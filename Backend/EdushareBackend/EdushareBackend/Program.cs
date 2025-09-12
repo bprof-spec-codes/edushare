@@ -11,7 +11,19 @@ namespace EdushareBackend
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.WebHost.UseUrls("http://0.0.0.0:5000");
+
             // Add services to the container.
+
+            builder.Services.AddCors(option =>
+            {
+                option.AddPolicy("AllowAngularApp", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                });
+            });
 
             builder.Services.AddTransient<TestLogic>();
             builder.Services.AddTransient<Repository>();
@@ -34,6 +46,8 @@ namespace EdushareBackend
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("AllowAngularApp");
 
             app.UseHttpsRedirection();
 
