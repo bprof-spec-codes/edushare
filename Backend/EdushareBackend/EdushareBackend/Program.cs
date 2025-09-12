@@ -1,4 +1,8 @@
 
+using Data;
+using Logic.Logic;
+using Microsoft.EntityFrameworkCore;
+
 namespace EdushareBackend
 {
     public class Program
@@ -8,6 +12,14 @@ namespace EdushareBackend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddTransient<TestLogic>();
+            builder.Services.AddTransient<Repository>();
+
+            builder.Services.AddDbContext<RepositoryContext>(options =>
+            {
+                options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=EduShareDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True");
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
