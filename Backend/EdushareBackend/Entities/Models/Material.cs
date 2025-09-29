@@ -1,0 +1,32 @@
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Entities.Models
+{
+    public class Material
+    {
+        [Key]
+        [StringLength(50)]
+        public string Id { get; set; } = string.Empty;
+
+        [StringLength(50)]
+        public string Title { get; set; } = string.Empty;
+
+        [StringLength(50)]
+        public string Subject { get; set; } = string.Empty;
+
+        [StringLength(500)]
+        public string Description { get; set; } = string.Empty;
+        public DateTime UploadDate { get; set; } = DateTime.Now;
+
+        [StringLength(50)]
+        public string Uploader { get; set; } = string.Empty;
+        public IFormFile File { get; set; } = null!;
+
+    }
+}
