@@ -1,6 +1,5 @@
 
 using Data;
-using Logic.Logic;
 using Microsoft.EntityFrameworkCore;
 
 namespace EdushareBackend
@@ -25,7 +24,6 @@ namespace EdushareBackend
                 });
             });
 
-            builder.Services.AddTransient<TestLogic>();
             builder.Services.AddTransient<Repository>();
 
             builder.Services.AddDbContext<RepositoryContext>(options =>
