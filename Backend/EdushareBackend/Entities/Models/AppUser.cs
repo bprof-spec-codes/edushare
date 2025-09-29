@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,9 @@ namespace Entities.Models
 
         [StringLength(50)]
         public string LastName { get; set; } = string.Empty;
-        public IFormFile Image { get; set; } = null!;
+        public byte[] Image { get; set; } = null!;
+
+        [NotMapped]
+        public virtual List<Material>? Materials { get; set; }
     }
 }
