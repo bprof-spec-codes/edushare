@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,9 +25,9 @@ namespace Entities.Models
         public string Description { get; set; } = string.Empty;
         public DateTime UploadDate { get; set; } = DateTime.Now;
 
-        [StringLength(50)]
-        public string Uploader { get; set; } = string.Empty;
-        public IFormFile File { get; set; } = null!;
+        [NotMapped]
+        public virtual AppUser? Uploader { get; set; }
+        public byte[] File { get; set; } = null!;
 
     }
 }
