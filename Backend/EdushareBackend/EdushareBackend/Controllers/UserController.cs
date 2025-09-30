@@ -34,7 +34,7 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPost("Register")]
-        public void RegisterUser(AppUserRegisterUpdateDto dto)
+        public void RegisterUser(AppUserRegisterDto dto)
         {
 
         }
@@ -43,6 +43,12 @@ namespace EdushareBackend.Controllers
         public string LoginUser(AppUserLoginDto dto)
         {
             return "token";
+        }
+
+        [HttpPut("{id}")]
+        public void UpdateUser(string id, [FromBody] AppUserUpdateDto dto)
+        {
+
         }
     }
 }
