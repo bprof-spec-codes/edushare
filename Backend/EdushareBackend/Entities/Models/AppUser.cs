@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Entities.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Models
 {
-    public class AppUser : IdentityUser
+    public class AppUser : IdentityUser, IIdEntity
     {
         [StringLength(50)]
         public string FirstName { get; set; } = string.Empty;
