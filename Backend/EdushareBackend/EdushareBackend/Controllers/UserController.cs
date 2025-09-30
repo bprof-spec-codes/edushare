@@ -1,4 +1,5 @@
-﻿using Entities.Dtos.User;
+﻿using Entities.Dtos.Material;
+using Entities.Dtos.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdushareBackend.Controllers
@@ -22,14 +23,22 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpGet("{id}")]
-        public AppUserShortViewDto GetUserById(string id)
+        public AppUserViewDto GetUserById(string id)
         {
-            return new AppUserShortViewDto
+            return new AppUserViewDto
             {
                 Id = id,
                 Email = "test@email.com",
                 FullName = "UserName",
-                Image = null
+                Image = null,
+                Materials = new List<MaterialAppUserShortViewDto>() { 
+                    new MaterialAppUserShortViewDto
+                    {
+                        Id = "materialId",
+                        Title = "MaterialTitle",
+                        UploadDate = DateTime.Now
+                    }
+                }
             };
         }
 
