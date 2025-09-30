@@ -44,5 +44,10 @@ namespace Data
         { 
             return ctx.Set<T>().First(e => e.Id == id);
         }
+
+        public IQueryable<T> GetAll()
+        {
+            return ctx.Set<T>();
+        }
     }
 }
