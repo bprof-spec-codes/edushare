@@ -24,20 +24,25 @@ namespace Data
 
         public void DeleteById(string id)
         { 
-            var entity = ctx.Set<T>().First(e => e.Id == id);
+            var entity = FindById(id);
             ctx.Set<T>().Remove(entity);
             ctx.SaveChanges();
         }
 
         public void Update(T entity)
         { 
-            var old = ctx.Set<T>().First(e => e.Id == entity.Id);
+            var old = FindById(entity.Id);
             foreach (var prop in typeof(T).GetProperties())
             {
                 prop.SetValue(old, prop.GetValue(entity));
             }
             ctx.Set<T>().Update(old);
             ctx.SaveChanges();
+        }
+
+        public T FindById(string id)
+        { 
+            return ctx.Set<T>().First(e => e.Id == id);
         }
     }
 }
