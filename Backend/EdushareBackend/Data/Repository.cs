@@ -29,6 +29,12 @@ namespace Data
             ctx.SaveChanges();
         }
 
+        public void Delete(T entity)
+        { 
+            ctx.Set<T>().Remove(entity);
+            ctx.SaveChanges();
+        }
+
         public void Update(T entity)
         { 
             var old = FindById(entity.Id);
