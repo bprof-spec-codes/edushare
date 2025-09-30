@@ -50,5 +50,10 @@ namespace EdushareBackend.Controllers
         {
 
         }
+
+        [HttpDelete("{id}")]
+        public void DeleteUserById(string id)
+        {
+        }
     }
 }
