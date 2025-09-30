@@ -49,9 +49,13 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPost("Login")]
-        public string LoginUser(AppUserLoginDto dto)
+        public async Task<IActionResult> LoginUser(AppUserLoginDto dto)
         {
-            return "token";
+            return Ok(new LoginResultDto() 
+            {
+                Token = "tokenHere",
+                Expiration = DateTime.Now.AddHours(1)
+            });
         }
 
         [HttpPut("{id}")]
