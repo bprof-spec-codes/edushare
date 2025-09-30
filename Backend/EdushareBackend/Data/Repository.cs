@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    public class Repository
+    public class Repository<T> where T : class
     {
         RepositoryContext ctx;
 
@@ -15,5 +15,10 @@ namespace Data
             this.ctx = ctx;
         }
 
+        public void Add(T entity)
+        {
+            ctx.Set<T>().Add(entity);
+            ctx.SaveChanges();
+        }
     }
 }
