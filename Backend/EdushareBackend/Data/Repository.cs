@@ -28,5 +28,16 @@ namespace Data
             ctx.Set<T>().Remove(entity);
             ctx.SaveChanges();
         }
+
+        public void Update(T entity)
+        { 
+            var old = ctx.Set<T>().First(e => e.Id == entity.Id);
+            foreach (var prop in typeof(T).GetProperties())
+            {
+                prop.SetValue(old, prop.GetValue(entity));
+            }
+            ctx.Set<T>().Update(old);
+            ctx.SaveChanges();
+        }
     }
 }
