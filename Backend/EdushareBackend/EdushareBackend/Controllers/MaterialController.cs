@@ -23,9 +23,9 @@ namespace EdushareBackend.Controllers
 
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         //[Authorize]
-        public void UpdateMaterial(MaterialCreateUpdateDto dto)
+        public void UpdateMaterial(string id, [FromBody] MaterialCreateUpdateDto dto)
         {
 
         }
