@@ -55,30 +55,35 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPut("{id}")]
+        //[Authorize] Admin / Own Profile
         public void UpdateUser(string id, [FromBody] AppUserUpdateDto dto)
         {
 
         }
 
         [HttpDelete("{id}")]
+        //[Authorize] Admin / Own Profile
         public void DeleteUserById(string id)
         {
 
         }
 
         [HttpGet("GrantAdmin/{userId}")]
+        //[Authorize] Admin
         public async Task GrantAdminRole(string userId)
         {
 
         }
 
         [HttpGet("GrantTeacher/{userId}")]
+        //[Authorize] Admin
         public async Task GrantTeacherRole(string userId)
         {
 
         }
 
         [HttpGet("RevokeRole/{userId}")]
+        //[Authorize] Admin
         public async Task RevokeRole(string userId)
         {
 
