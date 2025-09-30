@@ -14,5 +14,14 @@ namespace EdushareBackend.Controllers
         {
 
         }
+
+        [HttpDelete("{id}")]
+        //[Authorize]
+        public void DeleteMaterialById(string id)
+        {
+
+        }
+
+        public 
     }
 }
