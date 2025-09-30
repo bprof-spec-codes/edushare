@@ -36,12 +36,27 @@ namespace EdushareBackend.Controllers
 
             x.Title = "Cim";
             x.Id = "Id";
-            x.Uploader = new AppUserMaterialShortView{ Id = "123123-1231431-1234134",FullName = "UserName", Image = null };
+            x.Uploader = new AppUserMaterialShortViewDto{ Id = "123123-1231431-1234134",FullName = "UserName", Image = null };
             x.UploadDate = DateTime.Now;
 
             return new List<MaterialShortViewDto>()
             {
                 x
+            };
+        }
+
+        [HttpGet("{id}")]
+        public MaterialViewDto GetMaterialById(string id)
+        { 
+            return new MaterialViewDto
+            {
+                Id = id,
+                Title = "Cim",
+                Description = "Leiras",
+                Subject = "Tantargy",
+                UploadDate = DateTime.Now,
+                Uploader = new AppUserMaterialShortViewDto { Id = "123123-1231431-1234134", FullName = "UserName", Image = null },
+                File = null
             };
         }
     }

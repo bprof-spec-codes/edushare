@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Dtos
 {
-    public class AppUserMaterialShortView
+    public class AppUserMaterialShortViewDto
     {
         public string Id { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
