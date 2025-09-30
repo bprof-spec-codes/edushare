@@ -32,6 +32,11 @@ namespace EdushareBackend.Controllers
                 Image = null
             };
         }
-    }
+
+        [HttpPost]
+        public void RegisterUser(AppUserRegisterUpdateDto dto)
+        { 
             
+        }
+    }    
 }
