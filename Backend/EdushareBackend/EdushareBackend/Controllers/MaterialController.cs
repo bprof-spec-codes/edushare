@@ -17,14 +17,14 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize]
+        //[Authorize] Admin / Own Material
         public void DeleteMaterialById(string id)
         {
 
         }
 
         [HttpPut("{id}")]
-        //[Authorize]
+        //[Authorize] Admin / Own Material
         public void UpdateMaterial(string id, [FromBody] MaterialCreateUpdateDto dto)
         {
 
