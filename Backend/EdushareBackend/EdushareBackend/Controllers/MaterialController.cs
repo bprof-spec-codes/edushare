@@ -22,6 +22,11 @@ namespace EdushareBackend.Controllers
 
         }
 
-        public 
+        [HttpPut]
+        //[Authorize]
+        public void UpdateMaterial(MaterialCreateUpdateDto dto)
+        {
+
+        }
     }
 }
