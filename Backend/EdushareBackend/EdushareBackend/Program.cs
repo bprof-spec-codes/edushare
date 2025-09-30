@@ -24,7 +24,7 @@ namespace EdushareBackend
                 });
             });
 
-            builder.Services.AddTransient<Repository>();
+            builder.Services.AddTransient(typeof(Repository<>));
 
             builder.Services.AddDbContext<RepositoryContext>(options =>
             {
