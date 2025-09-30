@@ -54,6 +54,25 @@ namespace EdushareBackend.Controllers
         [HttpDelete("{id}")]
         public void DeleteUserById(string id)
         {
+
+        }
+
+        [HttpGet("GrantAdmin/{userId}")]
+        public async Task GrantAdminRole(string userId)
+        {
+
+        }
+
+        [HttpGet("GrantTeacher/{userId}")]
+        public async Task GrantTeacherRole(string userId)
+        {
+
+        }
+
+        [HttpGet("RevokeRole/{userId}")]
+        public async Task RevokeRole(string userId)
+        {
+
         }
     }
 }
