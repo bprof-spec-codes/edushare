@@ -33,7 +33,7 @@ namespace EdushareBackend.Controllers
             };
         }
 
-        [HttpPost]
+        [HttpPost("Register")]
         public void RegisterUser(AppUserRegisterUpdateDto dto)
         { 
             
