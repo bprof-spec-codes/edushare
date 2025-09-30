@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Dtos
+namespace Entities.Dtos.User
 {
-    public class AppUserMaterialShortViewDto
+    public class AppUserShortViewDto
     {
         public string Id { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public IFormFile Image { get; set; } = null!;
     }

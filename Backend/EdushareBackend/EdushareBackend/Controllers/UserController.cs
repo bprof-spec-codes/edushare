@@ -1,0 +1,37 @@
+﻿using Entities.Dtos.User;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EdushareBackend.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+        [HttpGet]
+        public IEnumerable<AppUserShortViewDto> GetAllUsers()
+        {
+            var user = new AppUserShortViewDto
+            {
+                Id = "123123-1231431-1234134",
+                Email = "test@email.com",
+                FullName = "UserName",
+                Image = null
+            };
+
+            return new List<AppUserShortViewDto>() { user };
+        }
+
+        [HttpGet("{id}")]
+        public AppUserShortViewDto GetUserById(string id)
+        {
+            return new AppUserShortViewDto
+            {
+                Id = id,
+                Email = "test@email.com",
+                FullName = "UserName",
+                Image = null
+            };
+        }
+    }
+            
+}

@@ -1,4 +1,5 @@
-﻿using Entities.Dtos;
+﻿using Entities.Dtos.Material;
+using Entities.Dtos.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

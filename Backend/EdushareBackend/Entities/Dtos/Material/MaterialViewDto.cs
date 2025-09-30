@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.Dtos.User;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Dtos
+namespace Entities.Dtos.Material
 {
     public class MaterialViewDto
     {
