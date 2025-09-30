@@ -21,5 +21,12 @@ namespace Data
             ctx.Set<T>().Add(entity);
             ctx.SaveChanges();
         }
+
+        public void DeleteById(string id)
+        { 
+            var entity = ctx.Set<T>().First(e => e.Id == id);
+            ctx.Set<T>().Remove(entity);
+            ctx.SaveChanges();
+        }
     }
 }
