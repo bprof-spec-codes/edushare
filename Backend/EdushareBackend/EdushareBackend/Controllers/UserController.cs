@@ -55,7 +55,7 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPost("Register")]
-        public void RegisterUser(AppUserRegisterDto dto)
+        public async Task RegisterUser(AppUserRegisterDto dto)
         {
             logic.Register(dto);
         }
