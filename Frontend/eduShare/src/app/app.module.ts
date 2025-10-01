@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 import { TestComponent } from './components/test/test.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TestComponent
+    TestComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
