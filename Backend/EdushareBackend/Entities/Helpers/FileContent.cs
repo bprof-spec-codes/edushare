@@ -9,11 +9,11 @@ namespace Entities.Helpers
 {
     public class FileContent
     {
-        public FileContent(string fileName, string file)
+        public FileContent(string fileName, byte[] file)
         {
             Id = Guid.NewGuid().ToString();
             FileName = fileName;
-            //File = file;
+            File = file;
         }
 
         [Key]

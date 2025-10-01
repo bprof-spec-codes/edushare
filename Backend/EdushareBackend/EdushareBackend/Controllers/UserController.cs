@@ -1,5 +1,7 @@
-﻿using Entities.Dtos.Material;
+﻿using Entities.Dtos.Content;
+using Entities.Dtos.Material;
 using Entities.Dtos.User;
+using Entities.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdushareBackend.Controllers
@@ -16,7 +18,7 @@ namespace EdushareBackend.Controllers
                 Id = "123123-1231431-1234134",
                 Email = "test@email.com",
                 FullName = "UserName",
-                Image = null
+                Image = new ContentViewDto("imageId", "imageTitle", "imageInBase64")
             };
 
             return new List<AppUserShortViewDto>() { user };
