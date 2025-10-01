@@ -8,13 +8,13 @@ namespace Entities.Dtos.Content
 {
     public class ContentCreateUpdateDto
     {
-        public ContentCreateUpdateDto(string fileName, byte[] file)
+        public ContentCreateUpdateDto(string fileName, string file)
         {
             FileName = fileName;
             File = file;
         }
 
         public required string FileName { get; set; }
-        public required byte[] File { get; set; }
+        public required string File { get; set; }
     }
 }

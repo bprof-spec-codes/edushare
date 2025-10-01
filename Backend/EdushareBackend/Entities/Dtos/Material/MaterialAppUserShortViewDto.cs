@@ -1,4 +1,5 @@
 ﻿using Entities.Dtos.User;
+using Entities.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace Entities.Dtos.Material
         public string Id { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public DateTime UploadDate { get; set; }
+        public FileContent Content { get; set; } = null!;
     }
 }

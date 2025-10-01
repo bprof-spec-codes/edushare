@@ -1,5 +1,7 @@
-﻿using Entities.Dtos.Material;
+﻿using Entities.Dtos.Content;
+using Entities.Dtos.Material;
 using Entities.Dtos.User;
+using Entities.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,7 +39,7 @@ namespace EdushareBackend.Controllers
 
             x.Title = "Cim";
             x.Id = "Id";
-            x.Uploader = new AppUserMaterialShortViewDto{ Id = "123123-1231431-1234134",FullName = "UserName", Image = null };
+            x.Uploader = new AppUserMaterialShortViewDto{ Id = "123123-1231431-1234134", FullName = "UserName", Image = new ContentViewDto("ImageId", "fileTitle", "fileInBase64") };
             x.UploadDate = DateTime.Now;
 
             return new List<MaterialShortViewDto>()
@@ -56,7 +58,7 @@ namespace EdushareBackend.Controllers
                 Description = "Leiras",
                 Subject = "Tantargy",
                 UploadDate = DateTime.Now,
-                Uploader = new AppUserMaterialShortViewDto { Id = "123123-1231431-1234134", FullName = "UserName", Image = null },
+                Uploader = new AppUserMaterialShortViewDto { Id = "123123-1231431-1234134", FullName = "UserName", Image = new ContentViewDto("ImageId", "fileTitle", "fileInBase64") },
                 File = null
             };
         }

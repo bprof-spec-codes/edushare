@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Entities.Helpers
 {
-    public class Content
+    public class FileContent
     {
-        public Content(string fileName, byte[] file)
+        public FileContent(string fileName, string file)
         {
             Id = Guid.NewGuid().ToString();
             FileName = fileName;
-            File = file;
+            //File = file;
         }
 
         [Key]
