@@ -59,7 +59,7 @@ namespace EdushareBackend.Controllers
                 Subject = "Tantargy",
                 UploadDate = DateTime.Now,
                 Uploader = new AppUserMaterialShortViewDto { Id = "123123-1231431-1234134", FullName = "UserName", Image = new ContentViewDto("ImageId", "fileTitle", "fileInBase64") },
-                File = null
+                Content = new ContentViewDto("FileId", "fileTitle", "fileInBase64")
             };
         }
     }

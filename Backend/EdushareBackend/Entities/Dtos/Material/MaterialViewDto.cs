@@ -1,4 +1,5 @@
-﻿using Entities.Dtos.User;
+﻿using Entities.Dtos.Content;
+using Entities.Dtos.User;
 using Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,6 @@ namespace Entities.Dtos.Material
         public string Description { get; set; } = string.Empty;
         public DateTime UploadDate { get; set; } = DateTime.Now;
         public AppUserMaterialShortViewDto Uploader { get; set; } = null!;
-        public byte[] File { get; set; } = null!;
+        public ContentViewDto Content { get; set; } = null!;
     }
 }
