@@ -2,6 +2,7 @@
 using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
+using Logic.Logic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdushareBackend.Controllers
@@ -10,6 +11,13 @@ namespace EdushareBackend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        AppUserLogic logic;
+
+        public UserController(AppUserLogic logic)
+        {
+            this.logic = logic;
+        }
+
         [HttpGet]
         public IEnumerable<AppUserShortViewDto> GetAllUsers()
         {
