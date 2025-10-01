@@ -14,10 +14,12 @@ namespace EdushareBackend.Controllers
     public class UserController : ControllerBase
     {
         AppUserLogic logic;
+        UserManager<AppUser> userManager;
 
-        public UserController(AppUserLogic logic)
+        public UserController(AppUserLogic logic, UserManager<AppUser> userManager)
         {
             this.logic = logic;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -57,7 +59,13 @@ namespace EdushareBackend.Controllers
         [HttpPost("Register")]
         public async Task RegisterUser(AppUserRegisterDto dto)
         {
-            logic.Register(dto);
+            var user = new AppUser();
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            user.UserName = dto.FirstName + dto.LastName;
+
+            var result = await userManager.CreateAsync(user, dto.Password);
+
         }
 
         [HttpPost("Login")]

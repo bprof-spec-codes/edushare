@@ -23,5 +23,6 @@ namespace Entities.Models
 
         [NotMapped]
         public virtual List<Material>? Materials { get; set; }
+
     }
 }
