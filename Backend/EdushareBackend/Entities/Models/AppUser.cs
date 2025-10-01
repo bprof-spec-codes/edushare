@@ -18,6 +18,7 @@ namespace Entities.Models
 
         [StringLength(50)]
         public string LastName { get; set; } = string.Empty;
+
         public FileContent Image { get; set; } = null!;
 
         [NotMapped]

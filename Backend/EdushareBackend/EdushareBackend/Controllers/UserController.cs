@@ -2,7 +2,9 @@
 using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
+using Entities.Models;
 using Logic.Logic;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdushareBackend.Controllers
@@ -55,7 +57,7 @@ namespace EdushareBackend.Controllers
         [HttpPost("Register")]
         public void RegisterUser(AppUserRegisterDto dto)
         {
-
+            logic.Register(dto);
         }
 
         [HttpPost("Login")]
