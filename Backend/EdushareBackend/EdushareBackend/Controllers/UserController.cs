@@ -3,7 +3,6 @@ using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
 using Entities.Models;
-using Logic.Logic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +12,10 @@ namespace EdushareBackend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        AppUserLogic logic;
         UserManager<AppUser> userManager;
 
-        public UserController(AppUserLogic logic, UserManager<AppUser> userManager)
+        public UserController(UserManager<AppUser> userManager)
         {
-            this.logic = logic;
             this.userManager = userManager;
         }
 
@@ -62,7 +59,7 @@ namespace EdushareBackend.Controllers
             var user = new AppUser();
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
-            user.UserName = dto.FirstName + dto.LastName;
+            user.UserName = dto.Email.Split('@')[0];
 
             var result = await userManager.CreateAsync(user, dto.Password);
 

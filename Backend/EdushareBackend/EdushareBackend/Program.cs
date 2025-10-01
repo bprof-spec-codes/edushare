@@ -28,10 +28,17 @@ namespace EdushareBackend
             });
 
             builder.Services.AddTransient(typeof(Repository<>));
-            builder.Services.AddTransient<AppUserLogic>();
 
 
-            builder.Services.AddIdentity<AppUser, IdentityRole>()
+            builder.Services.AddIdentity<AppUser, IdentityRole>(
+                option =>
+                {
+                    option.Password.RequireDigit = false;
+                    option.Password.RequiredLength = 8;
+                    option.Password.RequireNonAlphanumeric = false;
+                    option.Password.RequireUppercase = false;
+                    option.Password.RequireLowercase = false;
+                })
                 .AddEntityFrameworkStores<RepositoryContext>()   // <-- a te DbContext-ed, amiben az Identity táblák vannak
                 .AddDefaultTokenProviders();
 
