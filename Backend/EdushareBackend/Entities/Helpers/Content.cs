@@ -11,6 +11,7 @@ namespace Entities.Helpers
     {
         public Content(string fileName, byte[] file)
         {
+            Id = Guid.NewGuid().ToString();
             FileName = fileName;
             File = file;
         }
