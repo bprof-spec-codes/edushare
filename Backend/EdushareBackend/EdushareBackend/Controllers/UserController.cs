@@ -1,5 +1,7 @@
-﻿using Entities.Dtos.Material;
+﻿using Entities.Dtos.Content;
+using Entities.Dtos.Material;
 using Entities.Dtos.User;
+using Entities.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdushareBackend.Controllers
@@ -16,7 +18,7 @@ namespace EdushareBackend.Controllers
                 Id = "123123-1231431-1234134",
                 Email = "test@email.com",
                 FullName = "UserName",
-                Image = null
+                Image = new ContentViewDto("imageId", "imageTitle", "imageInBase64")
             };
 
             return new List<AppUserShortViewDto>() { user };
@@ -30,7 +32,7 @@ namespace EdushareBackend.Controllers
                 Id = id,
                 Email = "test@email.com",
                 FullName = "UserName",
-                Image = null,
+                Image = new ContentViewDto("imageId", "imageTitle", "imageInBase64"),
                 Materials = new List<MaterialAppUserShortViewDto>() { 
                     new MaterialAppUserShortViewDto
                     {
@@ -49,9 +51,13 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPost("Login")]
-        public string LoginUser(AppUserLoginDto dto)
+        public async Task<IActionResult> LoginUser(AppUserLoginDto dto)
         {
-            return "token";
+            return Ok(new LoginResultDto() 
+            {
+                Token = "tokenHere",
+                Expiration = DateTime.Now.AddHours(1)
+            });
         }
 
         [HttpPut("{id}")]

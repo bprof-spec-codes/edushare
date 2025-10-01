@@ -1,4 +1,5 @@
-﻿using Entities.Dtos.Material;
+﻿using Entities.Dtos.Content;
+using Entities.Dtos.Material;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Entities.Dtos.User
         public string Id { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public IFormFile Image { get; set; } = null!;
+        public ContentViewDto Image { get; set; } = null!;
         public List<MaterialAppUserShortViewDto> Materials { get; set; } = new List<MaterialAppUserShortViewDto>();
     }
 }

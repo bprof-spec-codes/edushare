@@ -28,7 +28,7 @@ namespace Entities.Models
 
         [NotMapped]
         public virtual AppUser? Uploader { get; set; }
-        public byte[] File { get; set; } = null!;
+        public FileContent Content { get; set; } = null!;
 
     }
 }

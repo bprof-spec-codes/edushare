@@ -18,7 +18,7 @@ namespace Entities.Models
 
         [StringLength(50)]
         public string LastName { get; set; } = string.Empty;
-        public byte[] Image { get; set; } = null!;
+        public FileContent Image { get; set; } = null!;
 
         [NotMapped]
         public virtual List<Material>? Materials { get; set; }
