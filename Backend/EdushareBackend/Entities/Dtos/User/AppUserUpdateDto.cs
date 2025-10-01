@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Entities.Dtos.Content;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace Entities.Dtos.User
         public required string Email { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
-        public IFormFile Image { get; set; } = null!;
+        public ContentCreateUpdateDto Image { get; set; } = null!;
     }
 }
