@@ -13,6 +13,5 @@ namespace Entities.Dtos.Material
         public string Id { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public DateTime UploadDate { get; set; }
-        public FileContent Content { get; set; } = null!;
     }
 }

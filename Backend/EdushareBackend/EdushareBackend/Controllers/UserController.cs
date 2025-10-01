@@ -32,7 +32,7 @@ namespace EdushareBackend.Controllers
                 Id = id,
                 Email = "test@email.com",
                 FullName = "UserName",
-                Image = null,
+                Image = new ContentViewDto("imageId", "imageTitle", "imageInBase64"),
                 Materials = new List<MaterialAppUserShortViewDto>() { 
                     new MaterialAppUserShortViewDto
                     {
