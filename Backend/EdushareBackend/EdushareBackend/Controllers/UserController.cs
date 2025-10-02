@@ -60,6 +60,7 @@ namespace EdushareBackend.Controllers
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
             user.UserName = dto.Email.Split('@')[0];
+            user.Email = dto.Email;
 
             var result = await userManager.CreateAsync(user, dto.Password);
 

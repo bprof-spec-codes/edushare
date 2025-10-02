@@ -1,7 +1,6 @@
 
 using Data;
 using Entities.Models;
-using Logic.Logic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
