@@ -5,6 +5,7 @@ using Entities.Helpers;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EdushareBackend.Controllers
 {
@@ -13,24 +14,18 @@ namespace EdushareBackend.Controllers
     public class UserController : ControllerBase
     {
         UserManager<AppUser> userManager;
+        private readonly IWebHostEnvironment env;
 
-        public UserController(UserManager<AppUser> userManager)
+        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env)
         {
             this.userManager = userManager;
+            this.env = env;
         }
 
         [HttpGet]
-        public IEnumerable<AppUserShortViewDto> GetAllUsers()
+        public async Task<IEnumerable<AppUserShortViewDto>> GetAllUsers()
         {
-            var user = new AppUserShortViewDto
-            {
-                Id = "123123-1231431-1234134",
-                Email = "test@email.com",
-                FullName = "UserName",
-                Image = new ContentViewDto("imageId", "imageTitle", "imageInBase64")
-            };
-
-            return new List<AppUserShortViewDto>() { user };
+            return null;
         }
 
         [HttpGet("{id}")]
@@ -61,6 +56,12 @@ namespace EdushareBackend.Controllers
             user.LastName = dto.LastName;
             user.UserName = dto.Email.Split('@')[0];
             user.Email = dto.Email;
+
+            var defaultImagePath = Path.Combine(env.WebRootPath, "images", "default.png"); //kép betöltése
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(defaultImagePath);
+
+            user.Image = new FileContent("default.png", fileBytes);
 
             var result = await userManager.CreateAsync(user, dto.Password);
 

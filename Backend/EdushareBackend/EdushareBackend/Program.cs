@@ -67,6 +67,7 @@ namespace EdushareBackend
 
             app.UseAuthorization();
 
+            app.UseStaticFiles();
 
             app.MapControllers();
 
