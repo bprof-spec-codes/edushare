@@ -2,6 +2,8 @@
 using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
+using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdushareBackend.Controllers
@@ -10,6 +12,13 @@ namespace EdushareBackend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        UserManager<AppUser> userManager;
+
+        public UserController(UserManager<AppUser> userManager)
+        {
+            this.userManager = userManager;
+        }
+
         [HttpGet]
         public IEnumerable<AppUserShortViewDto> GetAllUsers()
         {
@@ -45,8 +54,15 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPost("Register")]
-        public void RegisterUser(AppUserRegisterDto dto)
+        public async Task RegisterUser(AppUserRegisterDto dto)
         {
+            var user = new AppUser();
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            user.UserName = dto.Email.Split('@')[0];
+            user.Email = dto.Email;
+
+            var result = await userManager.CreateAsync(user, dto.Password);
 
         }
 

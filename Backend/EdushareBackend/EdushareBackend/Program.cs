@@ -1,5 +1,7 @@
 
 using Data;
+using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace EdushareBackend
@@ -26,6 +28,19 @@ namespace EdushareBackend
 
             builder.Services.AddTransient(typeof(Repository<>));
 
+
+            builder.Services.AddIdentity<AppUser, IdentityRole>(
+                option =>
+                {
+                    option.Password.RequireDigit = false;
+                    option.Password.RequiredLength = 8;
+                    option.Password.RequireNonAlphanumeric = false;
+                    option.Password.RequireUppercase = false;
+                    option.Password.RequireLowercase = false;
+                })
+                .AddEntityFrameworkStores<RepositoryContext>()   // <-- a te DbContext-ed, amiben az Identity táblák vannak
+                .AddDefaultTokenProviders();
+
             builder.Services.AddDbContext<RepositoryContext>(options =>
             {
                 options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=EduShareDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True");
@@ -35,6 +50,7 @@ namespace EdushareBackend
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            
 
             var app = builder.Build();
 
