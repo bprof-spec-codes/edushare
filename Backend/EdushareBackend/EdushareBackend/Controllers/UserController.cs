@@ -26,7 +26,7 @@ namespace EdushareBackend.Controllers
         public async Task<IEnumerable<AppUserShortViewDto>> GetAllUsers()
         {
             var users = await userManager.Users
-                .Include(u => u.Image) // be kell tölteni az Image-t
+                .Include(u => u.Image) 
                 .ToListAsync();
 
             return users.Select(u => new AppUserShortViewDto
@@ -45,23 +45,37 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpGet("{id}")]
-        public AppUserViewDto GetUserById(string id)
+        public async Task<AppUserViewDto> GetUserById(string id)
         {
-            return new AppUserViewDto
+            var user = await userManager.Users
+                .Include(u => u.Image)
+                .Include(u => u.Materials)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user is null) throw new Exception("User Not Found");
+
+            var userView = new AppUserViewDto
             {
-                Id = id,
-                Email = "test@email.com",
-                FullName = "UserName",
-                Image = new ContentViewDto("imageId", "imageTitle", "imageInBase64"),
-                Materials = new List<MaterialAppUserShortViewDto>() { 
-                    new MaterialAppUserShortViewDto
-                    {
-                        Id = "materialId",
-                        Title = "MaterialTitle",
-                        UploadDate = DateTime.Now
-                    }
-                }
+                Id = user.Id,
+                FullName = $"{user.FirstName} {user.LastName}",
+                Email = user.Email,
+                Image = user.Image != null
+            ? new ContentViewDto(
+                user.Image.Id,
+                user.Image.FileName,
+                Convert.ToBase64String(user.Image.File)
+              )
+            : null!,
+                Materials = user.Materials?.Select(m => new MaterialAppUserShortViewDto
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    UploadDate = m.UploadDate
+                }).ToList() ?? new List<MaterialAppUserShortViewDto>()
             };
+
+            return userView;
+
         }
 
         [HttpPost("Register")]
