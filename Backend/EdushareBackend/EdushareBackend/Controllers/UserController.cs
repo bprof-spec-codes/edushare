@@ -25,7 +25,23 @@ namespace EdushareBackend.Controllers
         [HttpGet]
         public async Task<IEnumerable<AppUserShortViewDto>> GetAllUsers()
         {
-            return null;
+            var users = await userManager.Users
+                .Include(u => u.Image) // be kell tölteni az Image-t
+                .ToListAsync();
+
+            return users.Select(u => new AppUserShortViewDto
+            {
+                Id = u.Id,
+                Email = u.Email,
+                FullName = u.FirstName + " " + u.LastName,
+                Image = u.Image != null
+                    ? new ContentViewDto(
+                        u.Image.Id,
+                        u.Image.FileName,
+                        Convert.ToBase64String(u.Image.File)
+                        )
+                    : null!
+            });
         }
 
         [HttpGet("{id}")]
