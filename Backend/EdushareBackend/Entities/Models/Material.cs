@@ -12,6 +12,11 @@ namespace Entities.Models
 {
     public class Material : IIdEntity
     {
+        public Material()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
+
         [Key]
         [StringLength(50)]
         public string Id { get; set; } = string.Empty;

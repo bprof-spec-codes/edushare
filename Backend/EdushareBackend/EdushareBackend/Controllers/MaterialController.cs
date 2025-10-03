@@ -2,7 +2,10 @@
 using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
+using Entities.Models;
+using Logic.Logic;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdushareBackend.Controllers
@@ -11,10 +14,20 @@ namespace EdushareBackend.Controllers
     [ApiController]
     public class MaterialController : ControllerBase
     {
-        [HttpPost]
-        //[Authorize]
-        public void AddMaterial(MaterialCreateUpdateDto dto)
+        UserManager<AppUser> UserManager;
+        MaterialLogic materialLogic;
+        public MaterialController(MaterialLogic materialLogic, UserManager<AppUser> userManager)
         {
+            this.materialLogic = materialLogic;
+            this.UserManager = userManager;
+        }
+        [HttpPost]
+       // [Authorize]
+        public async Task AddMaterial(MaterialCreateUpdateDto dto)
+        {
+            var user = await UserManager.GetUserAsync(User);
+
+            materialLogic.AddMaterial(dto, user!.Id);
 
         }
 
@@ -22,7 +35,7 @@ namespace EdushareBackend.Controllers
         //[Authorize] Admin / Own Material
         public void DeleteMaterialById(string id)
         {
-
+            materialLogic.DeleteMaterialById(id);
         }
 
         [HttpPut("{id}")]
@@ -35,17 +48,18 @@ namespace EdushareBackend.Controllers
         [HttpGet]
         public IEnumerable<MaterialShortViewDto> GetAllMaterials()
         {
-            var x = new MaterialShortViewDto();
+            return materialLogic.GetAllMaterials();
+            //var x = new MaterialShortViewDto();
 
-            x.Title = "Cim";
-            x.Id = "Id";
-            x.Uploader = new AppUserMaterialShortViewDto{ Id = "123123-1231431-1234134", FullName = "UserName", Image = new ContentViewDto("ImageId", "fileTitle", "fileInBase64") };
-            x.UploadDate = DateTime.Now;
+            //x.Title = "Cim";
+            //x.Id = "Id";
+            //x.Uploader = new AppUserMaterialShortViewDto{ Id = "123123-1231431-1234134", FullName = "UserName", Image = new ContentViewDto("ImageId", "fileTitle", "fileInBase64") };
+            //x.UploadDate = DateTime.Now;
 
-            return new List<MaterialShortViewDto>()
-            {
-                x
-            };
+            //return new List<MaterialShortViewDto>()
+            //{
+            //    x
+            //};
         }
 
         [HttpGet("{id}")]
