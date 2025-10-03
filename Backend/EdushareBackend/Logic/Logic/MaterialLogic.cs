@@ -29,8 +29,8 @@ namespace Logic.Logic
             if (material.Content != null)
             {
                 mat.Content = new FileContent(
-                material.Content.FileName,
-                Convert.FromBase64String(material.Content.File) // itt konvertáljuk byte[]-re
+                    material.Content.FileName,
+                    System.Text.Encoding.UTF8.GetBytes(material.Content.File)
                 );
             }
 
