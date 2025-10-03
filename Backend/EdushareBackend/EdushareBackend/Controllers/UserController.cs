@@ -3,6 +3,7 @@ using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
 using Entities.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,53 +26,50 @@ namespace EdushareBackend.Controllers
         [HttpGet]
         public async Task<IEnumerable<AppUserShortViewDto>> GetAllUsers()
         {
-            var users = await userManager.Users
-                .Include(u => u.Image) 
+            var users = await userManager.Users //összes user listázása
+                .Include(u => u.Image)  //include a navigation property miatt kell hogy az is benne legyen
                 .ToListAsync();
 
-            return users.Select(u => new AppUserShortViewDto
+            return users.Select(u => new AppUserShortViewDto //átalakítás DTO-vá
             {
                 Id = u.Id,
                 Email = u.Email,
                 FullName = u.FirstName + " " + u.LastName,
-                Image = u.Image != null
-                    ? new ContentViewDto(
-                        u.Image.Id,
-                        u.Image.FileName,
-                        Convert.ToBase64String(u.Image.File)
-                        )
-                    : null!
+                Image = new ContentViewDto(
+                    u.Image.Id,
+                    u.Image.FileName,
+                    Convert.ToBase64String(u.Image.File)
+                  )
             });
         }
 
         [HttpGet("{id}")]
-        public async Task<AppUserViewDto> GetUserById(string id)
+        public async Task<ActionResult<AppUserViewDto>> GetUserById(string id)
         {
             var user = await userManager.Users
                 .Include(u => u.Image)
                 .Include(u => u.Materials)
-                .FirstOrDefaultAsync(u => u.Id == id);
+                .FirstOrDefaultAsync(u => u.Id == id); //id alapján keresés (első találat de elv. nem is lehet több)
 
-            if (user is null) throw new Exception("User Not Found");
+            if (user is null) return NotFound("User Not Found"); //hiba ha nincs találat
 
-            var userView = new AppUserViewDto
+            var userView = new AppUserViewDto //átalakítás DTO-vá
             {
                 Id = user.Id,
                 FullName = $"{user.FirstName} {user.LastName}",
                 Email = user.Email,
-                Image = user.Image != null
-            ? new ContentViewDto(
-                user.Image.Id,
-                user.Image.FileName,
-                Convert.ToBase64String(user.Image.File)
-              )
-            : null!,
-                Materials = user.Materials?.Select(m => new MaterialAppUserShortViewDto
+                Image = new ContentViewDto(
+                    user.Image.Id,
+                    user.Image.FileName,
+                    Convert.ToBase64String(user.Image.File)
+                ),
+            
+                Materials = user.Materials?.Select(m => new MaterialAppUserShortViewDto 
                 {
                     Id = m.Id,
                     Title = m.Title,
                     UploadDate = m.UploadDate
-                }).ToList() ?? new List<MaterialAppUserShortViewDto>()
+                }).ToList() ?? new List<MaterialAppUserShortViewDto>() //ha a materilas null akkor üres lista
             };
 
             return userView;
