@@ -3,6 +3,7 @@ using Entities.Dtos.Material;
 using Entities.Helpers;
 using Entities.Models;
 using Logic.Helper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,8 @@ namespace Logic.Logic
         }
         public IEnumerable<MaterialShortViewDto> GetAllMaterials()
         {
-            return materialRepo.GetAll().Select(x => dtoProviders.Mapper.Map<MaterialShortViewDto>(x));
+            return materialRepo.GetAll().Include(u => u.Uploader).ThenInclude(u => u.Image).Select(x => dtoProviders.Mapper.Map<MaterialShortViewDto>(x));
+                
         }
         public void DeleteMaterialById(string id)
         {

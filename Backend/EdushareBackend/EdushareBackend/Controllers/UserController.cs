@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace EdushareBackend.Controllers
 {
@@ -39,7 +43,7 @@ namespace EdushareBackend.Controllers
                     u.Image.Id,
                     u.Image.FileName,
                     Convert.ToBase64String(u.Image.File)
-                  )
+                )
             });
         }
 
@@ -96,13 +100,46 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginUser(AppUserLoginDto dto)
+        public async Task<IActionResult> Login(AppUserLoginDto dto)
         {
-            return Ok(new LoginResultDto() 
+            var user = await userManager.FindByEmailAsync(dto.Email);
+            if (user == null)
             {
-                Token = "tokenHere",
-                Expiration = DateTime.Now.AddHours(1)
-            });
+                throw new ArgumentException("User not found");
+            }
+            else
+            {
+                var result = await userManager.CheckPasswordAsync(user, dto.Password);
+                if (!result)
+                {
+                    throw new ArgumentException("Incorrect password");
+                }
+                else
+                {
+                    //todo: generate token
+                    var claim = new List<Claim>();
+                    claim.Add(new Claim(ClaimTypes.Name, user.UserName!));
+                    claim.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+
+                    foreach (var role in await userManager.GetRolesAsync(user))
+                    {
+                        claim.Add(new Claim(ClaimTypes.Role, role));
+                    }
+
+                    int expiryInMinutes = 24 * 60;
+                    var token = GenerateAccessToken(claim, expiryInMinutes);
+
+                    return Ok(new LoginResultDto()
+                    {
+                        Token = new JwtSecurityTokenHandler().WriteToken(token),
+                        Expiration = DateTime.Now.AddMinutes(expiryInMinutes)
+                    });
+
+                }
+            }
+
+
+
         }
 
         [HttpPut("{id}")]
@@ -138,6 +175,21 @@ namespace EdushareBackend.Controllers
         public async Task RevokeRole(string userId)
         {
 
+        }
+
+
+        private JwtSecurityToken GenerateAccessToken(IEnumerable<Claim>? claims, int expiryInMinutes)
+        {
+            var signinKey = new SymmetricSecurityKey(
+                  Encoding.UTF8.GetBytes("jhsddsfjkhdsfhksfjdsdsfdsgdsfsfdhjsfdhjsfdjsjsffdsdfsdfsdfhdsfhdskhf54465g6dsgúdsg4dsdggsdglsdj4oiietrjhsddsfjkhdsfhksfjdsdsfdsgdsfsfdhjsfdhjsfdjsjsffdsdfsdfsdfhdsfhdskhf54465g6dsgúdsg4dsdggsdglsdj4oiietrjhsddsfjkhdsfhksfjdsdsfdsgdsfsfdhjsfdhjsfdjsjsffdsdfsdfsdfhdsfhdskhf54465g6dsgúdsg4dsdggsdglsdj4oiietr"));
+
+            return new JwtSecurityToken(
+                  issuer: "edushare.com",
+                  audience: "edushare.com",
+                  claims: claims?.ToArray(),
+                  expires: DateTime.Now.AddMinutes(expiryInMinutes),
+                  signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
+            );
         }
     }
 }

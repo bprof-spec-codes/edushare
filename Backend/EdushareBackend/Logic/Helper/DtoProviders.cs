@@ -29,7 +29,13 @@ namespace Logic.Helper
                 cfg.CreateMap<Material, MaterialShortViewDto>()
                     .ForMember(dest => dest.Uploader, opt => opt.MapFrom(src => new AppUserMaterialShortViewDto
                     {
-                        Id = src.Uploader.Id
+                        Id = src.Uploader!.Id,
+                        FullName = src.Uploader.FirstName + " " + src.Uploader.LastName,
+                        Image = new ContentViewDto(
+                            src.Uploader.Image.Id,
+                            src.Uploader.Image.FileName,
+                            Convert.ToBase64String(src.Uploader.Image.File)
+                        )
                     }));
                 cfg.CreateMap<Material, MaterialViewDto>();
                 cfg.CreateMap<ContentCreateUpdateDto, FileContent>();
