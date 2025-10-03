@@ -6,7 +6,6 @@ using Logic.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,19 +22,21 @@ namespace Logic.Logic
             this.dtoProviders = dtoProviders;
         }
 
-        public void AddMaterial(MaterialCreateUpdateDto material)
+        public void AddMaterial(MaterialCreateUpdateDto material , string id)
         {
-            Material mat=dtoProviders.Mapper.Map<Material>(material);
+            Material mat = dtoProviders.Mapper.Map<Material>(material);
+            mat.Uploader = new AppUser { Id = id };
             if (material.Content != null)
             {
+                
                 mat.Content = new FileContent(
                     material.Content.FileName,
-                    System.Text.Encoding.UTF8.GetBytes(material.Content.File)
+                    Convert.FromBase64String(material.Content.File)
                 );
             }
 
             repo.Add(mat);
-            
+
         }
         public IEnumerable<MaterialShortViewDto> GetAllMaterials()
         {
