@@ -43,7 +43,7 @@ namespace EdushareBackend.Controllers
                     u.Image.Id,
                     u.Image.FileName,
                     Convert.ToBase64String(u.Image.File)
-                  )
+                )
             });
         }
 
