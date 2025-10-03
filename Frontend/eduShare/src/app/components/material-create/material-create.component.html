@@ -20,8 +20,8 @@
                 <div class="mb-3">
                     <label for="file" class="form-label">Fájl *</label>
                     <input type="file" id="file" class="form-control" (change)="onFileSelected($event)" />
-                    <div *ngIf="fileName" class="form-text">
-                        Kiválasztott fájl: <strong>{{ fileName }}</strong>
+                    <div *ngIf="content.fileName" class="form-text">
+                        Kiválasztott fájl: <strong>{{ content.fileName }}</strong>
                     </div>
                     <div *ngIf="materialForm.get('file')?.touched && materialForm.get('file')?.invalid" class="text-danger">
                         Fájlt kötelező feltölteni.

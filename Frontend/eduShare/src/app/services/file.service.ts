@@ -10,7 +10,7 @@ export class FileService {
     const base64 = await this.toBase64(file)
     return{
       fileName: file.name,
-      base64: base64
+      file: base64
     }
   }
 

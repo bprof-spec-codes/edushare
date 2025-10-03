@@ -4,5 +4,5 @@ export class Material {
     id: string=''
     title: string=''
     description: string=''
-    content: FileContent={fileName:'', base64:''}
+    content: FileContent={fileName:'', file:''}
 }
