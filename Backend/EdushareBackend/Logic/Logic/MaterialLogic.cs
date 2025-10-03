@@ -1,10 +1,12 @@
 ﻿using Data;
 using Entities.Dtos.Material;
+using Entities.Helpers;
 using Entities.Models;
 using Logic.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +26,14 @@ namespace Logic.Logic
         public void AddMaterial(MaterialCreateUpdateDto material)
         {
             Material mat=dtoProviders.Mapper.Map<Material>(material);
+            if (material.Content != null)
+            {
+                mat.Content = new FileContent(
+                material.Content.FileName,
+                Convert.FromBase64String(material.Content.File) // itt konvertáljuk byte[]-re
+                );
+            }
+
             repo.Add(mat);
             
         }
