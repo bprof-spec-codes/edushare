@@ -22,12 +22,12 @@ namespace EdushareBackend.Controllers
             this.UserManager = userManager;
         }
         [HttpPost]
-        //[Authorize]
+       // [Authorize]
         public async Task AddMaterial(MaterialCreateUpdateDto dto)
         {
             var user = await UserManager.GetUserAsync(User);
 
-            materialLogic.AddMaterial(dto, user.Id);
+            materialLogic.AddMaterial(dto, "dummyId");
 
         }
 
@@ -48,17 +48,18 @@ namespace EdushareBackend.Controllers
         [HttpGet]
         public IEnumerable<MaterialShortViewDto> GetAllMaterials()
         {
-            var x = new MaterialShortViewDto();
+            return materialLogic.GetAllMaterials();
+            //var x = new MaterialShortViewDto();
 
-            x.Title = "Cim";
-            x.Id = "Id";
-            x.Uploader = new AppUserMaterialShortViewDto{ Id = "123123-1231431-1234134", FullName = "UserName", Image = new ContentViewDto("ImageId", "fileTitle", "fileInBase64") };
-            x.UploadDate = DateTime.Now;
+            //x.Title = "Cim";
+            //x.Id = "Id";
+            //x.Uploader = new AppUserMaterialShortViewDto{ Id = "123123-1231431-1234134", FullName = "UserName", Image = new ContentViewDto("ImageId", "fileTitle", "fileInBase64") };
+            //x.UploadDate = DateTime.Now;
 
-            return new List<MaterialShortViewDto>()
-            {
-                x
-            };
+            //return new List<MaterialShortViewDto>()
+            //{
+            //    x
+            //};
         }
 
         [HttpGet("{id}")]
