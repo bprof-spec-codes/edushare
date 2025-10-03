@@ -3,6 +3,7 @@ using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
 using Entities.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,27 +26,54 @@ namespace EdushareBackend.Controllers
         [HttpGet]
         public async Task<IEnumerable<AppUserShortViewDto>> GetAllUsers()
         {
-            return null;
+            var users = await userManager.Users //összes user listázása
+                .Include(u => u.Image)  //include a navigation property miatt kell hogy az is benne legyen
+                .ToListAsync();
+
+            return users.Select(u => new AppUserShortViewDto //átalakítás DTO-vá
+            {
+                Id = u.Id,
+                Email = u.Email,
+                FullName = u.FirstName + " " + u.LastName,
+                Image = new ContentViewDto(
+                    u.Image.Id,
+                    u.Image.FileName,
+                    Convert.ToBase64String(u.Image.File)
+                  )
+            });
         }
 
         [HttpGet("{id}")]
-        public AppUserViewDto GetUserById(string id)
+        public async Task<ActionResult<AppUserViewDto>> GetUserById(string id)
         {
-            return new AppUserViewDto
+            var user = await userManager.Users
+                .Include(u => u.Image)
+                .Include(u => u.Materials)
+                .FirstOrDefaultAsync(u => u.Id == id); //id alapján keresés (első találat de elv. nem is lehet több)
+
+            if (user is null) return NotFound("User Not Found"); //hiba ha nincs találat
+
+            var userView = new AppUserViewDto //átalakítás DTO-vá
             {
-                Id = id,
-                Email = "test@email.com",
-                FullName = "UserName",
-                Image = new ContentViewDto("imageId", "imageTitle", "imageInBase64"),
-                Materials = new List<MaterialAppUserShortViewDto>() { 
-                    new MaterialAppUserShortViewDto
-                    {
-                        Id = "materialId",
-                        Title = "MaterialTitle",
-                        UploadDate = DateTime.Now
-                    }
-                }
+                Id = user.Id,
+                FullName = $"{user.FirstName} {user.LastName}",
+                Email = user.Email,
+                Image = new ContentViewDto(
+                    user.Image.Id,
+                    user.Image.FileName,
+                    Convert.ToBase64String(user.Image.File)
+                ),
+            
+                Materials = user.Materials?.Select(m => new MaterialAppUserShortViewDto 
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    UploadDate = m.UploadDate
+                }).ToList() ?? new List<MaterialAppUserShortViewDto>() //ha a materilas null akkor üres lista
             };
+
+            return userView;
+
         }
 
         [HttpPost("Register")]
