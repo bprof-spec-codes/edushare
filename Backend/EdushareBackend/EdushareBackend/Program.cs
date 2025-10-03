@@ -1,6 +1,8 @@
 
 using Data;
 using Entities.Models;
+using Logic.Helper;
+using Logic.Logic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,7 +29,8 @@ namespace EdushareBackend
             });
 
             builder.Services.AddTransient(typeof(Repository<>));
-
+            builder.Services.AddTransient<DtoProviders>();
+            builder.Services.AddTransient<MaterialLogic>();
 
             builder.Services.AddIdentity<AppUser, IdentityRole>(
                 option =>

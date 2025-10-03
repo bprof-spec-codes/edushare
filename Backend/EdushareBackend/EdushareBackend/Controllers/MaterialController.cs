@@ -2,6 +2,8 @@
 using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
+using Entities.Models;
+using Logic.Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,18 +13,24 @@ namespace EdushareBackend.Controllers
     [ApiController]
     public class MaterialController : ControllerBase
     {
+
+        MaterialLogic materialLogic;
+        public MaterialController(MaterialLogic materialLogic)
+        {
+            this.materialLogic = materialLogic;
+        }
         [HttpPost]
         //[Authorize]
         public void AddMaterial(MaterialCreateUpdateDto dto)
         {
-
+            materialLogic.AddMaterial(dto);
         }
 
         [HttpDelete("{id}")]
         //[Authorize] Admin / Own Material
         public void DeleteMaterialById(string id)
         {
-
+            materialLogic.DeleteMaterialById(id);
         }
 
         [HttpPut("{id}")]
