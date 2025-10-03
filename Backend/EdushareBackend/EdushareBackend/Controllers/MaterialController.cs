@@ -27,7 +27,7 @@ namespace EdushareBackend.Controllers
         {
             var user = await UserManager.GetUserAsync(User);
 
-            materialLogic.AddMaterial(dto, "dummyId");
+            materialLogic.AddMaterial(dto, user!.Id);
 
         }
 
