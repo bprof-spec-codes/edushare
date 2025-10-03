@@ -1,1 +1,37 @@
-<p>material-create works!</p>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Új tananyag feltöltése</h5>
+
+            <form [formGroup]="materialForm" (ngSubmit)="onSubmit()" novalidate>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Cím</label>
+                    <input type="text" id="title" class="form-control" formControlName="title" />
+                    <div *ngIf="materialForm.get('title')?.touched && materialForm.get('title')?.invalid" class="text-danger">
+                        A cím megadása kötelező.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Leírás</label>
+                    <textarea id="description" class="form-control" rows="3" formControlName="description"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="file" class="form-label">Fájl *</label>
+                    <input type="file" id="file" class="form-control" (change)="onFileSelected($event)" />
+                    <div *ngIf="fileName" class="form-text">
+                        Kiválasztott fájl: <strong>{{ fileName }}</strong>
+                    </div>
+                    <div *ngIf="materialForm.get('file')?.touched && materialForm.get('file')?.invalid" class="text-danger">
+                        Fájlt kötelező feltölteni.
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="materialForm.invalid">
+                    Feltöltés
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
