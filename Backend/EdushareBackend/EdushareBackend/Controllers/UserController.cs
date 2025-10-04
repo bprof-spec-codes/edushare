@@ -3,8 +3,14 @@ using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
 using Entities.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace EdushareBackend.Controllers
 {
@@ -13,44 +19,65 @@ namespace EdushareBackend.Controllers
     public class UserController : ControllerBase
     {
         UserManager<AppUser> userManager;
+        private readonly IWebHostEnvironment env;
 
-        public UserController(UserManager<AppUser> userManager)
+        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env)
         {
             this.userManager = userManager;
+            this.env = env;
         }
 
         [HttpGet]
-        public IEnumerable<AppUserShortViewDto> GetAllUsers()
+        public async Task<IEnumerable<AppUserShortViewDto>> GetAllUsers()
         {
-            var user = new AppUserShortViewDto
-            {
-                Id = "123123-1231431-1234134",
-                Email = "test@email.com",
-                FullName = "UserName",
-                Image = new ContentViewDto("imageId", "imageTitle", "imageInBase64")
-            };
+            var users = await userManager.Users //összes user listázása
+                .Include(u => u.Image)  //include a navigation property miatt kell hogy az is benne legyen
+                .ToListAsync();
 
-            return new List<AppUserShortViewDto>() { user };
+            return users.Select(u => new AppUserShortViewDto //átalakítás DTO-vá
+            {
+                Id = u.Id,
+                Email = u.Email,
+                FullName = u.FirstName + " " + u.LastName,
+                Image = new ContentViewDto(
+                    u.Image.Id,
+                    u.Image.FileName,
+                    Convert.ToBase64String(u.Image.File)
+                )
+            });
         }
 
         [HttpGet("{id}")]
-        public AppUserViewDto GetUserById(string id)
+        public async Task<ActionResult<AppUserViewDto>> GetUserById(string id)
         {
-            return new AppUserViewDto
+            var user = await userManager.Users
+                .Include(u => u.Image)
+                .Include(u => u.Materials)
+                .FirstOrDefaultAsync(u => u.Id == id); //id alapján keresés (első találat de elv. nem is lehet több)
+
+            if (user is null) return NotFound("User Not Found"); //hiba ha nincs találat
+
+            var userView = new AppUserViewDto //átalakítás DTO-vá
             {
-                Id = id,
-                Email = "test@email.com",
-                FullName = "UserName",
-                Image = new ContentViewDto("imageId", "imageTitle", "imageInBase64"),
-                Materials = new List<MaterialAppUserShortViewDto>() { 
-                    new MaterialAppUserShortViewDto
-                    {
-                        Id = "materialId",
-                        Title = "MaterialTitle",
-                        UploadDate = DateTime.Now
-                    }
-                }
+                Id = user.Id,
+                FullName = $"{user.FirstName} {user.LastName}",
+                Email = user.Email,
+                Image = new ContentViewDto(
+                    user.Image.Id,
+                    user.Image.FileName,
+                    Convert.ToBase64String(user.Image.File)
+                ),
+            
+                Materials = user.Materials?.Select(m => new MaterialAppUserShortViewDto 
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    UploadDate = m.UploadDate
+                }).ToList() ?? new List<MaterialAppUserShortViewDto>() //ha a materilas null akkor üres lista
             };
+
+            return userView;
+
         }
 
         [HttpPost("Register")]
@@ -62,18 +89,57 @@ namespace EdushareBackend.Controllers
             user.UserName = dto.Email.Split('@')[0];
             user.Email = dto.Email;
 
+            var defaultImagePath = Path.Combine(env.WebRootPath, "images", "default.png"); //kép betöltése
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(defaultImagePath);
+
+            user.Image = new FileContent("default.png", fileBytes);
+
             var result = await userManager.CreateAsync(user, dto.Password);
 
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> LoginUser(AppUserLoginDto dto)
+        public async Task<IActionResult> Login(AppUserLoginDto dto)
         {
-            return Ok(new LoginResultDto() 
+            var user = await userManager.FindByEmailAsync(dto.Email);
+            if (user == null)
             {
-                Token = "tokenHere",
-                Expiration = DateTime.Now.AddHours(1)
-            });
+                throw new ArgumentException("User not found");
+            }
+            else
+            {
+                var result = await userManager.CheckPasswordAsync(user, dto.Password);
+                if (!result)
+                {
+                    throw new ArgumentException("Incorrect password");
+                }
+                else
+                {
+                    //todo: generate token
+                    var claim = new List<Claim>();
+                    claim.Add(new Claim(ClaimTypes.Name, user.UserName!));
+                    claim.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+
+                    foreach (var role in await userManager.GetRolesAsync(user))
+                    {
+                        claim.Add(new Claim(ClaimTypes.Role, role));
+                    }
+
+                    int expiryInMinutes = 24 * 60;
+                    var token = GenerateAccessToken(claim, expiryInMinutes);
+
+                    return Ok(new LoginResultDto()
+                    {
+                        Token = new JwtSecurityTokenHandler().WriteToken(token),
+                        Expiration = DateTime.Now.AddMinutes(expiryInMinutes)
+                    });
+
+                }
+            }
+
+
+
         }
 
         [HttpPut("{id}")]
@@ -109,6 +175,21 @@ namespace EdushareBackend.Controllers
         public async Task RevokeRole(string userId)
         {
 
+        }
+
+
+        private JwtSecurityToken GenerateAccessToken(IEnumerable<Claim>? claims, int expiryInMinutes)
+        {
+            var signinKey = new SymmetricSecurityKey(
+                  Encoding.UTF8.GetBytes("jhsddsfjkhdsfhksfjdsdsfdsgdsfsfdhjsfdhjsfdjsjsffdsdfsdfsdfhdsfhdskhf54465g6dsgúdsg4dsdggsdglsdj4oiietrjhsddsfjkhdsfhksfjdsdsfdsgdsfsfdhjsfdhjsfdjsjsffdsdfsdfsdfhdsfhdskhf54465g6dsgúdsg4dsdggsdglsdj4oiietrjhsddsfjkhdsfhksfjdsdsfdsgdsfsfdhjsfdhjsfdjsjsffdsdfsdfsdfhdsfhdskhf54465g6dsgúdsg4dsdggsdglsdj4oiietr"));
+
+            return new JwtSecurityToken(
+                  issuer: "edushare.com",
+                  audience: "edushare.com",
+                  claims: claims?.ToArray(),
+                  expires: DateTime.Now.AddMinutes(expiryInMinutes),
+                  signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
+            );
         }
     }
 }
