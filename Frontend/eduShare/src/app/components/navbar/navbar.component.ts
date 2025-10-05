@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './navbar.component.sass'
 })
 export class NavbarComponent {
-
+  
 }
