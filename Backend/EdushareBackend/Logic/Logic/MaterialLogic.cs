@@ -79,7 +79,15 @@ namespace Logic.Logic
         }
         public MaterialViewDto GetMaterialById(string id)
         {
-            var mat= materialRepo.FindById(id);
+            var mat = materialRepo.GetAll()
+             .Include(m => m.Content)
+             .Include(m => m.Uploader)
+                 .ThenInclude(u => u.Image)
+             .FirstOrDefault(m => m.Id == id);
+
+            if (mat == null)
+                throw new Exception("Material not found");
+
             return dtoProviders.Mapper.Map<MaterialViewDto>(mat);
         }
 
