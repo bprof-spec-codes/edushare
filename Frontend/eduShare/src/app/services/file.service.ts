@@ -1,23 +1,27 @@
 import { Injectable } from '@angular/core';
-import { FileContent } from '../models/file-content';
-import { read } from '@popperjs/core';
+import { FileContentDto } from '../dtos/file-content-dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
-  async toFileContent(file: File): Promise<FileContent>{
+  async toFileContent(file: File | Blob): Promise<FileContentDto> {
     const base64 = await this.toBase64(file)
-    return{
-      fileName: file.name,
+    const fileName = (file as File).name ?? 'unknown'
+
+    return {
+      fileName,
       file: base64
     }
   }
 
-  private toBase64(file: File): Promise<string>{
+  private toBase64(file: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader()
-      reader.onload = () => resolve((reader.result as string).split(',')[1] || '')
+      reader.onload = () => {
+        const result = reader.result as string
+        resolve(result.split(',')[1] ?? '')
+      }
       reader.onerror = () => reject(reader.error)
       reader.readAsDataURL(file)
     })

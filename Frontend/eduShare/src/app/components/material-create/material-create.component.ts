@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FileService } from '../../services/file.service';
 import { MaterialService } from '../../services/material.service';
 import { FileContent } from '../../models/file-content';
+import { FileContentDto } from '../../dtos/file-content-dto';
 
 
 @Component({
@@ -14,10 +15,10 @@ import { FileContent } from '../../models/file-content';
 })
 export class MaterialCreateComponent {
   materialForm: FormGroup
-  content: FileContent = new FileContent()
+  content: FileContentDto = new FileContent()
 
   fileError: string = ''
-  allowedFileTypes = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'txt']
+  allowedFileTypes = ['pdf', 'doc', 'docx', 'ppt', 'pptx']
 
   constructor(private fb: FormBuilder, private http: HttpClient, private fileService: FileService, private materialService: MaterialService) {
     this.materialForm = this.fb.group(
@@ -38,7 +39,7 @@ export class MaterialCreateComponent {
 
     const fileExtension = file.name.split('.').pop()?.toLowerCase() || ''
     if (!this.allowedFileTypes.includes(fileExtension)) {
-      this.fileError = 'Nem támogatott fájltípus. Kérlek, válassz egy érvényes fájlt. (pdf, doc, docx, ppt, pptx, xls, xlsx, txt)'
+      this.fileError = 'Nem támogatott fájltípus. Kérlek, válassz egy érvényes fájlt. (pdf, doc, docx, ppt, pptx)'
       this.materialForm.patchValue({ file: null })
       this.content = new FileContent()
       return
@@ -55,11 +56,14 @@ export class MaterialCreateComponent {
     }
 
     if (!this.content.file || !this.content.fileName || !this.materialForm.value.title) return
+
     const dto = {
       title: this.materialForm.value.title,
+      subject: "Általános",
       description: this.materialForm.value.description,
       content: this.content
     }
+
     console.log('Feltöltendő JSON:', JSON.stringify(dto, null, 2))
 
     this.materialService.create(dto).subscribe({
