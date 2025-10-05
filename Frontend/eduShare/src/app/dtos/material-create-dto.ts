@@ -1,7 +1,7 @@
-import { FileContent } from "../models/file-content"
+import { FileContentDto } from "./file-content-dto"
 
 export interface MaterialCreateDto {
     title: string
     description?: string
-    content: FileContent
+    content: FileContentDto
 }

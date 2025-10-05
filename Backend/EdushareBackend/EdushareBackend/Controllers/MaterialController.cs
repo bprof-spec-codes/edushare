@@ -1,10 +1,8 @@
 ﻿using Entities.Dtos.Content;
 using Entities.Dtos.Material;
 using Entities.Dtos.User;
-using Entities.Helpers;
 using Entities.Models;
 using Logic.Logic;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +20,7 @@ namespace EdushareBackend.Controllers
             this.UserManager = userManager;
         }
         [HttpPost]
-       // [Authorize]
+        // [Authorize]
         public async Task AddMaterial(MaterialCreateUpdateDto dto)
         {
             var user = await UserManager.GetUserAsync(User);
@@ -64,7 +62,7 @@ namespace EdushareBackend.Controllers
 
         [HttpGet("{id}")]
         public MaterialViewDto GetMaterialById(string id)
-        { 
+        {
             return new MaterialViewDto
             {
                 Id = id,

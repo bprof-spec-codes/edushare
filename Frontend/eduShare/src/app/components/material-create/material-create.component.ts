@@ -14,43 +14,63 @@ import { FileContent } from '../../models/file-content';
 })
 export class MaterialCreateComponent {
   materialForm: FormGroup
-  content: FileContent={fileName:'', file:''}
+  content: FileContent = new FileContent()
+
+  fileError: string = ''
+  allowedFileTypes = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'txt']
 
   constructor(private fb: FormBuilder, private http: HttpClient, private fileService: FileService, private materialService: MaterialService) {
-    this.materialForm= this.fb.group(
+    this.materialForm = this.fb.group(
       {
-        title: ['',Validators.required],
+        title: ['', Validators.required],
         description: [''],
-        file: [null,Validators.required]
+        file: [null, Validators.required]
       }
     )
   }
 
-  async onFileSelected(event: Event){
+  async onFileSelected(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0] || null
-    if(!file) return
+
+    this.fileError = ''
+
+    if (!file) return
+
+    const fileExtension = file.name.split('.').pop()?.toLowerCase() || ''
+    if (!this.allowedFileTypes.includes(fileExtension)) {
+      this.fileError = 'Nem támogatott fájltípus. Kérlek, válassz egy érvényes fájlt. (pdf, doc, docx, ppt, pptx, xls, xlsx, txt)'
+      this.materialForm.patchValue({ file: null })
+      this.content = new FileContent()
+      return
+    }
 
     this.content = await this.fileService.toFileContent(file)
-    this.materialForm.patchValue({file})
+    this.materialForm.patchValue({ file })
   }
 
-  onSubmit(){
-    if(this.materialForm.invalid || !this.content) return
+  onSubmit() {
+    if (this.materialForm.invalid || !this.content){
+      alert("Kérlek töltsd ki a kötelező mezőket és válassz fájlt!")
+      return
+    }
 
+    if (!this.content.file || !this.content.fileName || !this.materialForm.value.title) return
     const dto = {
       title: this.materialForm.value.title,
       description: this.materialForm.value.description,
       content: this.content
     }
+    console.log('Feltöltendő JSON:', JSON.stringify(dto, null, 2))
 
     this.materialService.create(dto).subscribe({
       next: () => {
         console.log('Tananyag feltöltve')
         this.materialForm.reset()
-        this.content={fileName:'', file:''}
+        this.content = new FileContent()
       },
       error: (err) => {
-        console.error("Sikertelen feltöltés",err)
+        console.error("Sikertelen feltöltés", err)
+        alert("Sikertelen feltöltés")
       }
     })
   }
