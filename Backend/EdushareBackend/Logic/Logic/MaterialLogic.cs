@@ -50,11 +50,23 @@ namespace Logic.Logic
         {
             materialRepo.DeleteById(id);
         }
-        public void UpdateMaterial(string id, MaterialCreateUpdateDto material)
+        public void UpdateMaterial(string id, MaterialCreateUpdateDto dto)
         {
-            var old= materialRepo.FindById(id);
-            var mat=dtoProviders.Mapper.Map(material,old);
-            materialRepo.Update(mat);
+            var old = materialRepo.FindById(id);
+            if (old == null) throw new Exception("Material not found");
+
+            old.Title = dto.Title;
+            old.Description = dto.Description;
+
+            if (dto.Content != null)
+            {
+                old.Content = new FileContent(
+                    dto.Content.FileName,
+                    Convert.FromBase64String(dto.Content.File)
+                );
+            }
+
+            materialRepo.Update(old);
         }
         public MaterialViewDto GetMaterialById(string id)
         {
