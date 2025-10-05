@@ -42,7 +42,7 @@ namespace EdushareBackend.Controllers
         //[Authorize] Admin / Own Material
         public void UpdateMaterial(string id, [FromBody] MaterialCreateUpdateDto dto)
         {
-
+            materialLogic.UpdateMaterial(id, dto);
         }
 
         [HttpGet]

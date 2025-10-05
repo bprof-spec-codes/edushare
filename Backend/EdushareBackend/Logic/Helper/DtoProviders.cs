@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Logic.Helper
 {
-    public class DtoProviders 
+    public class DtoProviders
     {
         UserManager<AppUser> userManager;
         public Mapper Mapper { get; set; }
@@ -37,7 +37,31 @@ namespace Logic.Helper
                             Convert.ToBase64String(src.Uploader.Image.File)
                         )
                     }));
-                cfg.CreateMap<Material, MaterialViewDto>();
+                cfg.CreateMap<Material, MaterialViewDto>()
+                     .ForMember(dest => dest.Uploader, opt => opt.MapFrom(src => src.Uploader != null
+                         ? new AppUserMaterialShortViewDto
+                         {
+                             Id = src.Uploader.Id,
+                             FullName = src.Uploader.FirstName + " " + src.Uploader.LastName,
+                             Image =  new ContentViewDto(
+                                 
+                                 
+                                     src.Uploader.Image.Id,
+                                    src.Uploader.Image.FileName,
+                                     Convert.ToBase64String(src.Uploader.Image.File)
+                                 )
+                             }
+                         : null))
+                     .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content != null
+                         ? new ContentViewDto(
+                             
+                         
+                             src.Content.Id,
+                             src.Content.FileName,
+                             Convert.ToBase64String(src.Content.File)
+                         )
+                         : null));
+
                 cfg.CreateMap<ContentCreateUpdateDto, FileContent>();
                 cfg.CreateMap<AppUser, AppUserMaterialShortViewDto>();
                 cfg.CreateMap<FileContent, ContentViewDto>();
