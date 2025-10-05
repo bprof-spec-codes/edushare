@@ -5,16 +5,28 @@
                 <div class="mb-3">
                     <label for="lastname" class="form-label">Vezetéknév</label>
                     <input type="text" id="title" class="form-control"  />
+                    <div *ngIf=""
+                        class="text-danger">
+                        A vezetéknév megadása kötelező.
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="firstname" class="form-label">Keresztnév</label>
                     <input type="text" id="title" class="form-control"  />
+                    <div *ngIf=""
+                        class="text-danger">
+                        A keresztnév megadása kötelező.
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="text" id="title" class="form-control"  />
+                    <div *ngIf=""
+                        class="text-danger">
+                        Az email cím megadása kötelező.
+                    </div>
                 </div>
 
                 <div class="mb-3">
@@ -41,10 +53,18 @@
                             </div>   
                         </div>
                     </ng-template>
+                    <div *ngIf=""
+                        class="text-danger">
+                        A jelszó megadása kötelező.
+                    </div>
+                    <div *ngIf=""
+                        class="text-danger">
+                        A jelszónak legalább 8 karaktert kell tartalmaznia.
+                    </div>
                 </div>
 
                 <div class="mb-3">
-                    <label for="password2" class="form-label">Jelszó megadása mégegyszer</label>
+                    <label for="password2" class="form-label">Jelszó megerősítése</label>
                     <div *ngIf="hidePass; else shownPass2" class="row">
                         <div class="col-8">
                             <input  type="password" id="password2" class="form-control"  />
@@ -58,7 +78,7 @@
                     <ng-template #shownPass2>
                         <div class="row">
                             <div class="col-8">
-                                <input type="text" id="shownpw" class="form-control"  />
+                                <input type="text" id="shownpw2" class="form-control"  />
                             </div>
                             <div class="col-4">
                                 <button type="submit" class="btn btn-primary" >
@@ -67,6 +87,14 @@
                             </div>   
                         </div>
                     </ng-template>
+                    <div *ngIf=""
+                        class="text-danger">
+                        A jelszó megadása kötelező.
+                    </div>
+                    <div *ngIf=""
+                        class="text-danger">
+                        A két jelszó nem egyezik.
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary" disabled>

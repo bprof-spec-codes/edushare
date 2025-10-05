@@ -7,7 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './register.component.sass'
 })
 export class RegisterComponent {
-  
-
-hidePass:boolean=true
+  hidePass:boolean=true
 }
