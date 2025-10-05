@@ -8,12 +8,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { MaterialCreateComponent } from './components/material-create/material-create.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './components/authentication/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    MaterialCreateComponent
+    MaterialCreateComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
