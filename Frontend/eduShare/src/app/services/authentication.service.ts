@@ -14,13 +14,13 @@ interface LoginResult {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:5000/api/User';
+  private apiUrl = 'http://localhost:5000/api/User/Login';
   private storageKey = 'edu_token';
 
   constructor(private http: HttpClient, private router: Router) {}
 
   login(email: string, password: string): Observable<LoginResult> {
-    return this.http.post<LoginResult>(`${this.apiUrl}/Login`, { email, password });
+    return this.http.post<LoginResult>(`${this.apiUrl}`, { email, password });
   }
 
   saveToken(token: string) {

@@ -16,7 +16,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
     AppComponent,
     NavbarComponent,
     MaterialCreateComponent,
-    DashboardComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -24,6 +24,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
     HttpClientModule,
     NgbModule,
     ReactiveFormsModule,
+    DashboardComponent,
     LoginComponent
   ],
   providers: [],
