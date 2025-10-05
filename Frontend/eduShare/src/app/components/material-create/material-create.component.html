@@ -7,7 +7,8 @@
                 <div class="mb-3">
                     <label for="title" class="form-label">Cím</label>
                     <input type="text" id="title" class="form-control" formControlName="title" />
-                    <div *ngIf="materialForm.get('title')?.touched && materialForm.get('title')?.invalid" class="text-danger">
+                    <div *ngIf="materialForm.get('title')?.touched && materialForm.get('title')?.invalid"
+                        class="text-danger">
                         A cím megadása kötelező.
                     </div>
                 </div>
@@ -19,12 +20,13 @@
 
                 <div class="mb-3">
                     <label for="file" class="form-label">Fájl *</label>
-                    <input type="file" id="file" class="form-control" (change)="onFileSelected($event)" />
-                    <div *ngIf="content.fileName" class="form-text">
+                    <input type="file" id="file" class="form-control" (change)="onFileSelected($event)"
+                        accept=".pdf,.docx,.ppt,.pptx" />
+                    <div *ngIf="content?.fileName" class="form-text">
                         Kiválasztott fájl: <strong>{{ content.fileName }}</strong>
                     </div>
-                    <div *ngIf="materialForm.get('file')?.touched && materialForm.get('file')?.invalid" class="text-danger">
-                        Fájlt kötelező feltölteni.
+                    <div *ngIf="fileError" class="text-danger">
+                        {{ fileError }}
                     </div>
                 </div>
 

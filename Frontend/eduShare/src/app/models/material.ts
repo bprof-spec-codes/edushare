@@ -1,8 +1,9 @@
 import { FileContent } from "./file-content"
 
 export class Material {
-    id: string=''
-    title: string=''
-    description: string=''
-    content: FileContent={fileName:'', file:''}
+    id: string = ''
+    title: string = ''
+    subject: string = ''
+    description: string = ''
+    content: FileContent | null = null
 }
