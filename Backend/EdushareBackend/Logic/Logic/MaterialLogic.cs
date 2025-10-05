@@ -58,12 +58,21 @@ namespace Logic.Logic
             old.Title = dto.Title;
             old.Description = dto.Description;
 
+
             if (dto.Content != null)
             {
-                old.Content = new FileContent(
-                    dto.Content.FileName,
-                    Convert.FromBase64String(dto.Content.File)
-                );
+                if (old.Content == null)
+                {
+                    old.Content = new FileContent(
+                        dto.Content.FileName,
+                        Convert.FromBase64String(dto.Content.File)
+                    );
+                }
+                else
+                {
+                    old.Content.FileName = dto.Content.FileName;
+                    old.Content.File = Convert.FromBase64String(dto.Content.File);
+                }
             }
 
             materialRepo.Update(old);
