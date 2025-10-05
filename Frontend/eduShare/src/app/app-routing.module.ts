@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MaterialCreateComponent } from './components/material-create/material-create.component';
+import { MaterialCreateComponent } from './pages/material-create/material-create.component';
+import { LoginComponent } from './components/authentication/login/login.component';
 
 const routes: Routes = [
-  {path:"",redirectTo: "create-material",pathMatch:"full"},
-  {path:"create-material",component: MaterialCreateComponent},
-  {path:"**",redirectTo:"create-material",pathMatch:"full"}
+  { path: 'login', component: LoginComponent },
+  { path: 'create-material', component: MaterialCreateComponent },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
 
 @NgModule({
