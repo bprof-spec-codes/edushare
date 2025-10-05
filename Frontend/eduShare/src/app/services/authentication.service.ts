@@ -14,7 +14,7 @@ interface LoginResult {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:5001/api/User';
+  private apiUrl = 'https://localhost:5000/api/User';
   private storageKey = 'edu_token';
 
   constructor(private http: HttpClient, private router: Router) {}
