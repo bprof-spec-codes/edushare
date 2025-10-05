@@ -8,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class RegisterComponent {
   
+
+hidePass:boolean=true
 }
