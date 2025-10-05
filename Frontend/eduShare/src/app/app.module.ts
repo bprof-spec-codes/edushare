@@ -14,15 +14,15 @@ import { LoginComponent } from './components/authentication/login/login.componen
   declarations: [
     AppComponent,
     NavbarComponent,
-    MaterialCreateComponent,
-    LoginComponent
+    MaterialCreateComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LoginComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
