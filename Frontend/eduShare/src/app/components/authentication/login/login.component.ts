@@ -32,7 +32,7 @@ export class LoginComponent {
           return;
         }
         this.auth.saveToken(token);
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/homepage']);
       },
       error: (err) => {
         this.loading = false;

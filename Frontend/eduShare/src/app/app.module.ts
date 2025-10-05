@@ -9,14 +9,14 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { MaterialCreateComponent } from './pages/material-create/material-create.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './components/authentication/login/login.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { HomepageComponent } from './pages/homepage/homepage.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     MaterialCreateComponent,
-    
+    HomepageComponent,
   ],
   imports: [
     BrowserModule,
@@ -24,7 +24,6 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
     HttpClientModule,
     NgbModule,
     ReactiveFormsModule,
-    DashboardComponent,
     LoginComponent
   ],
   providers: [],
