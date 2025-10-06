@@ -13,6 +13,7 @@ import { LoginComponent } from './components/authentication/login/login.componen
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { DatePipe } from '@angular/common';
 import { AuthInterceptor } from './interceptors/login.interceptor';
+import { MaterialViewComponent } from './components/material-view/material-view.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { AuthInterceptor } from './interceptors/login.interceptor';
     MaterialCreateComponent,
     MaterialListComponent,
     HomepageComponent,
+    MaterialViewComponent,
   ],
   imports: [
     BrowserModule,
