@@ -1,14 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MaterialCreateComponent } from './components/material-create/material-create.component';
+import { MaterialCreateComponent } from './pages/material-create/material-create.component';
 import { MaterialListComponent } from './components/material-list/material-list.component';
+import { LoginComponent } from './components/authentication/login/login.component';
+import { AuthGuard } from './guards/login.service';
+import { HomepageComponent } from './pages/homepage/homepage.component';
 
 const routes: Routes = [
-  {path:"",redirectTo: "create-material",pathMatch:"full"},
-  {path:"create-material",component: MaterialCreateComponent},
-  {path:"list-materials",component: MaterialListComponent},
-  {path:"**",redirectTo:"create-material",pathMatch:"full"}
+  { path: 'login', component: LoginComponent },
+  { path: 'homepage', component: HomepageComponent, canActivate: [AuthGuard] },
+  { path: 'create-material', component: MaterialCreateComponent, canActivate: [AuthGuard] },
+  { path: 'list-materials', component: MaterialListComponent, canActivate: [AuthGuard] },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
