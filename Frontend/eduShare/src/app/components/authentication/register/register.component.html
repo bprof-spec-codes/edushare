@@ -34,7 +34,7 @@
                             <input  type="password" id="pw" formControlName="password" class="form-control"  />
                         </div>
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary" >
+                            <button (click)="passwordVisibility(('password'))" type="button" class="btn btn-primary" >
                             <i class="bi bi-eye"></i>
                             </button>
                         </div>   
@@ -42,10 +42,10 @@
                     <ng-template #shownPass1>
                         <div class="row">
                             <div class="col-8">
-                                <input type="text" id="shownpw" class="form-control"  />
+                                <input type="text" id="shownpw" formControlName="password" class="form-control"  />
                             </div>
                             <div class="col-4">
-                                <button type="submit" class="btn btn-primary" >
+                                <button (click)="passwordVisibility('password')" type="button" class="btn btn-primary" >
                                     <i class="bi bi-eye-slash"></i>
                                 </button>
                             </div>   
@@ -63,12 +63,12 @@
 
                 <div class="mb-3">
                     <label for="password2" class="form-label">Jelszó megerősítése</label>
-                    <div *ngIf="hidePass; else shownPass2" class="row">
+                    <div *ngIf="hidePass2; else shownPass2" class="row">
                         <div class="col-8">
                             <input  type="password" id="pw2" formControlName="password2" class="form-control"  />
                         </div>
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary" >
+                            <button (click)="passwordVisibility('password2')" type="button" class="btn btn-primary" >
                             <i class="bi bi-eye"></i>
                             </button>
                         </div>   
@@ -76,10 +76,10 @@
                     <ng-template #shownPass2>
                         <div class="row">
                             <div class="col-8">
-                                <input type="text" id="shownpw2" class="form-control"  />
+                                <input type="text" id="shownpw2" formControlName="password2" class="form-control"  />
                             </div>
                             <div class="col-4">
-                                <button type="submit" class="btn btn-primary" >
+                                <button (click)="passwordVisibility('password2')" type="button" class="btn btn-primary" >
                                     <i class="bi bi-eye-slash"></i>
                                 </button>
                             </div>   

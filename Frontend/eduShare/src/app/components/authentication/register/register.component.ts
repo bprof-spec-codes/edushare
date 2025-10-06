@@ -6,10 +6,11 @@ import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
   selector: 'app-register',
   standalone: false,
   templateUrl: './register.component.html',
-  styleUrl: './register.component.sass'
+  styleUrls: ['./register.component.sass']
 })
 export class RegisterComponent {
   hidePass:boolean=true
+  hidePass2:boolean=true
   registerForm: FormGroup
   constructor(private fb: FormBuilder) {
     this.registerForm = this.fb.group(
@@ -26,6 +27,15 @@ export class RegisterComponent {
     const pw=this.registerForm.get('password')?.value;
     const pw2=this.registerForm.get('password2')?.value;
     return pw&&pw2&&pw!==pw2
+  }
+  passwordVisibility(field: 'password' | 'password2'): void {
+    if (field === 'password') {
+      this.hidePass = !this.hidePass;
+    } 
+    else
+    {
+        this.hidePass2 = !this.hidePass2;
+    }
   }
 }
 
