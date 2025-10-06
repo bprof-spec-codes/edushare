@@ -41,7 +41,7 @@ export class LoginComponent {
     });
   }
 
-  onRegister() {
-    alert('Regisztráció: még nincs implementálva.');
+  goToRegister() {
+    this.router.navigate(['/register']);
   }
 }
