@@ -22,6 +22,10 @@ export class MaterialService {
     )
   }
 
+  getById(id: string): Observable<Material> {
+    return this.http.get<Material>(`${this.apiBaseUrl}/${id}`);
+  }
+
   create(material: MaterialCreateDto): Observable<void> {
     return this.http.post<void>(this.apiBaseUrl, material).pipe(
       switchMap(() => this.http.get<MaterialShortViewDto[]>(this.apiBaseUrl)),
