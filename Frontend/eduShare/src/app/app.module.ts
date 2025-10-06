@@ -3,19 +3,23 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { MaterialCreateComponent } from './pages/material-create/material-create.component';
+import { MaterialCreateComponent } from './components/material-create/material-create.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialListComponent } from './components/material-list/material-list.component';
 import { LoginComponent } from './components/authentication/login/login.component';
-import { HomepageComponent } from './pages/homepage/homepage.component';
+import { HomepageComponent } from './components/homepage/homepage.component';
+import { DatePipe } from '@angular/common';
+import { AuthInterceptor } from './interceptors/login.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     MaterialCreateComponent,
+    MaterialListComponent,
     HomepageComponent,
   ],
   imports: [
@@ -24,9 +28,12 @@ import { HomepageComponent } from './pages/homepage/homepage.component';
     HttpClientModule,
     NgbModule,
     ReactiveFormsModule,
-    LoginComponent
+    LoginComponent,
+    DatePipe
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
