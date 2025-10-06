@@ -37,5 +37,8 @@ export class RegisterComponent {
         this.hidePass2 = !this.hidePass2;
     }
   }
-}
+  canSubmit(): boolean {
+    return this.registerForm.valid && !this.PasswordMatch();
+  }
 
+}

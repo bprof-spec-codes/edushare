@@ -55,7 +55,7 @@
                         class="text-danger">
                         A jelszó megadása kötelező.
                     </div>
-                    <div *ngIf=""
+                    <div *ngIf="registerForm.get('password')?.value?.length < 8 && registerForm.get('password')?.touched"
                         class="text-danger">
                         A jelszónak legalább 8 karaktert kell tartalmaznia.
                     </div>
@@ -95,7 +95,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" disabled>
+                <button type="submit" class="btn btn-primary" [disabled]="!canSubmit()">
                     Regisztrálás
                 </button>
             </form>
