@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Text;
 
 namespace EdushareBackend.Controllers
@@ -83,6 +84,12 @@ namespace EdushareBackend.Controllers
         [HttpPost("Register")]
         public async Task RegisterUser(AppUserRegisterDto dto)
         {
+            if (dto.Password.Length < 8) throw new ArgumentException("A jelszónak legalább 8 karakter hosszúnak kell lennie");
+
+            if (await userManager.FindByEmailAsync(dto.Email) != null) throw new ArgumentException("Az emalcím már létezik");
+
+            if (!(IsValidEmail(dto.Email))) throw new ArgumentException("Az email cím formátuma nem megfelelő");
+
             var user = new AppUser();
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
@@ -190,6 +197,12 @@ namespace EdushareBackend.Controllers
                   expires: DateTime.Now.AddMinutes(expiryInMinutes),
                   signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
             );
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            return Regex.IsMatch(email, pattern, RegexOptions.IgnoreCase);
         }
     }
 }

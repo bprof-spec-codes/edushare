@@ -6,21 +6,25 @@ import { AppComponent } from './app.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { MaterialCreateComponent } from './components/material-create/material-create.component';
+import { MaterialCreateComponent } from './pages/material-create/material-create.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './components/authentication/login/login.component';
+import { HomepageComponent } from './pages/homepage/homepage.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    MaterialCreateComponent
+    MaterialCreateComponent,
+    HomepageComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LoginComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

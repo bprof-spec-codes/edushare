@@ -63,16 +63,17 @@ namespace EdushareBackend.Controllers
         [HttpGet("{id}")]
         public MaterialViewDto GetMaterialById(string id)
         {
-            return new MaterialViewDto
-            {
-                Id = id,
-                Title = "Cim",
-                Description = "Leiras",
-                Subject = "Tantargy",
-                UploadDate = DateTime.Now,
-                Uploader = new AppUserMaterialShortViewDto { Id = "123123-1231431-1234134", FullName = "UserName", Image = new ContentViewDto("ImageId", "fileTitle", "fileInBase64") },
-                Content = new ContentViewDto("FileId", "fileTitle", "fileInBase64")
-            };
+            return materialLogic.GetMaterialById(id);
+            //return new MaterialViewDto
+            //{
+            //    Id = id,
+            //    Title = "Cim",
+            //    Description = "Leiras",
+            //    Subject = "Tantargy",
+            //    UploadDate = DateTime.Now,
+            //    Uploader = new AppUserMaterialShortViewDto { Id = "123123-1231431-1234134", FullName = "UserName", Image = new ContentViewDto("ImageId", "fileTitle", "fileInBase64") },
+            //    Content = new ContentViewDto("FileId", "fileTitle", "fileInBase64")
+            //};
         }
     }
 }
