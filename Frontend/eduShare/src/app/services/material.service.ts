@@ -4,6 +4,7 @@ import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
 import { Material } from '../models/material';
 import { MaterialCreateDto } from '../dtos/material-create-dto';
 import { MaterialShortViewDto } from '../dtos/material-short-view-dto';
+import { MaterialViewDto } from '../dtos/material-view-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +23,8 @@ export class MaterialService {
     )
   }
 
-  getById(id: string): Observable<Material> {
-    return this.http.get<Material>(`${this.apiBaseUrl}/${id}`);
+  getById(id: string): Observable<MaterialViewDto> {
+    return this.http.get<MaterialViewDto>(`${this.apiBaseUrl}/${id}`);
   }
 
   create(material: MaterialCreateDto): Observable<void> {
