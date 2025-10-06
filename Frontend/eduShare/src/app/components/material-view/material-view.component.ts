@@ -11,11 +11,19 @@ import { MaterialViewDto } from '../../dtos/material-view-dto';
 })
 export class MaterialViewComponent implements OnInit {
   material: MaterialViewDto | null = null
+  loading = false
+  error?: string
 
   constructor(private route: ActivatedRoute, private materialService: MaterialService) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')
+    if(!id) {
+      alert('Érvénytelen azonosító.')
+      return
+    }
+
+    this.loading = true
     if (id) {
       this.materialService.getById(id).subscribe({
         next: (data) => {
@@ -29,4 +37,14 @@ export class MaterialViewComponent implements OnInit {
       })
     }
   }
+
+  downloadFile(base64: string | undefined, fileName: string | undefined): void {
+    if (!base64 || !fileName) return
+
+    const link = document.createElement('a')
+    link.href = `data:application/octet-stream;base64,${base64}`
+    link.download = fileName
+    link.click()
+  }
+
 }
