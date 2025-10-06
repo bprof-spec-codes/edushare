@@ -2,29 +2,27 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <h5 class="mb-3">Regisztráció</h5>
+            <form [formGroup]="registerForm">
                 <div class="mb-3">
                     <label for="lastname" class="form-label">Vezetéknév</label>
-                    <input type="text" id="title" class="form-control"  />
-                    <div *ngIf=""
-                        class="text-danger">
+                    <input type="text" id="title" formControlName="lastname" class="form-control"  />
+                    <div *ngIf="registerForm.get('lastname')?.touched && registerForm.get('lastname')?.invalid" class="text-danger">
                         A vezetéknév megadása kötelező.
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="firstname" class="form-label">Keresztnév</label>
-                    <input type="text" id="title" class="form-control"  />
-                    <div *ngIf=""
-                        class="text-danger">
+                    <input type="text" id="title" formControlName="firstname" class="form-control"  />
+                    <div *ngIf="registerForm.get('firstname')?.touched && registerForm.get('firstname')?.invalid" class="text-danger">
                         A keresztnév megadása kötelező.
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="text" id="title" class="form-control"  />
-                    <div *ngIf=""
-                        class="text-danger">
+                    <input type="text" id="title" formControlName="email" class="form-control"  />
+                    <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid" class="text-danger">
                         Az email cím megadása kötelező.
                     </div>
                 </div>
@@ -33,7 +31,7 @@
                     <label for="password" class="form-label">Jelszó</label>
                     <div *ngIf="hidePass; else shownPass1" class="row">
                         <div class="col-8">
-                            <input  type="password" id="pw" class="form-control"  />
+                            <input  type="password" id="pw" formControlName="password" class="form-control"  />
                         </div>
                         <div class="col-4">
                             <button type="submit" class="btn btn-primary" >
@@ -53,7 +51,7 @@
                             </div>   
                         </div>
                     </ng-template>
-                    <div *ngIf=""
+                    <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid"
                         class="text-danger">
                         A jelszó megadása kötelező.
                     </div>
@@ -67,7 +65,7 @@
                     <label for="password2" class="form-label">Jelszó megerősítése</label>
                     <div *ngIf="hidePass; else shownPass2" class="row">
                         <div class="col-8">
-                            <input  type="password" id="password2" class="form-control"  />
+                            <input  type="password" id="pw2" formControlName="password2" class="form-control"  />
                         </div>
                         <div class="col-4">
                             <button type="submit" class="btn btn-primary" >
@@ -87,9 +85,9 @@
                             </div>   
                         </div>
                     </ng-template>
-                    <div *ngIf=""
+                    <div *ngIf="registerForm.get('password2')?.touched && registerForm.get('password2')?.invalid"
                         class="text-danger">
-                        A jelszó megadása kötelező.
+                        A jelszó megerősítése kötelező.
                     </div>
                     <div *ngIf=""
                         class="text-danger">
@@ -100,7 +98,7 @@
                 <button type="submit" class="btn btn-primary" disabled>
                     Regisztrálás
                 </button>
-            
+            </form>
         </div>
     </div>
 </div>
