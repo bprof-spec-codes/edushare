@@ -5,23 +5,13 @@
   <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
 
   <ul class="list-group" *ngIf="!loading && materials.length">
-    <li
-      *ngFor="let m of materials"
-      class="list-group-item d-flex align-items-center justify-content-between"
-      (click)="openDetail(m)"
-      style="cursor: pointer;"
-    >
+    <li *ngFor="let m of materials" class="list-group-item d-flex align-items-center justify-content-between"
+      (click)="openDetail(m)" style="cursor: pointer;">
       <div class="d-flex align-items-center">
-        <img
-          *ngIf="m.uploader?.image?.file"
-          [src]="m.uploader.image.file.startsWith('http')
+        <img *ngIf="m.uploader?.image?.file" [src]="m.uploader.image.file.startsWith('http')
                   ? m.uploader.image.file
-                  : 'data:image/*;base64,' + m.uploader.image.file"
-          [alt]="m.uploader.fullName"
-          class="rounded-circle me-3"
-          width="50"
-          height="50"
-        />
+                  : 'data:image/*;base64,' + m.uploader.image.file" [alt]="m.uploader.fullName"
+          class="rounded-circle me-3" width="50" height="50" />
         <div>
           <h6 class="mb-0">{{ m.title }}</h6>
           <small class="text-muted">
