@@ -6,7 +6,7 @@
                 <div class="mb-3">
                     <label for="lastname" class="form-label">Vezetéknév</label>
                     <input type="text" id="title" formControlName="lastname" class="form-control"  />
-                    <div *ngIf="registerForm.get('lastname')?.touched && registerForm.get('lastname')?.invalid" class="text-danger">
+                    <div *ngIf="registerForm.get('lastname')?.dirty && registerForm.get('lastname')?.invalid" class="text-danger">
                         A vezetéknév megadása kötelező.
                     </div>
                 </div>
@@ -14,7 +14,7 @@
                 <div class="mb-3">
                     <label for="firstname" class="form-label">Keresztnév</label>
                     <input type="text" id="title" formControlName="firstname" class="form-control"  />
-                    <div *ngIf="registerForm.get('firstname')?.touched && registerForm.get('firstname')?.invalid" class="text-danger">
+                    <div *ngIf="registerForm.get('firstname')?.dirty && registerForm.get('firstname')?.invalid" class="text-danger">
                         A keresztnév megadása kötelező.
                     </div>
                 </div>
@@ -22,7 +22,7 @@
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="text" id="title" formControlName="email" class="form-control"  />
-                    <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid" class="text-danger">
+                    <div *ngIf="registerForm.get('email')?.dirty && registerForm.get('email')?.invalid" class="text-danger">
                         Az email cím megadása kötelező.
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                             </div>   
                         </div>
                     </ng-template>
-                    <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid"
+                    <div *ngIf="registerForm.get('password')?.dirty && registerForm.get('password')?.invalid"
                         class="text-danger">
                         A jelszó megadása kötelező.
                     </div>
@@ -85,11 +85,11 @@
                             </div>   
                         </div>
                     </ng-template>
-                    <div *ngIf="registerForm.get('password2')?.touched && registerForm.get('password2')?.invalid"
+                    <div *ngIf="registerForm.get('password2')?.dirty && registerForm.get('password2')?.invalid"
                         class="text-danger">
                         A jelszó megerősítése kötelező.
                     </div>
-                    <div *ngIf=""
+                    <div *ngIf="PasswordMatch() && registerForm.get('password2')?.touched"
                         class="text-danger">
                         A két jelszó nem egyezik.
                     </div>

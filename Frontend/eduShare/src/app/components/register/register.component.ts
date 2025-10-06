@@ -22,4 +22,10 @@ export class RegisterComponent {
       }
     )
   }
+  PasswordMatch():boolean{
+    const pw=this.registerForm.get('password')?.value;
+    const pw2=this.registerForm.get('password2')?.value;
+    return pw&&pw2&&pw!==pw2
+  }
 }
+
