@@ -15,7 +15,6 @@ export class MaterialListComponent {
   error?: string
 
   constructor(private materialService: MaterialService, private router: Router) { }
-
   ngOnInit(): void {
     this.loadMaterials()
   }

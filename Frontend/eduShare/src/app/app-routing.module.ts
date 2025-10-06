@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MaterialCreateComponent } from './pages/material-create/material-create.component';
 import { MaterialListComponent } from './components/material-list/material-list.component';
 import { LoginComponent } from './components/authentication/login/login.component';
 import { AuthGuard } from './guards/login.service';
-import { HomepageComponent } from './pages/homepage/homepage.component';
+import { HomepageComponent } from './components/homepage/homepage.component';
+import { MaterialCreateComponent } from './components/material-create/material-create.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },

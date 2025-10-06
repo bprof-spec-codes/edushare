@@ -23,14 +23,10 @@ export class MaterialService {
   }
 
   create(material: MaterialCreateDto): Observable<void> {
-    const headers = { 'Authorization': `Bearer ${this.token}` }
-    return this.http.post<void>(this.apiBaseUrl, material, { headers }).pipe(
-
+    return this.http.post<void>(this.apiBaseUrl, material).pipe(
       switchMap(() => this.http.get<MaterialShortViewDto[]>(this.apiBaseUrl)),
       tap(created => this.materialShortSubject.next(created)),
       map(() => void 0)
     )
   }
-
-  private token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYmF0b3IiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjAwNGRiM2ExLWU5MWUtNGU1Zi05ZTBjLTQ2M2MxY2E0Njk0NiIsImV4cCI6MTc1OTc3MTQ2NSwiaXNzIjoiZWR1c2hhcmUuY29tIiwiYXVkIjoiZWR1c2hhcmUuY29tIn0.G6xpiW5VALnkFii5LS9C2Bny2NVy3D3w93Wuah4YP0A'
 }
