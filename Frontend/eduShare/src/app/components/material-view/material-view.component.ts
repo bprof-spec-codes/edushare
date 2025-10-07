@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialService } from '../../services/material.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialViewDto } from '../../dtos/material-view-dto';
 
 @Component({
@@ -14,7 +14,7 @@ export class MaterialViewComponent implements OnInit {
   loading = false
   error?: string
 
-  constructor(private route: ActivatedRoute, private materialService: MaterialService) {}
+  constructor(private route: ActivatedRoute, private materialService: MaterialService, private router: Router) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')
@@ -47,4 +47,18 @@ export class MaterialViewComponent implements OnInit {
     link.click()
   }
 
+  deleteMaterial(): void {
+    if (!this.material) return
+    if (!confirm('Biztosan törölni szeretnéd az anyagot?')) return
+    this.materialService.delete(this.material.id).subscribe({
+      next: () => {
+        console.log('A tananyag sikeresen törölve lett.')
+        this.router.navigate(['/list-materials'])
+      },
+      error: (err) => {
+        console.error(err)
+        alert('Nem sikerült törölni az tananyagot.')
+      }
+    })
+  }
 }
