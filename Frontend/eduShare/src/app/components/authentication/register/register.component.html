@@ -1,0 +1,104 @@
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="mb-3">Regisztráció</h5>
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                <div class="mb-3">
+                    <label for="lastname" class="form-label">Vezetéknév</label>
+                    <input type="text" id="lastname" formControlName="lastname" class="form-control"  />
+                    <div *ngIf="registerForm.get('lastname')?.dirty && registerForm.get('lastname')?.invalid" class="text-danger">
+                        A vezetéknév megadása kötelező.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="firstname" class="form-label">Keresztnév</label>
+                    <input type="text" id="firstname" formControlName="firstname" class="form-control"  />
+                    <div *ngIf="registerForm.get('firstname')?.dirty && registerForm.get('firstname')?.invalid" class="text-danger">
+                        A keresztnév megadása kötelező.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" id="email" formControlName="email" class="form-control"  />
+                    <div *ngIf="registerForm.get('email')?.dirty && registerForm.get('email')?.invalid" class="text-danger">
+                        Az email cím megadása kötelező.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label [attr.for]="hidePass ? 'password' : 'shownpw'" class="form-label">Jelszó</label>
+                    <div *ngIf="hidePass; else shownPass1" class="row">
+                        <div class="col-8">
+                            <input  type="password" id="password" formControlName="password" class="form-control"  />
+                        </div>
+                        <div class="col-4">
+                            <button (click)="passwordVisibility(('password'))" type="button" class="btn btn-primary" >
+                            <i class="bi bi-eye-slash"></i>
+                            </button>
+                        </div>   
+                    </div>
+                    <ng-template #shownPass1>
+                        <div class="row">
+                            <div class="col-8">
+                                <input type="text" id="shownpw" formControlName="password" class="form-control"  />
+                            </div>
+                            <div class="col-4">
+                                <button (click)="passwordVisibility('password')" type="button" class="btn btn-primary" >
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>   
+                        </div>
+                    </ng-template>
+                    <div *ngIf="registerForm.get('password')?.dirty && registerForm.get('password')?.invalid"
+                        class="text-danger">
+                        A jelszó megadása kötelező.
+                    </div>
+                    <div *ngIf="registerForm.get('password')?.value?.length < 8 && registerForm.get('password')?.touched"
+                        class="text-danger">
+                        A jelszónak legalább 8 karaktert kell tartalmaznia.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label [attr.for]="hidePass2 ? 'password2' : 'shownpw2'" class="form-label">Jelszó megerősítése</label>
+                    <div *ngIf="hidePass2; else shownPass2" class="row">
+                        <div class="col-8">
+                            <input  type="password" id="password2" formControlName="password2" class="form-control"  />
+                        </div>
+                        <div class="col-4">
+                            <button (click)="passwordVisibility('password2')" type="button" class="btn btn-primary" >
+                            <i class="bi bi-eye"></i>
+                            </button>
+                        </div>   
+                    </div>
+                    <ng-template #shownPass2>
+                        <div class="row">
+                            <div class="col-8">
+                                <input type="text" id="shownpw2" formControlName="password2" class="form-control"  />
+                            </div>
+                            <div class="col-4">
+                                <button (click)="passwordVisibility('password2')" type="button" class="btn btn-primary" >
+                                    <i class="bi bi-eye-slash"></i>
+                                </button>
+                            </div>   
+                        </div>
+                    </ng-template>
+                    <div *ngIf="registerForm.get('password2')?.dirty && registerForm.get('password2')?.invalid"
+                        class="text-danger">
+                        A jelszó megerősítése kötelező.
+                    </div>
+                    <div *ngIf="PasswordMatch() && registerForm.get('password2')?.touched"
+                        class="text-danger">
+                        A két jelszó nem egyezik.
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="!canSubmit()" >
+                    Regisztrálás
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

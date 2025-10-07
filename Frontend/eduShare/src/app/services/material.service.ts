@@ -34,4 +34,12 @@ export class MaterialService {
       map(() => void 0)
     )
   }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiBaseUrl}/${id}`).pipe(
+      switchMap(() => this.http.get<MaterialShortViewDto[]>(this.apiBaseUrl)),
+      tap(deleted => this.materialShortSubject.next(deleted)),
+      map(() => void 0)
+    )
+  }
 }

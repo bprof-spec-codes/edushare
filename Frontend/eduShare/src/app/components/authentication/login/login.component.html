@@ -37,7 +37,7 @@
 
     <p class="text-center mt-3">
       Nincs fiókod? 
-      <a href="javascript:void(0)" (click)="onRegister()">Regisztráció</a>
+      <a (click)="goToRegister()" class="link-primary">Regisztráció</a>
     </p>
 
     <div *ngIf="error" class="alert alert-danger mt-2 mb-0 text-center">

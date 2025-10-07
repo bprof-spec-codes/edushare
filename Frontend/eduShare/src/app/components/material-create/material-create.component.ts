@@ -63,6 +63,7 @@ export class MaterialCreateComponent {
       description: this.materialForm.value.description,
       content: this.content
     }
+
     console.log('Feltöltendő JSON:', JSON.stringify(dto, null, 2))
 
     this.materialService.create(dto).subscribe({
