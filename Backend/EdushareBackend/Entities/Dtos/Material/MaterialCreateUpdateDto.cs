@@ -15,6 +15,8 @@ namespace Entities.Dtos.Material
 
         public required string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+
+        public string Subject { get; set; } = string.Empty;
         public required ContentCreateUpdateDto Content { get; set; } = null!;
     }
 }
