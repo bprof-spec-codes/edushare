@@ -11,6 +11,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialListComponent } from './components/material-list/material-list.component';
 import { LoginComponent } from './components/authentication/login/login.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
+import { RegisterComponent } from './components/authentication/register/register.component';
+import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { AuthInterceptor } from './interceptors/login.interceptor';
 import { MaterialViewComponent } from './components/material-view/material-view.component';
@@ -22,6 +24,7 @@ import { MaterialViewComponent } from './components/material-view/material-view.
     MaterialCreateComponent,
     MaterialListComponent,
     HomepageComponent,
+    RegisterComponent,
     MaterialViewComponent,
   ],
   imports: [
@@ -31,7 +34,8 @@ import { MaterialViewComponent } from './components/material-view/material-view.
     NgbModule,
     ReactiveFormsModule,
     LoginComponent,
-    DatePipe
+    FormsModule,
+    DatePipe,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
