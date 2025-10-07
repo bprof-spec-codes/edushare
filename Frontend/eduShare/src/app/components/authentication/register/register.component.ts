@@ -60,6 +60,7 @@ export class RegisterComponent {
       console.log('Sikeres regisztráció:', response);
       alert('Sikeres regisztráció!');
       this.registerForm.reset();
+      this.router.navigate(['/login']);
     },
     error: (err) => {
       console.error('Sikertelen regisztráció:', err);
