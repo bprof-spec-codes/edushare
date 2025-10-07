@@ -6,10 +6,6 @@ import { AuthGuard } from './guards/login.service';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { RegisterComponent } from './components/authentication/register/register.component';
 import { MaterialListComponent } from './components/material-list/material-list.component';
-import { LoginComponent } from './components/authentication/login/login.component';
-import { AuthGuard } from './guards/login.service';
-import { HomepageComponent } from './components/homepage/homepage.component';
-import { MaterialCreateComponent } from './components/material-create/material-create.component';
 import { MaterialViewComponent } from './components/material-view/material-view.component';
 
 const routes: Routes = [
