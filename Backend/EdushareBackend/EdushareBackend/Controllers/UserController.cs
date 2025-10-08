@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Text;
+using Data;
 
 namespace EdushareBackend.Controllers
 {
@@ -21,11 +22,13 @@ namespace EdushareBackend.Controllers
     {
         UserManager<AppUser> userManager;
         private readonly IWebHostEnvironment env;
+        RepositoryContext ctx;
 
-        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env)
+        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RepositoryContext ctx)
         {
             this.userManager = userManager;
             this.env = env;
+            this.ctx = ctx;
         }
 
         [HttpGet]
@@ -68,8 +71,8 @@ namespace EdushareBackend.Controllers
                     user.Image.FileName,
                     Convert.ToBase64String(user.Image.File)
                 ),
-            
-                Materials = user.Materials?.Select(m => new MaterialAppUserShortViewDto 
+
+                Materials = user.Materials?.Select(m => new MaterialAppUserShortViewDto
                 {
                     Id = m.Id,
                     Title = m.Title,
@@ -151,8 +154,23 @@ namespace EdushareBackend.Controllers
 
         [HttpPut("{id}")]
         //[Authorize] Admin / Own Profile
-        public void UpdateUser(string id, [FromBody] AppUserUpdateDto dto)
+        public async Task UpdateUser(string id,[FromBody] AppUserUpdateDto dto)
         {
+            var currentUser = await userManager.Users
+                .Include(u => u.Image)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+             currentUser.Email = dto.Email;
+             currentUser.FirstName = dto.FirstName;
+             currentUser.LastName = dto.LastName;
+             if (dto.Image != null)
+             {
+                 currentUser.Image.FileName = dto.Image.FileName;
+                 currentUser.Image.File = Convert.FromBase64String(dto.Image.File);
+             }
+
+            await userManager.SetEmailAsync(currentUser, dto.Email);
+            await userManager.UpdateAsync(currentUser);
 
         }
 
