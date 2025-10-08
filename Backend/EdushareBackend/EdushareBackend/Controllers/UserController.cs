@@ -22,13 +22,12 @@ namespace EdushareBackend.Controllers
     {
         UserManager<AppUser> userManager;
         private readonly IWebHostEnvironment env;
-        RepositoryContext ctx;
+       
 
-        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RepositoryContext ctx)
+        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env)
         {
             this.userManager = userManager;
             this.env = env;
-            this.ctx = ctx;
         }
 
         [HttpGet]
