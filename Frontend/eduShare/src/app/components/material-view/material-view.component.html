@@ -50,6 +50,10 @@
             </div>
           </div>
           <div class="d-flex text-end">
+            <button class="btn btn-warning btn-sm mt-3 me-2" (click)="updateMaterial()" *ngIf="material">
+              <i class="bi bi-pencil-square me-1"></i>
+              Módosítás
+            </button>
             <button class="btn btn-danger btn-sm mt-3 ms-auto" (click)="deleteMaterial()" *ngIf="material">
               <i class="bi bi-trash me-1"></i>
               Törlés

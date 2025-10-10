@@ -49,7 +49,7 @@ export class MaterialViewComponent implements OnInit {
 
   updateMaterial(): void {
     if (!this.material) return
-    this.router.navigate(['/materials/' + this.material.id + '/update'])
+    this.router.navigate(['/materials', this.material.id, 'update'])
   }
 
   deleteMaterial(): void {

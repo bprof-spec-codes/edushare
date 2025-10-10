@@ -45,7 +45,7 @@ export class MaterialService {
 
   update(id: string, material: MaterialCreateDto): Observable<void> {
     return this.http.put<void>(`${this.apiBaseUrl}/${id}`, material).pipe(
-      switchMap(() => this.http.get<MaterialShortViewDto[]>(this.apiBaseUrl)),
+      switchMap(() => this.http.get<MaterialViewDto[]>(this.apiBaseUrl)),
       tap(updated => this.materialShortSubject.next(updated)),
       map(() => void 0)
     )

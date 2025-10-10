@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MaterialViewDto } from '../../dtos/material-view-dto';
+import { Material } from '../../models/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MaterialService } from '../../services/material.service';
+import { MaterialFormValue } from '../material-form/material-form.component';
 
 @Component({
   selector: 'app-material-update',
@@ -6,6 +11,45 @@ import { Component } from '@angular/core';
   templateUrl: './material-update.component.html',
   styleUrl: './material-update.component.sass'
 })
-export class MaterialUpdateComponent {
+export class MaterialUpdateComponent implements OnInit{
+  material?: MaterialViewDto
+  id!: string
 
+  constructor(private route: ActivatedRoute, private materialService: MaterialService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.id = this.route.snapshot.paramMap.get('id')!
+    this.materialService.getById(this.id).subscribe({
+      next: (data) =>{
+        this.material=data
+      },
+      error: (err) => {
+        console.error("Nem sikerült betölteni az anyagot", err)
+        this.router.navigate(['/materials'])
+      }
+    })
+  }
+
+  onUpdate(value: MaterialFormValue){
+    
+    if (!this.material) return
+    const dto = {
+      title: value.title,
+      subject: value.subject,
+      description: value.description,
+      content: value.content ? value.content : this.material.content
+    }
+    
+    this.materialService.update(this.id, dto).subscribe({
+      next: () => {
+        console.log("Sikeres módosítás!")
+        this.router.navigate(['/materials', this.id, 'view'])
+      },
+      error: (err) => {
+        console.error("Nem sikerült módosítani az anyagot", err)
+        alert("Sikertelen módosítás!")
+        this.router.navigate(['/materials'])
+      }
+    })
+  }
 }
