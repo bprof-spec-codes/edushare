@@ -1,12 +1,21 @@
 <form [formGroup]="materialForm" (ngSubmit)="submit()">
     <div class="mb-3">
-        <label class="form-label">Cím</label>
-        <input class="form-control" formControlName="title" />
+        <label class="form-label">Cím <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" formControlName="title"
+            [class.is-invalid]="materialForm.get('title')?.invalid && materialForm.get('title')?.touched" />
+        <div class="text-danger small" *ngIf="materialForm.get('title')?.invalid && materialForm.get('title')?.touched">
+            A cím megadása kötelező.
+        </div>
     </div>
 
     <div class="mb-3">
         <label class="form-label">Tantárgy</label>
-        <input class="form-control" formControlName="subject" />
+        <input type="text" class="form-control" formControlName="subject"
+            [class.is-invalid]="materialForm.get('subject')?.invalid && materialForm.get('subject')?.touched" />
+
+        <div class="text-danger small" *ngIf="materialForm.get('subject')?.invalid && materialForm.get('subject')?.touched">
+            A Tantárgy megadása kötelező.
+        </div>
     </div>
 
     <div class="mb-3">
@@ -14,15 +23,20 @@
         <textarea class="form-control" rows="4" formControlName="description"></textarea>
     </div>
 
-    <div *ngIf="isUpdateMode && initial?.content?.fileName" class="mb-2 text-muted">
-        Jelenlegi fájl: <strong>{{ initial?.content?.fileName }}</strong>
-    </div>
-
     <div class="mb-3">
-        <label class="form-label">{{ isUpdateMode ? 'Új fájl (nem kötelező)' : 'Fájl feltöltése' }}</label>
-        <input type="file" class="form-control" formControlName="file" (change)="onFileSelected($event)" />
+        <label class="form-label">
+            {{ isUpdateMode ? 'Új fájl (nem kötelező)' : 'Fájl feltöltése *' }}
+        </label>
+        <input type="file" class="form-control" formControlName="file" (change)="onFileSelected($event)"
+            [class.is-invalid]="!isUpdateMode && materialForm.get('file')?.invalid && materialForm.get('file')?.touched" />
+        <div class="text-danger small"
+            *ngIf="!isUpdateMode && materialForm.get('file')?.invalid && materialForm.get('file')?.touched">
+            Fájl kiválasztása kötelező.
+        </div>
         <div class="text-danger small" *ngIf="fileError">{{ fileError }}</div>
     </div>
 
-    <button class="btn btn-primary" type="submit">Mentés</button>
+    <button type="submit" class="btn btn-primary" [disabled]="materialForm.invalid">
+        Mentés
+    </button>
 </form>

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FileService } from '../../services/file.service';
 import { formatCurrency } from '@angular/common';
 import { FileContentDto } from '../../dtos/file-content-dto';
+import { FileContent } from '../../models/file-content';
 
 export interface MaterialFormValue {
   title: string
@@ -38,13 +39,13 @@ export class MaterialFormComponent implements OnInit {
       file: [null]
     })
 
-    if (!this.isUpdateMode) {
-      this.materialForm.get('file')?.addValidators(Validators.required)
+    const fileControl = this.materialForm.get('file')
+    if (this.isUpdateMode) {
+      fileControl?.clearValidators()
+    } else {
+      fileControl?.setValidators([Validators.required])
     }
-
-    if (this.initial?.content) {
-      this.content = this.initial.content
-    }
+    fileControl?.updateValueAndValidity()
   }
 
   async onFileSelected(event: Event) {
@@ -57,16 +58,17 @@ export class MaterialFormComponent implements OnInit {
     const fileExtension = file.name.split('.').pop()?.toLowerCase() || ''
     if (!this.allowed.includes(fileExtension)) {
       this.fileError = 'Nem támogatott fájltípus. Kérlek, válassz egy érvényes fájlt. (pdf, doc, docx, ppt, pptx)'
-      this.materialForm.patchValue({ file: null })
+      this.content = new FileContent()
+      this.materialForm.get('file')?.setValue('')
       return
     }
 
     this.content = await this.fileService.toFileContent(file)
-    this.materialForm.patchValue({ file })
+    this.materialForm.get('file')?.markAsDirty()
   }
 
   submit() {
-    if (this.materialForm.invalid){
+    if (this.materialForm.invalid) {
       this.materialForm.markAllAsTouched()
       return
     }
@@ -75,7 +77,7 @@ export class MaterialFormComponent implements OnInit {
       title: this.materialForm.value.title,
       subject: this.materialForm.value.subject,
       description: this.materialForm.value.description?.trim() || undefined,
-      ...(this.materialForm.value.file ? {content: this.content}: {})
+      ...(this.materialForm.value.file ? { content: this.content } : {})
     }
 
     this.submitted.emit(dto)
