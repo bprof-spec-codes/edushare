@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { AuthInterceptor } from './interceptors/login.interceptor';
 import { MaterialViewComponent } from './components/material-view/material-view.component';
+import { ProfileListComponent } from './components/profile-list/profile-list.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { MaterialViewComponent } from './components/material-view/material-view.
     HomepageComponent,
     RegisterComponent,
     MaterialViewComponent,
+    ProfileListComponent,
   ],
   imports: [
     BrowserModule,

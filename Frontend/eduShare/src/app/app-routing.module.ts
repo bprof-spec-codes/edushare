@@ -8,6 +8,7 @@ import { RegisterComponent } from './components/authentication/register/register
 import { MaterialListComponent } from './components/material-list/material-list.component';
 import { MaterialViewComponent } from './components/material-view/material-view.component';
 import { NoAuthGuard } from './guards/no-auth.guard';
+import { ProfileListComponent } from './components/profile-list/profile-list.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent, canActivate: [NoAuthGuard] },
   { path: 'list-materials', component: MaterialListComponent, canActivate: [AuthGuard] },
   { path: 'material-view/:id', component: MaterialViewComponent, canActivate: [AuthGuard] },
+  { path: 'profile-list', component: ProfileListComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
 

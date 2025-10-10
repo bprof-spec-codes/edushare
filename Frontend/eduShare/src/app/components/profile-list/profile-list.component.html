@@ -1,0 +1,13 @@
+<h2>Felhasználók listája:</h2>
+<hr>
+<ul *ngFor="let p of profiles">
+    <li class="text-center list-group-item">{{p.image}} {{p.fullName}} {{p.email}} 
+        <button type="button" class="btn btn-primary">
+            View
+        </button>
+    </li>
+    <hr>
+</ul>
+<p *ngIf="!loading && !profiles.length" class="text-center text-muted mt-3">
+    Nincs megjeleníthető felhasználó.
+</p>
