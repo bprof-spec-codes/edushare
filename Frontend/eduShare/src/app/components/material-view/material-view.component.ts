@@ -47,13 +47,18 @@ export class MaterialViewComponent implements OnInit {
     link.click()
   }
 
+  updateMaterial(): void {
+    if (!this.material) return
+    this.router.navigate(['/materials/' + this.material.id + '/update'])
+  }
+
   deleteMaterial(): void {
     if (!this.material) return
     if (!confirm('Biztosan törölni szeretnéd az anyagot?')) return
     this.materialService.delete(this.material.id).subscribe({
       next: () => {
         console.log('A tananyag sikeresen törölve lett.')
-        this.router.navigate(['/list-materials'])
+        this.router.navigate(['/materials'])
       },
       error: (err) => {
         console.error(err)

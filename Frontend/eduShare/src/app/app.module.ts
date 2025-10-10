@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { MaterialCreateComponent } from './components/material-create/material-create.component';
+import { MaterialCreateUpdateComponent } from './components/material-create-update/material-create-update.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialListComponent } from './components/material-list/material-list.component';
 import { LoginComponent } from './components/authentication/login/login.component';
@@ -21,7 +21,7 @@ import { MaterialViewComponent } from './components/material-view/material-view.
   declarations: [
     AppComponent,
     NavbarComponent,
-    MaterialCreateComponent,
+    MaterialCreateUpdateComponent,
     MaterialListComponent,
     HomepageComponent,
     RegisterComponent,

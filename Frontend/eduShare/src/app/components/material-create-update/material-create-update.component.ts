@@ -10,10 +10,10 @@ import { FileContentDto } from '../../dtos/file-content-dto';
 @Component({
   selector: 'app-material-create',
   standalone: false,
-  templateUrl: './material-create.component.html',
-  styleUrl: './material-create.component.sass'
+  templateUrl: './material-create-update.component.html',
+  styleUrl: './material-create-update.component.sass'
 })
-export class MaterialCreateComponent {
+export class MaterialCreateUpdateComponent {
   materialForm: FormGroup
   content: FileContentDto = new FileContent()
 

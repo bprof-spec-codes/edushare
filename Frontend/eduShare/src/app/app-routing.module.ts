@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MaterialCreateComponent } from './components/material-create/material-create.component';
+import { MaterialCreateUpdateComponent } from './components/material-create-update/material-create-update.component';
 import { LoginComponent } from './components/authentication/login/login.component';
 import { AuthGuard } from './guards/login.service';
 import { HomepageComponent } from './components/homepage/homepage.component';
@@ -12,10 +12,11 @@ import { NoAuthGuard } from './guards/no-auth.guard';
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
   { path: 'homepage', component: HomepageComponent, canActivate: [AuthGuard] },
-  { path: 'create-material', component: MaterialCreateComponent, canActivate: [AuthGuard] },
+  { path: 'materials/create', component: MaterialCreateUpdateComponent, canActivate: [AuthGuard] },
+  { path: 'materials/:id/update', component: MaterialCreateUpdateComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [NoAuthGuard] },
-  { path: 'list-materials', component: MaterialListComponent, canActivate: [AuthGuard] },
-  { path: 'material-view/:id', component: MaterialViewComponent, canActivate: [AuthGuard] },
+  { path: 'materials', component: MaterialListComponent, canActivate: [AuthGuard] },
+  { path: 'materials/:id/view', component: MaterialViewComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
 
