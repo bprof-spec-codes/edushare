@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { AuthInterceptor } from './interceptors/login.interceptor';
 import { MaterialViewComponent } from './components/material-view/material-view.component';
 import { ProfileListComponent } from './components/profile-list/profile-list.component';
+import { ProfileViewComponent } from './components/profile-view/profile-view.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ProfileListComponent } from './components/profile-list/profile-list.com
     RegisterComponent,
     MaterialViewComponent,
     ProfileListComponent,
+    ProfileViewComponent,
   ],
   imports: [
     BrowserModule,

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ProfilListViewDto } from '../../dtos/profil-list-view-dto';
 import { Router } from '@angular/router';
 import { ProfileService } from '../../services/profile.service';
+import { ProfileViewDto } from '../../dtos/profile-view-dto';
 
 @Component({
   selector: 'app-profile-list',
@@ -34,7 +35,7 @@ export class ProfileListComponent {
       },
     })
   }
-  // openDetail(): void {
-  //     this.router.navigate(['/profile-list'])
-  //   }
+  openDetail(profile: ProfilListViewDto): void {
+      this.router.navigate(['/profile-view', profile.id])
+    }
 }

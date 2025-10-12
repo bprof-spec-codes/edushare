@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ProfilListViewDto } from '../dtos/profil-list-view-dto';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { ProfileViewDto } from '../dtos/profile-view-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -21,4 +22,7 @@ export class ProfileService {
         tap(profiles => this.profileShortSubject.next(profiles))
       )
     }
+    getById(id: string): Observable<ProfileViewDto> {
+        return this.http.get<ProfileViewDto>(`${this.apiBaseUrl}/${id}`);
+      }
 }
