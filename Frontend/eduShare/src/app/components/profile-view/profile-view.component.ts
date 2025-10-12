@@ -41,5 +41,5 @@ export class ProfileViewComponent {
   const file = this.profile?.image?.file;
   if (!file) return 'assets/default-avatar.png'; // alapértelmezett kép
   return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
-}
+  }
 }
