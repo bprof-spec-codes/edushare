@@ -1,8 +1,14 @@
+<div class="position-relative mb-3">
+  <!-- Jobb felső gomb -->
+  <button class="btn btn-outline-primary position-absolute top-0 end-0">
+    <i class="bi bi-pencil-square"></i>
+  </button>
 <div class="d-flex align-items-center justify-content-between">
     <div class="d-flex flex-column align-items-center text-center">
     <img *ngIf="profile?.image?.file"  [src]="getProfileImageSrc()"  [alt]="profile?.fullName" class="rounded-circle me-3" width="50" height="50" />
     <p class="mb-0">{{profile?.fullName}}</p>
     </div>
+</div>
 </div>
 <p class="text-center ">{{profile?.email}}</p>
 <hr>
@@ -30,7 +36,7 @@
     </div>
     
 
-<div class="col" >
+<!-- <div class="col" >
       <div class="card h-100 shadow-sm">
         <div class="card-body">
           <h5 class="card-title text-primary text-center">cím</h5>
@@ -46,7 +52,7 @@
         </div>
       </div>
     </div> 
-  </div>
+  </div> -->
 </div>
 
 
