@@ -1,0 +1,49 @@
+
+            <form [formGroup]="updateForm" (ngSubmit)="onUpdate(updateForm.value)">
+                <div class="mb-3">
+                    <label for="firstname" class="form-label">Vezetéknév</label>
+                    <input type="text" id="firstname" formControlName="firstname" class="form-control"  />
+                    <div *ngIf="updateForm.get('firstname')?.dirty && updateForm.get('firstname')?.invalid" class="text-danger">
+                        A vezetéknév megadása kötelező.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="lastname" class="form-label">Keresztnév</label>
+                    <input type="text" id="lastname" formControlName="lastname" class="form-control"  />
+                    <div *ngIf="updateForm.get('lastname')?.dirty && updateForm.get('lastname')?.invalid" class="text-danger">
+                        A keresztnév megadása kötelező.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" id="email" formControlName="email" class="form-control"  />
+                    <div *ngIf="updateForm.get('email')?.dirty && updateForm.get('email')?.invalid" class="text-danger">
+                        Az email cím megadása kötelező.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                <img *ngIf="profile?.image?.file"  [src]="selectedFileDataUrl || getProfileImageSrc()"  [alt]="profile?.lastname + ' ' + profile?.firstname" class="rounded-circle me-3" width="50" height="50"  />
+                <label class="form-label">
+                    {{ isUpdateMode ? 'Új profilkép (nem kötelező)' : 'Profilkép feltöltése *' }}
+                </label>
+                <input type="file" class="form-control" (change)="onFileSelected($event)"
+                    [class.is-invalid]="!isUpdateMode && updateForm.get('file')?.invalid && updateForm.get('file')?.touched" />
+                <div class="text-danger small"
+                    *ngIf="!isUpdateMode && updateForm.get('file')?.invalid && updateForm.get('file')?.touched">
+                    Fájl kiválasztása kötelező.
+                </div>
+                <div class="text-danger small" *ngIf="fileError">{{ fileError }}</div>
+                </div>
+                
+
+                <button type="submit" class="btn btn-primary" >
+                    Frissítés
+                </button>
+            </form>
+
+
+            
+

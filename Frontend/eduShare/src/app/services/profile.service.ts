@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ProfilListViewDto } from '../dtos/profil-list-view-dto';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ProfileViewDto } from '../dtos/profile-view-dto';
+import { UpdateProfileDto } from '../dtos/update-profile-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -25,4 +26,13 @@ export class ProfileService {
     getById(id: string): Observable<ProfileViewDto> {
         return this.http.get<ProfileViewDto>(`${this.apiBaseUrl}/${id}`);
       }
+      
+  update(id: string, profile: UpdateProfileDto): Observable<void> {
+      return this.http.put<void>(`${this.apiBaseUrl}/${id}`, profile).pipe(
+        switchMap(() => this.http.get<ProfileViewDto[]>(this.apiBaseUrl)),
+        tap(updated => this.profileShortSubject.next(updated)),
+        map(() => void 0)
+      )
+    }
+      
 }

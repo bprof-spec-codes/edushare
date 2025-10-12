@@ -36,6 +36,10 @@ export class ProfileViewComponent {
   openDetail(material: MaterialViewForProfileDto): void {
         this.router.navigate(['/material-view', material.id])
       }
+
+  editDetail(profile: ProfileViewDto): void {
+       this.router.navigate(['/profile-update', profile.id])
+  }
       
   getProfileImageSrc(): string {
   const file = this.profile?.image?.file;
