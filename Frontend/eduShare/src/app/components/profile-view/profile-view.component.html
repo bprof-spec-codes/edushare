@@ -21,9 +21,9 @@
       <div class="card h-100 shadow-sm">
         <div  class="card-body">
           <h5 class="card-title text-primary">{{m.title}}</h5>
-          <i class="bi bi-book"></i><p class="card-text mb-1">{{m.subject}}</p>
-          <i class="bi bi-person"></i><p class="card-text mb-1">{{m.uploader}}</p>
-          <i class="bi bi-clock"></i><p class="card-text">{{m.uploadDate| date:'yyyy.MM.dd. HH:mm'}}</p>
+          <p class="card-text mb-1"><i class="bi bi-book"></i>{{m.subject}}</p>
+          <p class="card-text mb-1"><i class="bi bi-person"></i>{{m.uploader}}</p>
+          <p class="card-text"><i class="bi bi-clock"></i>{{m.uploadDate| date:'yyyy.MM.dd. HH:mm'}}</p>
         </div>
         <div class="card-footer bg-transparent border-0 d-flex align-items-center justify-content-between">
             <button type="button" (click)="openDetail(m)" class="btn btn-outline-primary flex-grow-1 me-2">
