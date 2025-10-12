@@ -57,7 +57,7 @@ namespace Logic.Logic
 
             old.Title = dto.Title;
             old.Description = dto.Description;
-
+            old.Subject = dto.Subject;
 
             if (dto.Content != null)
             {
