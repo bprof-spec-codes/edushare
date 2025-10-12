@@ -17,7 +17,7 @@
           <h5 class="card-title text-primary">{{m.title}}</h5>
           <i class="bi bi-book"></i><p class="card-text mb-1">{{m.subject}}</p>
           <i class="bi bi-person"></i><p class="card-text mb-1">{{m.uploader}}</p>
-          <i class="bi bi-clock"></i><p class="card-text">{{m.uploadDate}}</p>
+          <i class="bi bi-clock"></i><p class="card-text">{{m.uploadDate| date:'yyyy.MM.dd. HH:mm'}}</p>
         </div>
         <div class="card-footer bg-transparent border-0 d-flex align-items-center justify-content-between">
             <button class="btn btn-outline-primary flex-grow-1 me-2">
@@ -30,7 +30,7 @@
     </div>
     
 
-<!-- <div class="col" >
+<div class="col" >
       <div class="card h-100 shadow-sm">
         <div class="card-body">
           <h5 class="card-title text-primary text-center">cím</h5>
@@ -45,8 +45,7 @@
             <i class="bi bi-bookmark fs-4 text-primary" style="cursor: pointer;"></i>
         </div>
       </div>
-    </div> -->
-
+    </div> 
   </div>
 </div>
 
