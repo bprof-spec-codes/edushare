@@ -35,6 +35,6 @@ export class MaterialListComponent {
   }
 
   openDetail(material: MaterialShortViewDto): void {
-    this.router.navigate(['/material-view', material.id])
+    this.router.navigate(['/materials/' + material.id + '/view'])
   }
 }

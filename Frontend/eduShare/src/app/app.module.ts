@@ -16,6 +16,8 @@ import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { AuthInterceptor } from './interceptors/login.interceptor';
 import { MaterialViewComponent } from './components/material-view/material-view.component';
+import { MaterialUpdateComponent } from './components/material-update/material-update.component';
+import { MaterialFormComponent } from './components/material-form/material-form.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { MaterialViewComponent } from './components/material-view/material-view.
     HomepageComponent,
     RegisterComponent,
     MaterialViewComponent,
+    MaterialUpdateComponent,
+    MaterialFormComponent,
   ],
   imports: [
     BrowserModule,
