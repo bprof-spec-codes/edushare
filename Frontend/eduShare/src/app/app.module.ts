@@ -18,6 +18,8 @@ import { AuthInterceptor } from './interceptors/login.interceptor';
 import { MaterialViewComponent } from './components/material-view/material-view.component';
 import { MaterialUpdateComponent } from './components/material-update/material-update.component';
 import { MaterialFormComponent } from './components/material-form/material-form.component';
+import { ProfileListComponent } from './components/profile-list/profile-list.component';
+import { ProfileViewComponent } from './components/profile-view/profile-view.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { MaterialFormComponent } from './components/material-form/material-form.
     MaterialViewComponent,
     MaterialUpdateComponent,
     MaterialFormComponent,
+    ProfileListComponent,
+    ProfileViewComponent,
   ],
   imports: [
     BrowserModule,

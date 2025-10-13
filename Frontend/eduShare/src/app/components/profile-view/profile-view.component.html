@@ -1,0 +1,39 @@
+<div class="position-relative mb-3">
+  <!-- Jobb felső gomb -->
+  <button class="btn btn-outline-primary position-absolute top-0 end-0">
+    <i class="bi bi-pencil-square"></i>
+  </button>
+<div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex flex-column align-items-center text-center">
+    <img *ngIf="profile?.image?.file"  [src]="getProfileImageSrc()"  [alt]="profile?.fullName" class="rounded-circle me-3" width="50" height="50" />
+    <p class="mb-0">{{profile?.fullName}}</p>
+    </div>
+</div>
+</div>
+<p class="text-center ">{{profile?.email}}</p>
+<hr>
+
+<h2>Feltöltött tananyagai: </h2>
+
+<div  class="container mt-4">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <div class="col" *ngFor="let m of profile?.materials" >
+      <div class="card h-100 shadow-sm">
+        <div  class="card-body">
+          <h5 class="card-title text-primary">{{m.title}}</h5>
+          <p class="card-text mb-1"><i class="bi bi-book"></i>{{m.subject}}</p>
+          <p class="card-text mb-1"><i class="bi bi-person"></i>{{m.uploader}}</p>
+          <p class="card-text"><i class="bi bi-clock"></i>{{m.uploadDate| date:'yyyy.MM.dd. HH:mm'}}</p>
+        </div>
+        <div class="card-footer bg-transparent border-0 d-flex align-items-center justify-content-between">
+            <button type="button" (click)="openDetail(m)" class="btn btn-outline-primary flex-grow-1 me-2">
+                Megnyitás
+            </button>
+            <i class="bi bi-bookmark fs-4 text-primary" style="cursor: pointer;"></i>
+        </div>
+      </div>
+      
+    </div>
+</div>
+
+

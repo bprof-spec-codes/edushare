@@ -8,6 +8,8 @@ import { RegisterComponent } from './components/authentication/register/register
 import { MaterialListComponent } from './components/material-list/material-list.component';
 import { MaterialViewComponent } from './components/material-view/material-view.component';
 import { NoAuthGuard } from './guards/no-auth.guard';
+import { ProfileListComponent } from './components/profile-list/profile-list.component';
+import { ProfileViewComponent } from './components/profile-view/profile-view.component';
 import { MaterialUpdateComponent } from './components/material-update/material-update.component';
 
 const routes: Routes = [
@@ -16,8 +18,10 @@ const routes: Routes = [
   { path: 'materials/create', component: MaterialCreateComponent, canActivate: [AuthGuard] },
   { path: 'materials/:id/update', component: MaterialUpdateComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [NoAuthGuard] },
-  { path: 'materials', component: MaterialListComponent, canActivate: [AuthGuard] },
-  { path: 'materials/:id/view', component: MaterialViewComponent, canActivate: [AuthGuard] },
+  { path: 'list-materials', component: MaterialListComponent, canActivate: [AuthGuard] },
+  { path: 'material-view/:id', component: MaterialViewComponent, canActivate: [AuthGuard] },
+  { path: 'profile-list', component: ProfileListComponent, canActivate: [AuthGuard] },
+  { path: 'profile-view/:id', component: ProfileViewComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
 
