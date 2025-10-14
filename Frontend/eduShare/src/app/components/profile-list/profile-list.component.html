@@ -1,5 +1,6 @@
-<h2>Felhasználók listája:</h2>
-<hr>
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Felhasználók listája:</h2>
+    <hr>
 <ul *ngFor="let p of profiles">
     <li class="text-center list-group-item">
         <img *ngIf="p.image?.file" [src]="p.image.file.startsWith('http')
@@ -12,3 +13,4 @@
     </li>
     <hr>
 </ul>
+</div>
