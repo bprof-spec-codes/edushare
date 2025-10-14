@@ -34,7 +34,7 @@ export class ProfileViewComponent {
     }
   }
   openDetail(material: MaterialViewForProfileDto): void {
-        this.router.navigate(['/material-view', material.id])
+        this.router.navigate(['/materials', material.id, 'view']);
       }
 
   editDetail(profile: ProfileViewDto): void {
