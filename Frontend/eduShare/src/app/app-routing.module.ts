@@ -11,6 +11,7 @@ import { NoAuthGuard } from './guards/no-auth.guard';
 import { ProfileListComponent } from './components/profile-list/profile-list.component';
 import { ProfileViewComponent } from './components/profile-view/profile-view.component';
 import { MaterialUpdateComponent } from './components/material-update/material-update.component';
+import { ProfileUpdateComponent } from './components/profile-update/profile-update.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'material-view/:id', component: MaterialViewComponent, canActivate: [AuthGuard] },
   { path: 'profile-list', component: ProfileListComponent, canActivate: [AuthGuard] },
   { path: 'profile-view/:id', component: ProfileViewComponent, canActivate: [AuthGuard] },
+  { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
 
