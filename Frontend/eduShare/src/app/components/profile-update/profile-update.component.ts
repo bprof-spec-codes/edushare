@@ -74,37 +74,31 @@ export class ProfileUpdateComponent {
 
 
 
-  async onUpdate(value: UpdateProfileDto) {
- console.log(
-  (this.profile?.firstname ?? '') +
-  (this.profile?.lastname ?? '') +
-  (this.profile?.email ?? '') +
-  (this.profile?.image ? JSON.stringify(this.profile.image) : '')
-);
+onUpdate() {
+  const value = this.updateForm.value;
   if (!this.profile|| !this.id) return;
 
-  let imageDto = undefined;
-
-  if (this.selectedFile && this.selectedFileDataUrl) {
-    imageDto = {
-      fileName: this.selectedFile.name,
-      file: this.selectedFileDataUrl
-    };
-  } else if (this.profile.image) {
-    imageDto = {
-      fileName: this.profile.image.fileName,
-      file: this.profile.image.file
-    };
-  }
+  const imageDto: ImageDto | undefined = this.selectedFileDataUrl
+    ? {
+        id: this.profile?.image?.id ?? '', // ha van korábbi kép
+        fileName: this.selectedFile?.name ?? 'profile.png',
+        file: this.selectedFileDataUrl
+      }
+    : this.profile?.image;
 
   const dto: UpdateProfileDto = {
     email: value.email,
     firstname: value.firstname,
     lastname: value.lastname,
     image: this.selectedFileDataUrl
-      ? { ...this.profile.image, file: this.selectedFileDataUrl } 
-      : this.profile.image 
+      ? {
+          id: this.profile?.image?.id ?? '',
+          fileName: this.selectedFile?.name ?? 'profile.png',
+          file: this.selectedFileDataUrl
+        }
+      : this.profile?.image
   };
+
 
   this.profileService.update(this.id, dto).subscribe({
     next: () => {
@@ -118,7 +112,7 @@ export class ProfileUpdateComponent {
   });
 }
 
-onFileSelected(event: Event) {
+async onFileSelected(event: Event) {
   const input = event.target as HTMLInputElement;
   if (!input.files || input.files.length === 0) return;
 
@@ -131,33 +125,26 @@ onFileSelected(event: Event) {
     alert('Csak PNG és JPEG formátum engedélyezett!');
     input.value = '';
     this.selectedFileDataUrl = null;
-    this.selectedFile = null;
+    this.content = undefined;
     return;
   }
   this.selectedFile = file;
-  const reader = new FileReader();
-  reader.onload = () => {
-    this.selectedFileDataUrl = reader.result as string;
-  };
-  reader.readAsDataURL(file);
+  const fileContent = await this.fileService.toFileContent(file);
+  this.selectedFileDataUrl = fileContent.file;
 
-  this.updateForm.get('file')?.setValue(file);
+    this.content = {
+      id: this.profile?.image?.id ?? '',
+      fileName: fileContent.fileName,
+      file: fileContent.file 
+    };
+
+    this.updateForm.get('file')?.setValue(file);
 }
 
 getProfileImageSrc(): string {
-  if (this.selectedFileDataUrl) return this.selectedFileDataUrl;
-  const file = this.profile?.image?.file;
+  const file =this.content?.file || this.profile?.image?.file;
   if (!file) return 'assets/default-avatar.png';
   return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
-}
-
-fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = err => reject(err);
-    reader.readAsDataURL(file);
-  });
 }
 
 }

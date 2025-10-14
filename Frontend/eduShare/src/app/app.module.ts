@@ -36,6 +36,7 @@ import { ProfileUpdateComponent } from './components/profile-update/profile-upda
     ProfileListComponent,
     ProfileViewComponent,
     ProfileUpdateComponent,
+    
   ],
   imports: [
     BrowserModule,
