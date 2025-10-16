@@ -109,6 +109,12 @@ namespace EdushareBackend.Controllers
 
             var result = await userManager.CreateAsync(user, dto.Password);
 
+            if (userManager.Users.Count() == 1)
+            {
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await userManager.AddToRoleAsync(user, "Admin");
+            }
+
         }
 
         [HttpPost("Login")]
@@ -200,6 +206,14 @@ namespace EdushareBackend.Controllers
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
                 throw new ArgumentException("User not found");
+
+            var roleExsists = await roleManager.RoleExistsAsync("Teacher");
+
+            if (!(roleExsists))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Teacher"));
+            }
+
             await userManager.AddToRoleAsync(user, "Teacher");
         }
 
@@ -211,6 +225,12 @@ namespace EdushareBackend.Controllers
             if (user == null)
                 throw new ArgumentException("User not found");
             var roles = await userManager.GetRolesAsync(user);
+
+            if(roles is null)
+            {
+                throw new ArgumentException("User has no roles");
+            }
+
             await userManager.RemoveFromRolesAsync(user, roles);
         }
 
