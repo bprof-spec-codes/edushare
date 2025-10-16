@@ -207,7 +207,11 @@ namespace EdushareBackend.Controllers
         //[Authorize] Admin
         public async Task RevokeRole(string userId)
         {
-
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new ArgumentException("User not found");
+            var roles = await userManager.GetRolesAsync(user);
+            await userManager.RemoveFromRolesAsync(user, roles);
         }
 
 
