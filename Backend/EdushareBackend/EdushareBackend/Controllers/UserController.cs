@@ -21,13 +21,15 @@ namespace EdushareBackend.Controllers
     public class UserController : ControllerBase
     {
         UserManager<AppUser> userManager;
+        RoleManager<IdentityRole> roleManager;
         private readonly IWebHostEnvironment env;
        
 
-        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env)
+        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.env = env;
+            this.roleManager = roleManager;
         }
 
         [HttpGet]
