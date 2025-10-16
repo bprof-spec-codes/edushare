@@ -115,14 +115,14 @@ namespace EdushareBackend.Controllers
             var user = await userManager.FindByEmailAsync(dto.Email);
             if (user == null)
             {
-                throw new ArgumentException("User not found");
+                return BadRequest(new { message = "Incorrect Email" });
             }
             else
             {
                 var result = await userManager.CheckPasswordAsync(user, dto.Password);
                 if (!result)
                 {
-                    throw new ArgumentException("Incorrect password");
+                    return BadRequest(new { message = "Incorrect Password" });
                 }
                 else
                 {
