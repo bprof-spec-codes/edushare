@@ -1,4 +1,4 @@
-﻿using Entities.Dtos.Content;
+using Entities.Dtos.Content;
 using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
@@ -235,10 +235,19 @@ namespace EdushareBackend.Controllers
         //[Authorize] Admin
         public async Task RevokeRole(string userId)
         {
+
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
                 throw new ArgumentException("User not found");
+
             var roles = await userManager.GetRolesAsync(user);
+
+            if(roles is null)
+            {
+                var admins = await userManager.GetUsersInRoleAsync("Admin");
+
+                if (admins.Count <= 1) throw new ArgumentException("You cannot remove the last remaining Admin user");
+            }     
 
             if (roles is null)
             {
