@@ -197,7 +197,10 @@ namespace EdushareBackend.Controllers
         //[Authorize] Admin
         public async Task GrantTeacherRole(string userId)
         {
-
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new ArgumentException("User not found");
+            await userManager.AddToRoleAsync(user, "Teacher");
         }
 
         [HttpGet("RevokeRole/{userId}")]
