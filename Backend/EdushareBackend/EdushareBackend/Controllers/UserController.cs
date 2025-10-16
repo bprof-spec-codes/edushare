@@ -13,6 +13,8 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Text;
 using Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace EdushareBackend.Controllers
 {
@@ -23,7 +25,7 @@ namespace EdushareBackend.Controllers
         UserManager<AppUser> userManager;
         RoleManager<IdentityRole> roleManager;
         private readonly IWebHostEnvironment env;
-       
+
 
         public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager)
         {
@@ -78,7 +80,9 @@ namespace EdushareBackend.Controllers
                     Id = m.Id,
                     Title = m.Title,
                     Subject = m.Subject,
-                    UploadDate = m.UploadDate
+                    UploadDate = m.UploadDate,
+
+                    //todo Content
                 }).ToList() ?? new List<MaterialViewDto>() //ha a materilas null akkor üres lista
             };
 
@@ -161,21 +165,26 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        //[Authorize] Admin / Own Profile
-        public async Task UpdateUser(string id,[FromBody] AppUserUpdateDto dto)
+        [Authorize] 
+        public async Task UpdateUser(string id, [FromBody] AppUserUpdateDto dto)
         {
             var currentUser = await userManager.Users
                 .Include(u => u.Image)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-             currentUser.Email = dto.Email;
-             currentUser.FirstName = dto.FirstName;
-             currentUser.LastName = dto.LastName;
-             if (dto.Image != null)
-             {
-                 currentUser.Image.FileName = dto.Image.FileName;
-                 currentUser.Image.File = Convert.FromBase64String(dto.Image.File);
-             }
+            currentUser.Email = dto.Email;
+            currentUser.FirstName = dto.FirstName;
+            currentUser.LastName = dto.LastName;
+            if (dto.Image != null)
+            {
+                currentUser.Image.FileName = dto.Image.FileName;
+                currentUser.Image.File = Convert.FromBase64String(dto.Image.File);
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId != currentUser.Id)
+            {
+                throw new UnauthorizedAccessException("You are not allowed to do this");
+            }
 
             await userManager.SetEmailAsync(currentUser, dto.Email);
             await userManager.UpdateAsync(currentUser);
@@ -184,9 +193,14 @@ namespace EdushareBackend.Controllers
 
         [HttpDelete("{id}")]
         //[Authorize] Admin / Own Profile
-        public void DeleteUserById(string id)
+        public async Task DeleteUserById(string id)
         {
-
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId != id)
+            {
+                throw new UnauthorizedAccessException("You are not allowed to do this");
+            }
+            await userManager.DeleteAsync(await userManager.FindByIdAsync(id));
         }
 
         [HttpGet("GrantAdmin/{userId}")]
@@ -226,7 +240,7 @@ namespace EdushareBackend.Controllers
                 throw new ArgumentException("User not found");
             var roles = await userManager.GetRolesAsync(user);
 
-            if(roles is null)
+            if (roles is null)
             {
                 throw new ArgumentException("User has no roles");
             }
