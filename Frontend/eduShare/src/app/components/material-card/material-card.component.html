@@ -7,7 +7,7 @@
                             ? material.uploader.image.file
                             : 'data:image/*;base64,' + material.uploader.image.file" [alt]="material.uploader.fullName"
                     class="profile-pic" width="21" height="21" />              
-                <div>{{material.uploader.fullName}}</div>
+                <div><button class="btn-profile" (click)="openProfile(material.uploader.id)">{{material.uploader.fullName}}</button></div>
             </div>
             <div class="icon-data">
                 <i class="bi bi-clock clock"></i>

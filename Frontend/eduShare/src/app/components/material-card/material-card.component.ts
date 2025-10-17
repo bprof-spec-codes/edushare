@@ -17,4 +17,8 @@ export class MaterialCardComponent {
   openMaterial(material: MaterialShortViewDto){
     this.router.navigate(['/materials/' + material.id + '/view'])
   }
+
+  openProfile(id: string) {
+    this.router.navigate(['/profile-view', id])
+  }
 }
