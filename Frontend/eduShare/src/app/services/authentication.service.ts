@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { JwtPayload } from '../models/jwt-payload';
 
 interface LoginResult {
   Token?: string;
@@ -64,18 +65,45 @@ export class AuthService {
   }
 
   getRoles(): string[] {
-    const token = this.getToken();
-    if (!token) return [];
-    const payload = this.decodePayload(token);
-    if (!payload) return [];
+  const token = this.getToken()
+  if (!token) return []
 
-    if (payload.role) return Array.isArray(payload.role) ? payload.role : [payload.role];
-    if (payload.roles) return Array.isArray(payload.roles) ? payload.roles : [payload.roles];
+  const payload = this.getPayload(token)
+  if (!payload) return []
 
-    const claimUri = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
-    const claim = payload[claimUri];
-    if (claim) return Array.isArray(claim) ? claim : [claim];
+  // minden kulcsot végignézünk, és ami role, azt összegyűjtjük
+  const roles: string[] = []
 
-    return [];
+  for (const key in payload) {
+    if (key.endsWith('/role')) {
+      const value = (payload as any)[key]
+      if (Array.isArray(value)) {
+        roles.push(...value)
+      } else {
+        roles.push(value)
+      }
+    }
+  }
+
+  return roles
+}
+
+  private getPayload(token: string): JwtPayload | null {
+    try {
+      const base64url = token.split('.')[1] ?? ''
+      const json = this.base64UrlDecode(base64url)
+      return JSON.parse(json) as JwtPayload
+    } catch {
+      return null
+    }
+  }
+
+  private base64UrlDecode(input: string): string {
+    const base64 = input.replace(/-/g, '+').replace(/_/g, '/')
+    const pad = base64.length % 4 === 0 ? '' : '='.repeat(4 - (base64.length % 4))
+    const s = atob(base64 + pad)
+    return decodeURIComponent(
+      s.split('').map(c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0')).join('')
+    )
   }
 }

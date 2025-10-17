@@ -3,6 +3,7 @@ import { ProfilListViewDto } from '../../dtos/profil-list-view-dto';
 import { Router } from '@angular/router';
 import { ProfileService } from '../../services/profile.service';
 import { ProfileViewDto } from '../../dtos/profile-view-dto';
+import { AuthService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-profile-list',
@@ -14,11 +15,14 @@ export class ProfileListComponent {
   profiles: ProfilListViewDto[] = []
   loading = false
   error?: string
+  roles: string[] = []
 
-  constructor(private profileService: ProfileService, private router: Router) { }
+  constructor(private profileService: ProfileService, private router: Router, private authService : AuthService) { }
 
   ngOnInit(): void {
+    this.roles = this.authService.getRoles()
     this.loadProfiles()
+    console.log(this.roles)
   }
 
   loadProfiles(): void {
@@ -36,6 +40,10 @@ export class ProfileListComponent {
     })
   }
   openDetail(profile: ProfilListViewDto): void {
-      this.router.navigate(['/profile-view', profile.id])
-    }
+    this.router.navigate(['/profile-view', profile.id])
+  }
+
+
+
+
 }
