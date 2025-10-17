@@ -1,2 +1,7 @@
-<app-navbar *ngIf="auth.isLoggedIn()"></app-navbar>
-<router-outlet />
+<div class="d-flex flex-column min-vh-100">
+    <app-navbar class="px-2" *ngIf="auth.isLoggedIn()"></app-navbar>
+    <div class="flex-grow-1 m-2 p-3">
+        <router-outlet></router-outlet>
+    </div>
+    <app-footer></app-footer>
+</div>
