@@ -36,7 +36,7 @@ export class LoginComponent {
       },
       error: (err) => {
         this.loading = false;
-        this.error = err?.error ?? err?.error?.message ?? 'Hibás email vagy jelszó.';
+        this.error = err?.error?.message ?? err?.message ?? 'Hibás email vagy jelszó.';
       }
     });
   }

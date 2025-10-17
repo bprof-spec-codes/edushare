@@ -3,6 +3,7 @@ import { ProfileViewDto } from '../../dtos/profile-view-dto';
 import { ProfileService } from '../../services/profile.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialViewForProfileDto } from '../../dtos/material-view-for-profile-dto';
+import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 
 @Component({
   selector: 'app-profile-view',
@@ -33,7 +34,7 @@ export class ProfileViewComponent {
       })
     }
   }
-  openDetail(material: MaterialViewForProfileDto): void {
+  openDetail(material: MaterialShortViewDto): void {
         this.router.navigate(['/materials', material.id, 'view']);
       }
 

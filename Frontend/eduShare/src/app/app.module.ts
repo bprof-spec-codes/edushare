@@ -21,6 +21,8 @@ import { MaterialFormComponent } from './components/material-form/material-form.
 import { ProfileListComponent } from './components/profile-list/profile-list.component';
 import { ProfileViewComponent } from './components/profile-view/profile-view.component';
 import { ProfileUpdateComponent } from './components/profile-update/profile-update.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { MaterialCardComponent } from './components/material-card/material-card.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { ProfileUpdateComponent } from './components/profile-update/profile-upda
     ProfileListComponent,
     ProfileViewComponent,
     ProfileUpdateComponent,
-    
+    FooterComponent,
+    MaterialCardComponent,
   ],
   imports: [
     BrowserModule,
