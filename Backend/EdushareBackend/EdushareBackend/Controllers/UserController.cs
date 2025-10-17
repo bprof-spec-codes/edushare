@@ -75,15 +75,20 @@ namespace EdushareBackend.Controllers
                     Convert.ToBase64String(user.Image.File)
                 ),
 
-                Materials = user.Materials?.Select(m => new MaterialViewDto
+                Materials = user.Materials?.Select(m => new MaterialShortViewDto
                 {
                     Id = m.Id,
                     Title = m.Title,
                     Subject = m.Subject,
+                    Uploader = new AppUserMaterialShortViewDto
+                    {
+                        Id = user.Id,
+                        FullName = $"{user.FirstName} {user.LastName}"
+                    },
                     UploadDate = m.UploadDate,
 
                     //todo Content
-                }).ToList() ?? new List<MaterialViewDto>() //ha a materilas null akkor üres lista
+                }).ToList() ?? new List<MaterialShortViewDto>() //ha a materilas null akkor üres lista
             };
 
             return userView;

@@ -15,6 +15,6 @@ namespace Entities.Dtos.User
         public string FullName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public ContentViewDto Image { get; set; } = null!;
-        public List<MaterialViewDto> Materials { get; set; } = new List<MaterialViewDto>();
+        public List<MaterialShortViewDto> Materials { get; set; } = new List<MaterialShortViewDto>();
     }
 }
