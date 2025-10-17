@@ -34,5 +34,16 @@ export class ProfileService {
       map(() => void 0)
     )
   }
-      
+
+  grantAdmin(id:string): Observable<void> {
+    return this.http.get<void>(`${this.apiBaseUrl}/GrantAdmin/${id}`)
+  }
+   
+  grantTeacher(id:string): Observable<void> {
+    return this.http.get<void>(`${this.apiBaseUrl}/GrantTeacher/${id}`)
+  }
+
+  revokeRole(id:string): Observable<void> {
+    return this.http.get<void>(`${this.apiBaseUrl}/RevokeRole/${id}`)
+  }
 }

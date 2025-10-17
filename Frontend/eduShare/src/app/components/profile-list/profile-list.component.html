@@ -15,9 +15,9 @@
                 <div class="email">{{profile.email}}</div>
                 <div class="button-container">
                     <button class="button button-view" (click)="openDetail(profile.id)">View</button>
-                    <button class="button button-admin" *ngIf="hasRoleAdmin()">Admin</button>
-                    <button class="button button-teacher" *ngIf="hasRoleAdmin()">Teacher</button>
-                    <button class="button button-revoke" *ngIf="hasRoleAdmin()">Revoke</button>
+                    <button class="button button-admin" *ngIf="hasRoleAdmin()" (click)="grantAdmin(profile.id)">Admin</button>
+                    <button class="button button-teacher" *ngIf="hasRoleAdmin()" (click)="grantTeacher(profile.id)">Teacher</button>
+                    <button class="button button-revoke" *ngIf="hasRoleAdmin()" (click)="revokeRole(profile.id)">Revoke</button>
                 </div>
             </div>
             <hr class="hr">

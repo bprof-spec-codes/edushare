@@ -51,5 +51,43 @@ export class ProfileListComponent {
     return false
   }
 
+  grantAdmin(id: string) {
+    this.profileService.grantAdmin(id).subscribe({
+        next: () => {
+          alert("Admin added succesfully!")
+          //console.log("Admin added")
+        },
+        error: (err) => {
+          console.error(err)
+        }
+      }
+    )
+  }
 
+  grantTeacher(id: string) {
+    this.profileService.grantTeacher(id).subscribe({
+        next: () => {
+          alert("Teacher added succesfully!")
+          //console.log("Teacher added")
+        },
+        error: (err) => {
+          console.error(err)
+        }
+      }
+    )
+  }
+
+  revokeRole(id: string) {
+    this.profileService.revokeRole(id).subscribe({
+        next: () => {
+          alert("Roles deleted succesfully!")
+          //console.log("Teacher added")
+        },
+        error: (err) => {
+          alert(err.error)
+          console.log(err)
+        }
+      }
+    )
+  }
 }
