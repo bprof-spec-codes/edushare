@@ -1,4 +1,5 @@
 import { ImageDto } from "./image-dto"
+import { MaterialShortViewDto } from "./material-short-view-dto"
 import { MaterialViewForProfileDto } from "./material-view-for-profile-dto"
 
 export interface ProfileViewDto {
@@ -6,5 +7,5 @@ export interface ProfileViewDto {
     fullName:string
     email:string
     image:ImageDto
-    materials:MaterialViewForProfileDto[]
+    materials:MaterialShortViewDto[]
 }
