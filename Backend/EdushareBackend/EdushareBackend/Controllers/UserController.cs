@@ -1,4 +1,4 @@
-﻿using Entities.Dtos.Content;
+using Entities.Dtos.Content;
 using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
@@ -13,6 +13,8 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Text;
 using Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace EdushareBackend.Controllers
 {
@@ -21,13 +23,15 @@ namespace EdushareBackend.Controllers
     public class UserController : ControllerBase
     {
         UserManager<AppUser> userManager;
+        RoleManager<IdentityRole> roleManager;
         private readonly IWebHostEnvironment env;
-       
 
-        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env)
+
+        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.env = env;
+            this.roleManager = roleManager;
         }
 
         [HttpGet]
@@ -76,7 +80,9 @@ namespace EdushareBackend.Controllers
                     Id = m.Id,
                     Title = m.Title,
                     Subject = m.Subject,
-                    UploadDate = m.UploadDate
+                    UploadDate = m.UploadDate,
+
+                    //todo Content
                 }).ToList() ?? new List<MaterialViewDto>() //ha a materilas null akkor üres lista
             };
 
@@ -107,6 +113,12 @@ namespace EdushareBackend.Controllers
 
             var result = await userManager.CreateAsync(user, dto.Password);
 
+            if (userManager.Users.Count() == 1)
+            {
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await userManager.AddToRoleAsync(user, "Admin");
+            }
+
         }
 
         [HttpPost("Login")]
@@ -115,14 +127,14 @@ namespace EdushareBackend.Controllers
             var user = await userManager.FindByEmailAsync(dto.Email);
             if (user == null)
             {
-                throw new ArgumentException("User not found");
+                return BadRequest(new { message = "Incorrect Email" });
             }
             else
             {
                 var result = await userManager.CheckPasswordAsync(user, dto.Password);
                 if (!result)
                 {
-                    throw new ArgumentException("Incorrect password");
+                    return BadRequest(new { message = "Incorrect Password" });
                 }
                 else
                 {
@@ -153,21 +165,26 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        //[Authorize] Admin / Own Profile
-        public async Task UpdateUser(string id,[FromBody] AppUserUpdateDto dto)
+        [Authorize] 
+        public async Task UpdateUser(string id, [FromBody] AppUserUpdateDto dto)
         {
             var currentUser = await userManager.Users
                 .Include(u => u.Image)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-             currentUser.Email = dto.Email;
-             currentUser.FirstName = dto.FirstName;
-             currentUser.LastName = dto.LastName;
-             if (dto.Image != null)
-             {
-                 currentUser.Image.FileName = dto.Image.FileName;
-                 currentUser.Image.File = Convert.FromBase64String(dto.Image.File);
-             }
+            currentUser.Email = dto.Email;
+            currentUser.FirstName = dto.FirstName;
+            currentUser.LastName = dto.LastName;
+            if (dto.Image != null)
+            {
+                currentUser.Image.FileName = dto.Image.FileName;
+                currentUser.Image.File = Convert.FromBase64String(dto.Image.File);
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId != currentUser.Id)
+            {
+                throw new UnauthorizedAccessException("You are not allowed to do this");
+            }
 
             await userManager.SetEmailAsync(currentUser, dto.Email);
             await userManager.UpdateAsync(currentUser);
@@ -176,23 +193,42 @@ namespace EdushareBackend.Controllers
 
         [HttpDelete("{id}")]
         //[Authorize] Admin / Own Profile
-        public void DeleteUserById(string id)
+        public async Task DeleteUserById(string id)
         {
-
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId != id)
+            {
+                throw new UnauthorizedAccessException("You are not allowed to do this");
+            }
+            await userManager.DeleteAsync(await userManager.FindByIdAsync(id));
         }
 
         [HttpGet("GrantAdmin/{userId}")]
         //[Authorize] Admin
         public async Task GrantAdminRole(string userId)
         {
-
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new ArgumentException("User not found");
+            await userManager.AddToRoleAsync(user, "Admin");
         }
 
         [HttpGet("GrantTeacher/{userId}")]
         //[Authorize] Admin
         public async Task GrantTeacherRole(string userId)
         {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new ArgumentException("User not found");
 
+            var roleExsists = await roleManager.RoleExistsAsync("Teacher");
+
+            if (!(roleExsists))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Teacher"));
+            }
+
+            await userManager.AddToRoleAsync(user, "Teacher");
         }
 
         [HttpGet("RevokeRole/{userId}")]
@@ -200,6 +236,25 @@ namespace EdushareBackend.Controllers
         public async Task RevokeRole(string userId)
         {
 
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new ArgumentException("User not found");
+
+            var roles = await userManager.GetRolesAsync(user);
+
+            if(roles is null)
+            {
+                var admins = await userManager.GetUsersInRoleAsync("Admin");
+
+                if (admins.Count <= 1) throw new ArgumentException("You cannot remove the last remaining Admin user");
+            }     
+
+            if (roles is null)
+            {
+                throw new ArgumentException("User has no roles");
+            }
+
+            await userManager.RemoveFromRolesAsync(user, roles);
         }
 
 
