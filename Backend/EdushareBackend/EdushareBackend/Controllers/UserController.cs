@@ -254,7 +254,7 @@ namespace EdushareBackend.Controllers
 
             var roles = await userManager.GetRolesAsync(user);
 
-            if(roles is null)
+            if(roles is not null)
             {
                 var admins = await userManager.GetUsersInRoleAsync("Admin");
 

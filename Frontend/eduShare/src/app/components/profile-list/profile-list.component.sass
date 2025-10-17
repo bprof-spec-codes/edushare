@@ -1,0 +1,67 @@
+@use '../../../styles/_variables' as *
+
+.base-margin
+    margin: 30px 5% 20px 5%
+    font-family: 'Nunito', sans-serif
+    font-weight: 700
+
+.title
+    text-align: center
+    margin-bottom: 30px
+    font-weight: 1000
+
+.hr
+    //margin-bottom: 40px
+    margin: 0 auto
+    width: 82%
+    max-width: 1050px
+    min-width: 890px
+
+.profile-row
+    margin-bottom: 10px
+    display: flex
+    height: 80px
+    width: 80%
+    max-width: 1000px
+    min-width: 840px
+    //background-color: purple
+    margin: 10px auto
+    align-items: center
+
+.picture-container
+    width: 20%
+    text-align: center
+
+.profile-pic
+    margin: 5px 0 auto 0
+    border-radius: 50%
+
+.fullname
+    margin: 5px 0 auto 0
+    text-align: center
+
+.email
+    margin: auto 0 auto 0
+    text-align: center
+    width: 30%
+
+.button-container
+    display: flex
+    flex-direction: row-reverse
+    justify-content: space-between
+    width: 50%
+
+.button
+    width: 100px
+    height: 40px
+    border: 0
+    border-radius: 10px
+    font-family: 'Nunito'
+    font-weight: 700
+    color: white
+    background-color: $card-font-puprle
+    transition-duration: 0.3s
+
+    &:hover
+        background-color: $button-hover
+        transition-duration: 0.3s

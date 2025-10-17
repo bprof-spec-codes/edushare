@@ -28,11 +28,22 @@ export class ProfileService {
       }
       
   update(id: string, profile: UpdateProfileDto): Observable<void> {
-      return this.http.put<void>(`${this.apiBaseUrl}/${id}`, profile).pipe(
-        switchMap(() => this.http.get<ProfileViewDto[]>(this.apiBaseUrl)),
-        tap(updated => this.profileShortSubject.next(updated)),
-        map(() => void 0)
-      )
-    }
-      
+    return this.http.put<void>(`${this.apiBaseUrl}/${id}`, profile).pipe(
+      switchMap(() => this.http.get<ProfileViewDto[]>(this.apiBaseUrl)),
+      tap(updated => this.profileShortSubject.next(updated)),
+      map(() => void 0)
+    )
+  }
+
+  grantAdmin(id:string): Observable<void> {
+    return this.http.get<void>(`${this.apiBaseUrl}/GrantAdmin/${id}`)
+  }
+   
+  grantTeacher(id:string): Observable<void> {
+    return this.http.get<void>(`${this.apiBaseUrl}/GrantTeacher/${id}`)
+  }
+
+  revokeRole(id:string): Observable<void> {
+    return this.http.get<void>(`${this.apiBaseUrl}/RevokeRole/${id}`)
+  }
 }
