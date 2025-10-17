@@ -1,0 +1,27 @@
+@use '../../../styles/_variables' as *
+
+.edu-navbar
+
+.logo
+    font-family: 'Erica One', sans-serif
+    font-size: 2rem
+    letter-spacing: .2px
+    color: $edu-purple
+    transition: transform .15s ease, box-shadow .15s ease, color .15s ease
+    padding: .35rem .6rem
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+
+    &:hover 
+        text-decoration: none
+        transform: translateY(-1px)
+        text-shadow: 0 3px 6px rgba(0, 0, 0, 0.25), 0 0 8px rgba($edu-purple, 0.5); // kis lila fényes kiemelés
+        color: $edu-purple
+
+.nav-link
+    font-weight: 500
+    transition: transform .12s ease, color .12s ease
+    color: rgba(0,0,0,.7)
+    color: $edu-purple
+
+    &:hover
+        transform: translateY(-1px)
