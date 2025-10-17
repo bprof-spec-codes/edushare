@@ -22,7 +22,6 @@ export class ProfileListComponent {
   ngOnInit(): void {
     this.roles = this.authService.getRoles()
     this.loadProfiles()
-    console.log(this.roles)
   }
 
   loadProfiles(): void {
@@ -39,11 +38,18 @@ export class ProfileListComponent {
       },
     })
   }
-  openDetail(profile: ProfilListViewDto): void {
-    this.router.navigate(['/profile-view', profile.id])
+
+  openDetail(profileId: string): void {
+    this.router.navigate(['/profile-view', profileId])
   }
 
+  hasRoleAdmin(): boolean {
+    if(this.roles.includes("Admin")){
+      return true
+    }
 
+    return false
+  }
 
 
 }

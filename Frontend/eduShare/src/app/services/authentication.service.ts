@@ -88,6 +88,19 @@ export class AuthService {
   return roles
 }
 
+getUserId(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    const payload = this.decodePayload(token);
+    if (!payload) return null;
+
+    const id = payload[AuthService.NAME_ID_CLAIM];
+    return (typeof id === 'string' && id.trim() !== '') ? id : null;
+  }
+
+  public static readonly NAME_ID_CLAIM =
+    'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
+
   private getPayload(token: string): JwtPayload | null {
     try {
       const base64url = token.split('.')[1] ?? ''
