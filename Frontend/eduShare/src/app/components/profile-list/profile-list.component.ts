@@ -33,7 +33,7 @@ export class ProfileListComponent {
       },
       error: (err:any) => {
         console.error(err)
-        this.error = 'Nem sikerült betölteni a felhasználókat.'
+        this.error = 'Cannot load in users!'
         this.loading = false
       },
     })
