@@ -83,10 +83,17 @@ namespace EdushareBackend.Controllers
                     Uploader = new AppUserMaterialShortViewDto
                     {
                         Id = user.Id,
-                        FullName = $"{user.FirstName} {user.LastName}"
+                        FullName = $"{user.FirstName} {user.LastName}",
+                        Image = new ContentViewDto(
+                            user.Image.Id,
+                            user.Image.FileName,
+                            Convert.ToBase64String(user.Image.File)
+                        )
+
+
                     },
                     UploadDate = m.UploadDate,
-
+                    
                     //todo Content
                 }).ToList() ?? new List<MaterialShortViewDto>() //ha a materilas null akkor üres lista
             };
