@@ -1,16 +1,26 @@
-<div class="container mt-4">
-    <h2 class="mb-4 text-center">Felhasználók listája:</h2>
-    <hr>
-<ul *ngFor="let p of profiles">
-    <li class="text-center list-group-item">
-        <img *ngIf="p.image?.file" [src]="p.image.file.startsWith('http')
-                  ? p.image.file
-                  : 'data:image/*;base64,' + p.image.file" [alt]="p.fullName"
-          class="rounded-circle me-3" width="50" height="50" /> {{p.fullName}} {{p.email}} 
-        <button type="button" (click)="openDetail(p)" class="btn btn-primary" >
-            View
-        </button>
-    </li>
-    <hr>
-</ul>
+<div class="base-margin">
+    <h2 class="title">Felhasználók listája:</h2>
+    <hr class="title-hr">
+
+    <div *ngIf="loading" class="text-center text-secondary">Betöltés...</div>
+    <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+
+    <div *ngIf="!loading && profiles.length" class="profile-container">
+        <div *ngFor="let profile of profiles">
+            <div class="profile-row">
+                <div class="picture-container">
+                    <img *ngIf="profile.image?.file" [src]="profile.image.file.startsWith('http') ? profile.image.file : 'data:image/*;base64,' + profile.image.file" [alt]="profile.fullName" class="profile-pic" width="50" height="50" />
+                    <div class="fullname">{{profile.fullName}}</div>
+                </div>  
+                <div class="email">{{profile.email}}</div>
+                <div class="button-container">
+                    <button class="button button-revoke">Revoke</button>
+                    <button class="button button-teacher">Teacher</button>
+                    <button class="button button-admin">Admin</button>
+                    <button class="button button-view">View</button>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
 </div>
