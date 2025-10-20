@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { JwtPayload } from '../models/jwt-payload';
+import { environment } from '../../environments/environment.development';
 
 interface LoginResult {
   Token?: string;
@@ -15,7 +16,7 @@ interface LoginResult {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5000/api/User/Login';
+  private apiUrl = environment.baseApiUrl + '/api/User/Login';
   private storageKey = 'edu_token';
 
   constructor(private http: HttpClient, private router: Router) {}
