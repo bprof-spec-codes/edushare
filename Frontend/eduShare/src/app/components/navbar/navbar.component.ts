@@ -3,6 +3,7 @@ import { AuthService } from '../../services/authentication.service';
 import { ProfileService } from '../../services/profile.service';
 import { ProfileViewDto } from '../../dtos/profile-view-dto';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +16,7 @@ export class NavbarComponent implements OnChanges, OnInit {
   profile: ProfileViewDto | null = null
   id: string = ''
 
-  constructor(private auth: AuthService, private profileService: ProfileService, private router: Router) {
+  constructor(private auth: AuthService, private profileService: ProfileService, private router: Router,private modalService: NgbModal) {
     console.log('userid: ', auth.getUserId());
   }
 
@@ -45,10 +46,15 @@ export class NavbarComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
-    this.isLoggedIn = this.auth.isLoggedIn();
+    this.isLoggedIn = this.auth.isLoggedIn()
   }
 
+  //openLogoutModal(content: any) {
+  //  this.modalService.open(content,{centered: true})
+  //}
+
   logout() {
-    this.auth.logout();
+  //  this.modalService.dismissAll()
+  this.auth.logout()
   }
 }
