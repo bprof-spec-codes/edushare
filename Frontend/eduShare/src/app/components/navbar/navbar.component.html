@@ -24,10 +24,21 @@
             <img *ngIf="profile?.image?.file" [src]="getProfileImageSrc()" [alt]="profile?.fullName" class="avatar" />
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <!-- Ha később kell: <li><a class="dropdown-item" routerLink="/profile">Profile</a></li> -->
             <li><button class="dropdown-item" (click)="openProfile(this.id)">view profile</button></li>
-            <li><button class="dropdown-item" (click)="logout()">Log out</button></li>
+            <li><button class="dropdown-item" (click)="logout()">log out</button></li>
           </ul>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ms-auto align-items-center" *ngIf="!isLoggedIn">
+        <li class="nav-item me-3">
+          <a class="nav-link" routerLink="/login"><strong>upload</strong></a>
+        </li>
+        <li class="nav-item me-2">
+          <a class="nav-link" routerLink="/materials"><strong>see all</strong></a>
+        </li>
+        <li class="nav-item ms-2">
+          <button type="button" class="btn loginbtn" routerLink="/register">log in</button>
         </li>
       </ul>
     </div>

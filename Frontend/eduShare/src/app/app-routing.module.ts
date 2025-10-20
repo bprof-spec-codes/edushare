@@ -15,7 +15,7 @@ import { ProfileUpdateComponent } from './components/profile-update/profile-upda
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
-  { path: 'homepage', component: HomepageComponent, canActivate: [AuthGuard] },
+  { path: 'homepage', component: HomepageComponent},
   { path: 'materials/create', component: MaterialCreateComponent, canActivate: [AuthGuard] },
   { path: 'materials/:id/update', component: MaterialUpdateComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [NoAuthGuard] },
