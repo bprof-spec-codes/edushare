@@ -16,7 +16,8 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 const routes: Routes = [
-    {
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {
     path: '',
     component: AuthLayoutComponent,
     children: [
@@ -28,13 +29,13 @@ const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: 'homepage', component: HomepageComponent},
-      { path: 'materials', component: MaterialListComponent},
+      { path: 'homepage', component: HomepageComponent },
+      { path: 'materials', component: MaterialListComponent },
       { path: 'materials/create', component: MaterialCreateComponent, canActivate: [AuthGuard] },
       { path: 'materials/:id/update', component: MaterialUpdateComponent, canActivate: [AuthGuard] },
-      { path: 'materials/:id/view', component: MaterialViewComponent},
-      { path: 'profile-list', component: ProfileListComponent},
-      { path: 'profile-view/:id', component: ProfileViewComponent},
+      { path: 'materials/:id/view', component: MaterialViewComponent },
+      { path: 'profile-list', component: ProfileListComponent },
+      { path: 'profile-view/:id', component: ProfileViewComponent },
       { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard] },
     ]
   },
