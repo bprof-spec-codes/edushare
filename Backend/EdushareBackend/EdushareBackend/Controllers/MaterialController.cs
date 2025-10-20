@@ -3,8 +3,10 @@ using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Models;
 using Logic.Logic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EdushareBackend.Controllers
 {
@@ -30,17 +32,28 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize] Admin / Own Material
+        [Authorize] 
         public void DeleteMaterialById(string id)
         {
+            var userid=User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userid!=materialLogic.GetMaterialById(id).Uploader.Id)
+            {
+                throw new UnauthorizedAccessException("You are not allowed to do this");
+            }
             materialLogic.DeleteMaterialById(id);
         }
 
         [HttpPut("{id}")]
-        //[Authorize] Admin / Own Material
+        [Authorize] 
         public void UpdateMaterial(string id, [FromBody] MaterialCreateUpdateDto dto)
         {
+            var userid=User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userid!=materialLogic.GetMaterialById(id).Uploader.Id)
+            {
+                throw new UnauthorizedAccessException("You are not allowed to do this");
+            }
             materialLogic.UpdateMaterial(id, dto);
+
         }
 
         [HttpGet]

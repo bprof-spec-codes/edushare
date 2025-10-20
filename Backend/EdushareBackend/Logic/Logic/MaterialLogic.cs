@@ -77,6 +77,7 @@ namespace Logic.Logic
 
             materialRepo.Update(old);
         }
+        //RGVtbzI=
         public MaterialViewDto GetMaterialById(string id)
         {
             var mat = materialRepo.GetAll()

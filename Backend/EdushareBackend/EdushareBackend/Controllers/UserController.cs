@@ -1,4 +1,4 @@
-﻿using Entities.Dtos.Content;
+using Entities.Dtos.Content;
 using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
@@ -13,6 +13,9 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Text;
 using Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace EdushareBackend.Controllers
 {
@@ -21,13 +24,17 @@ namespace EdushareBackend.Controllers
     public class UserController : ControllerBase
     {
         UserManager<AppUser> userManager;
+        RoleManager<IdentityRole> roleManager;
         private readonly IWebHostEnvironment env;
-       
+        private readonly JwtSettings jwtSettings;
 
-        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env)
+
+        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, IOptions<JwtSettings> jwtSettings)
         {
             this.userManager = userManager;
             this.env = env;
+            this.roleManager = roleManager;
+            this.jwtSettings = jwtSettings.Value;
         }
 
         [HttpGet]
@@ -71,13 +78,27 @@ namespace EdushareBackend.Controllers
                     Convert.ToBase64String(user.Image.File)
                 ),
 
-                Materials = user.Materials?.Select(m => new MaterialViewDto
+                Materials = user.Materials?.Select(m => new MaterialShortViewDto
                 {
                     Id = m.Id,
                     Title = m.Title,
                     Subject = m.Subject,
-                    UploadDate = m.UploadDate
-                }).ToList() ?? new List<MaterialViewDto>() //ha a materilas null akkor üres lista
+                    Uploader = new AppUserMaterialShortViewDto
+                    {
+                        Id = user.Id,
+                        FullName = $"{user.FirstName} {user.LastName}",
+                        Image = new ContentViewDto(
+                            user.Image.Id,
+                            user.Image.FileName,
+                            Convert.ToBase64String(user.Image.File)
+                        )
+
+
+                    },
+                    UploadDate = m.UploadDate,
+                    
+                    //todo Content
+                }).ToList() ?? new List<MaterialShortViewDto>() //ha a materilas null akkor üres lista
             };
 
             return userView;
@@ -107,6 +128,12 @@ namespace EdushareBackend.Controllers
 
             var result = await userManager.CreateAsync(user, dto.Password);
 
+            if (userManager.Users.Count() == 1)
+            {
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await userManager.AddToRoleAsync(user, "Admin");
+            }
+
         }
 
         [HttpPost("Login")]
@@ -115,14 +142,14 @@ namespace EdushareBackend.Controllers
             var user = await userManager.FindByEmailAsync(dto.Email);
             if (user == null)
             {
-                throw new ArgumentException("User not found");
+                return BadRequest(new { message = "Incorrect Email" });
             }
             else
             {
                 var result = await userManager.CheckPasswordAsync(user, dto.Password);
                 if (!result)
                 {
-                    throw new ArgumentException("Incorrect password");
+                    return BadRequest(new { message = "Incorrect Password" });
                 }
                 else
                 {
@@ -153,21 +180,26 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        //[Authorize] Admin / Own Profile
-        public async Task UpdateUser(string id,[FromBody] AppUserUpdateDto dto)
+        [Authorize] 
+        public async Task UpdateUser(string id, [FromBody] AppUserUpdateDto dto)
         {
             var currentUser = await userManager.Users
                 .Include(u => u.Image)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-             currentUser.Email = dto.Email;
-             currentUser.FirstName = dto.FirstName;
-             currentUser.LastName = dto.LastName;
-             if (dto.Image != null)
-             {
-                 currentUser.Image.FileName = dto.Image.FileName;
-                 currentUser.Image.File = Convert.FromBase64String(dto.Image.File);
-             }
+            currentUser.Email = dto.Email;
+            currentUser.FirstName = dto.FirstName;
+            currentUser.LastName = dto.LastName;
+            if (dto.Image != null)
+            {
+                currentUser.Image.FileName = dto.Image.FileName;
+                currentUser.Image.File = Convert.FromBase64String(dto.Image.File);
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId != currentUser.Id)
+            {
+                throw new UnauthorizedAccessException("You are not allowed to do this");
+            }
 
             await userManager.SetEmailAsync(currentUser, dto.Email);
             await userManager.UpdateAsync(currentUser);
@@ -176,23 +208,42 @@ namespace EdushareBackend.Controllers
 
         [HttpDelete("{id}")]
         //[Authorize] Admin / Own Profile
-        public void DeleteUserById(string id)
+        public async Task DeleteUserById(string id)
         {
-
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId != id)
+            {
+                throw new UnauthorizedAccessException("You are not allowed to do this");
+            }
+            await userManager.DeleteAsync(await userManager.FindByIdAsync(id));
         }
 
         [HttpGet("GrantAdmin/{userId}")]
         //[Authorize] Admin
         public async Task GrantAdminRole(string userId)
         {
-
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new ArgumentException("User not found");
+            await userManager.AddToRoleAsync(user, "Admin");
         }
 
         [HttpGet("GrantTeacher/{userId}")]
         //[Authorize] Admin
         public async Task GrantTeacherRole(string userId)
         {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new ArgumentException("User not found");
 
+            var roleExsists = await roleManager.RoleExistsAsync("Teacher");
+
+            if (!(roleExsists))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Teacher"));
+            }
+
+            await userManager.AddToRoleAsync(user, "Teacher");
         }
 
         [HttpGet("RevokeRole/{userId}")]
@@ -200,17 +251,36 @@ namespace EdushareBackend.Controllers
         public async Task RevokeRole(string userId)
         {
 
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new ArgumentException("User not found");
+
+            var roles = await userManager.GetRolesAsync(user);
+
+            if(roles.Contains("Admin"))
+            {
+                var admins = await userManager.GetUsersInRoleAsync("Admin");
+
+                if (admins.Count <= 1) throw new ArgumentException("You cannot remove the last remaining Admin user");
+            }     
+
+            if (roles is null)
+            {
+                throw new ArgumentException("User has no roles");
+            }
+
+            await userManager.RemoveFromRolesAsync(user, roles);
         }
 
 
         private JwtSecurityToken GenerateAccessToken(IEnumerable<Claim>? claims, int expiryInMinutes)
         {
             var signinKey = new SymmetricSecurityKey(
-                  Encoding.UTF8.GetBytes("jhsddsfjkhdsfhksfjdsdsfdsgdsfsfdhjsfdhjsfdjsjsffdsdfsdfsdfhdsfhdskhf54465g6dsgúdsg4dsdggsdglsdj4oiietrjhsddsfjkhdsfhksfjdsdsfdsgdsfsfdhjsfdhjsfdjsjsffdsdfsdfsdfhdsfhdskhf54465g6dsgúdsg4dsdggsdglsdj4oiietrjhsddsfjkhdsfhksfjdsdsfdsgdsfsfdhjsfdhjsfdjsjsffdsdfsdfsdfhdsfhdskhf54465g6dsgúdsg4dsdggsdglsdj4oiietr"));
+                  Encoding.UTF8.GetBytes(jwtSettings.Key));
 
             return new JwtSecurityToken(
-                  issuer: "edushare.com",
-                  audience: "edushare.com",
+                  issuer: jwtSettings.Issuer,
+                  audience: jwtSettings.Issuer,
                   claims: claims?.ToArray(),
                   expires: DateTime.Now.AddMinutes(expiryInMinutes),
                   signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)

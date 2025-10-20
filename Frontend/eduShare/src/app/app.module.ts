@@ -22,6 +22,9 @@ import { ProfileListComponent } from './components/profile-list/profile-list.com
 import { ProfileViewComponent } from './components/profile-view/profile-view.component';
 import { ProfileUpdateComponent } from './components/profile-update/profile-update.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { MaterialCardComponent } from './components/material-card/material-card.component';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,9 @@ import { FooterComponent } from './components/footer/footer.component';
     ProfileViewComponent,
     ProfileUpdateComponent,
     FooterComponent,
+    MaterialCardComponent,
+    MainLayoutComponent,
+    AuthLayoutComponent,
   ],
   imports: [
     BrowserModule,

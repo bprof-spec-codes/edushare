@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { AuthService } from '../../services/authentication.service';
+import { ProfileService } from '../../services/profile.service';
+import { ProfileViewDto } from '../../dtos/profile-view-dto';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-navbar',
@@ -7,10 +11,50 @@ import { AuthService } from '../../services/authentication.service';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.sass'
 })
-export class NavbarComponent {
-  constructor(private auth: AuthService) {}
+export class NavbarComponent implements OnChanges, OnInit {
+  isLoggedIn: boolean = false;
+  profile: ProfileViewDto | null = null
+  id: string = ''
+
+  constructor(private auth: AuthService, private profileService: ProfileService, private router: Router,private modalService: NgbModal) {
+    console.log('userid: ', auth.getUserId());
+  }
+
+  ngOnInit(): void {
+    this.id = this.auth.getUserId() || '';
+    this.isLoggedIn = this.auth.isLoggedIn()
+    this.profileService.getById(this.id).subscribe({
+      next: (data) => {
+        this.profile = data
+        console.log(this.profile)
+      },
+      error: (err) => {
+        console.error(err)
+        alert('Nem sikerült betölteni a profilt.')
+      }
+    })
+  }
+
+  getProfileImageSrc(): string {
+    const file = this.profile?.image?.file;
+    if (!file) return 'assets/default-avatar.png'; // alapértelmezett kép
+    return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
+  }
+
+  openProfile(profileId: string): void {
+    this.router.navigate(['/profile-view', profileId])
+  }
+
+  ngOnChanges() {
+    this.isLoggedIn = this.auth.isLoggedIn()
+  }
+
+  //openLogoutModal(content: any) {
+  //  this.modalService.open(content,{centered: true})
+  //}
 
   logout() {
-    this.auth.logout();
+  //  this.modalService.dismissAll()
+  this.auth.logout()
   }
 }
