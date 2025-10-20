@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid nav-inner">
-    <a class="navbar-brand logo" routerLink="/">
+    <a class="navbar-brand logo" routerLink="/homepage">
       EduShare
     </a>
 
@@ -32,13 +32,16 @@
 
       <ul class="navbar-nav ms-auto align-items-center" *ngIf="!isLoggedIn">
         <li class="nav-item me-3">
-          <a class="nav-link" routerLink="/login"><strong>upload</strong></a>
+          <a class="nav-link" routerLink="/login"><strong>Upload</strong></a>
         </li>
         <li class="nav-item me-2">
-          <a class="nav-link" routerLink="/materials"><strong>see all</strong></a>
+          <a class="nav-link" routerLink="/materials"><strong>Materials</strong></a>
+        </li>
+        <li class="nav-item me-2">
+          <a class="nav-link" routerLink="/materials"><strong>Profiles</strong></a>
         </li>
         <li class="nav-item ms-2">
-          <button type="button" class="btn loginbtn" routerLink="/register">log in</button>
+          <button type="button" class="btn loginbtn" routerLink="/login">Log in</button>
         </li>
       </ul>
     </div>

@@ -12,21 +12,34 @@ import { ProfileListComponent } from './components/profile-list/profile-list.com
 import { ProfileViewComponent } from './components/profile-view/profile-view.component';
 import { MaterialUpdateComponent } from './components/material-update/material-update.component';
 import { ProfileUpdateComponent } from './components/profile-update/profile-update.component';
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
-  { path: 'homepage', component: HomepageComponent},
-  { path: 'materials/create', component: MaterialCreateComponent, canActivate: [AuthGuard] },
-  { path: 'materials/:id/update', component: MaterialUpdateComponent, canActivate: [AuthGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [NoAuthGuard] },
-  { path: 'materials', component: MaterialListComponent, canActivate: [AuthGuard] },
-  { path: 'materials/:id/view', component: MaterialViewComponent, canActivate: [AuthGuard] },
-  { path: 'profile-list', component: ProfileListComponent, canActivate: [AuthGuard] },
-  { path: 'profile-view/:id', component: ProfileViewComponent, canActivate: [AuthGuard] },
-  { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard] },
+    {
+    path: '',
+    component: AuthLayoutComponent,
+    children: [
+      { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
+      { path: 'register', component: RegisterComponent, canActivate: [NoAuthGuard] },
+    ]
+  },
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      { path: 'homepage', component: HomepageComponent},
+      { path: 'materials', component: MaterialListComponent},
+      { path: 'materials/create', component: MaterialCreateComponent, canActivate: [AuthGuard] },
+      { path: 'materials/:id/update', component: MaterialUpdateComponent, canActivate: [AuthGuard] },
+      { path: 'materials/:id/view', component: MaterialViewComponent},
+      { path: 'profile-list', component: ProfileListComponent},
+      { path: 'profile-view/:id', component: ProfileViewComponent},
+      { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard] },
+    ]
+  },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
-];
-
+]
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
