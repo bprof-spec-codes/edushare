@@ -1,50 +1,37 @@
-<div class="login-wrapper">
-  <!-- Bal oldal -->
-  <div class="login-left">
-    <div class="login-content">
-      <h2>Login</h2>
-      <form (ngSubmit)="onLogin()" autocomplete="off">
+<div class="login-page">
+  <h1 class="logo" routerLink="/homepage">EduShare</h1>
+
+  <div class="login-wrapper">
+    <div class="login-left">
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm" autocomplete="off">
+        <h4 class="text-center mb-3">Login </h4>
         <div class="input-group mb-3">
           <span class="input-group-text">
-            <i class="bi bi-envelope-fill"></i>
+            <i class="bi bi-envelope"></i>
           </span>
-          <input
-            type="email"
-            class="form-control"
-            placeholder="Email"
-            required
-            [(ngModel)]="email"
-            name="email"
-          />
+          <input type="email" class="form-control" placeholder="Email" />
         </div>
 
         <div class="input-group mb-3">
           <span class="input-group-text">
-            <i class="bi bi-lock-fill"></i>
+            <i class="bi bi-lock"></i>
           </span>
-          <input
-            type="password"
-            class="form-control"
-            placeholder="Password"
-            required
-            [(ngModel)]="password"
-            name="password"
-          />
+          <input type="password" class="form-control" placeholder="Password" />
         </div>
 
-        <button class="btn btn-primary w-100 mb-2" type="submit" [disabled]="loading">
-          Login
+        <button class="btn btn-primary w-100 mb-2" type="submit" [disabled]="loading"> 
+          <i class="bi bi-box-arrow-in-right me-2"></i> Login 
         </button>
 
-        <p class="text-center mt-3">
-          New to EduShare?  <a (click)="goToRegister()" class="register-link"> Register</a>
+        <p class="text-center md-3">
+          New to EduShare?
+          <a class="register-link" routerLink="/register"><strong>Register</strong></a>
         </p>
       </form>
     </div>
-  </div>
 
-  <!-- Jobb oldal -->
-  <div class="login-right">
-    <img src="/images/Login.jpg" alt="Login illustration" />
+    <div class="login-right">
+      <img src="assets/login-illustration.svg" alt="Login Illustration" />
+    </div>
   </div>
 </div>

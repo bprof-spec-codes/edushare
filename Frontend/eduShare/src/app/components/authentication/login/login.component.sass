@@ -1,11 +1,38 @@
 @use '../../../../styles/_variables' as *
 
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap')
+
+.login-page
+  background: #fff
+  min-height: 100vh
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  padding: 2rem
+
+  .logo
+    font-family: 'Nunito', sans-serif
+    font-size: 3rem
+    font-weight: 800
+    color: $card-font-puprle
+    margin-bottom: 2rem
+    cursor: pointer
+    text-shadow: 0 6px 18px rgba(0,0,0,0.25)
+    transition: transform 0.2s ease, text-shadow 0.3s ease
+    &:hover
+      transform: scale(1.05)
+      text-shadow: 0 8px 25px rgba(0,0,0,0.35)
+
 .login-wrapper
   display: flex
-  background: $card-font-puprle
-  height: 100vh
-  width: 100vw
+  width: 80%
+  max-width: 1100px
+  min-height: 500px
+  border-radius: 30px
   overflow: hidden
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25)
+  position: relative
 
 .login-left
   flex: 1
@@ -13,69 +40,52 @@
   display: flex
   justify-content: center
   align-items: center
+  color: #fff
   position: relative
   z-index: 2
-  border-top-right-radius: 30px
-  border-bottom-right-radius: 30px
-  box-shadow: 15px 0 40px rgba(0,0,0,0.25)
+  border-radius: 30px
+  margin-right: -60px
+  box-shadow: 8px 0 20px rgba(0,0,0,0.2)
 
   .login-content
-    width: 100%
+    width: 80%
     max-width: 350px
     text-align: center
+    background: rgba(255,255,255,0.08)
+    padding: 2rem
+    border-radius: 20px
 
     h2
-      font-size: 2.5rem
+      font-size: 2rem
       font-weight: 700
-      color: #fff
       margin-bottom: 2rem
-      text-shadow: 0 6px 14px rgba(0,0,0,0.35)
+      text-shadow: 0 4px 10px rgba(0,0,0,0.25)
 
-    form
-      .input-group
-        margin-bottom: 1rem
-        .input-group-text
-          background: $card-background-grey
-          border: 1px solid rgba(0,0,0,0.2)
-        input
-          background: $card-background-grey
-          border: 1px solid rgba(0,0,0,0.2)
-          border-left: none
-          &::placeholder
-            color: #333
+    .btn-primary
+      background: $card-font-puprle
+      border: none
+      border-radius: 8px
+      font-weight: 600
+      transition: background 0.2s ease
+      &:hover
+        background: $button-hover
 
-      .btn-primary
-        background: $card-font-puprle
-        border: none
-        font-weight: 600
-        border-radius: 8px
-        transition: background 0.2s ease
-        &:hover
-          background: $button-hover
+    .register-link
+      color: #2563eb
+      text-decoration: none
+      &:hover
+        text-decoration: underline
 
-      .register-link
-        color: $card-font-puprle
-        text-decoration: none
-        transition: text-decoration 150ms ease, color 150ms ease
-        &:hover
-          text-decoration: underline
-          color: $button-hover
-
-    p
-      margin-top: 1.5rem
-      color: #fff
-
-// Jobb oldal
 .login-right
   flex: 1
   background: $card-font-puprle
   display: flex
   justify-content: center
   align-items: center
-  position: relative
+  border-top-left-radius: 20px
+  border-bottom-left-radius: 20px
   overflow: hidden
 
   img
     max-width: 80%
     height: auto
-    border-radius: 12px
