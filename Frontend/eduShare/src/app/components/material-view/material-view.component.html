@@ -1,65 +1,87 @@
-<div class="container mt-4" *ngIf="material">
-  <div class="card shadow-sm">
-    <div class="card-body">
+<div class="container-fluid d-flex align-items-center justify-content-center">
+  <div class="row w-100 align-items-center justify-content-center">
+    <div class="col-md-7 d-flex justify-content-center">
+      <div class="container mt-4" *ngIf="material">
 
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="text-muted fw-semibold">
-          {{ material.subject || 'Placeholder' }}
-        </div>
-
-        <div class="d-flex align-items-center">
-          <div class="text-end me-3">
-            <div class="small fw-semibold">
-              {{ material.uploader.fullName || 'Ismeretlen' }}
-            </div>
-            <div class="small text-muted">
-              {{ material.uploadDate | date:'yyyy.MM.dd. HH:mm' }}
+        <div class="d-flex justify-content-between align-items-center mb-3 row">
+          <div class="col-6">
+            <h3 class="mb-0">{{ material.title }}</h3>
+            <div class="text-muted fw-semibold">
+              <i class="bi bi-book"></i> {{ material.subject || 'Placeholder' }}
             </div>
           </div>
 
-          <img *ngIf="material.uploader?.image?.file" [src]="material.uploader.image.file.startsWith('http')
-                    ? material.uploader.image.file
-                    : 'data:image/*;base64,' + material.uploader.image.file"
-            alt="{{ material.uploader.fullName || 'Feltöltő' }}" class="rounded-circle" width="42" height="42" />
-        </div>
-      </div>
-
-      <div class="row g-3">
-        <div class="col-12 col-lg-8">
-          <h4 class="mb-2">{{ material.title }}</h4>
-          <p class="mb-0 text-body-secondary">
-            {{ material.description || 'Nincs leírás.' }}
-          </p>
-        </div>
-
-        <div class="col-12 col-lg-4">
-          <div class="border rounded-3 bg-light d-flex flex-column align-items-center justify-content-center p-4"
-            style="min-height: 180px;">
-            <div class="text-center">
-              <div class="mb-2 fw-semibold">Fájl előnézet</div>
-              <div class="small text-muted mb-3">
-                {{ material.content.fileName || 'Nincs fájl' }}
+          <div class="d-flex align-items-center col-6 justify-content-end ">
+            <div class="text-end me-3">
+              <div class="small fw-semibold">
+                <a class="btn btn-link p-0 text-dark"
+                  (click)="openProfile(material.uploader.id)">{{material.uploader.fullName || 'Ismeretlen'}}</a>
               </div>
+              <div class="small text-muted">
+                {{ material.uploadDate | date:'yyyy.MM.dd. HH:mm' }}
+              </div>
+            </div>
 
-              <button class="btn btn-primary btn-sm"
-                (click)="downloadFile(material.content.file, material.content.fileName)"
-                [disabled]="!material.content.file">
-                <i class="bi bi-download me-1"></i>
-                Letöltés
+            <img *ngIf="material.uploader?.image?.file" [src]="material.uploader.image.file.startsWith('http')
+                       ? material.uploader.image.file
+                       : 'data:image/*;base64,' + material.uploader.image.file"
+              alt="{{ material.uploader.fullName || 'Feltöltő' }}" class="rounded-circle" width="42" height="42" />
+            <div class="dropdown ms-3" *ngIf="currentUserId === material.uploader.id">
+              <button class="btn btn-link text-dark p-0" type="button" id="optionsMenu" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="bi bi-three-dots-vertical fs-5"></i>
               </button>
+
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="optionsMenu">
+                <li>
+                  <button class="dropdown-item" (click)="updateMaterial()">
+                    <i class="bi bi-pencil-square me-2"></i> Módosítás
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item text-danger" (click)="deleteMaterial()">
+                    <i class="bi bi-trash me-2"></i> Törlés
+                  </button>
+                </li>
+              </ul>
             </div>
           </div>
-          <div class="d-flex text-end">
-            <button class="btn btn-warning btn-sm mt-3 me-2" (click)="updateMaterial()" *ngIf="material">
-              <i class="bi bi-pencil-square me-1"></i>
-              Módosítás
+        </div>
+
+        <div class="row g-3">
+          <div class="col-12">
+            <p class="mb-0 text-body-secondary text-body">
+              <i class="bi bi-file-earmark-text"></i>
+
+              {{ showFullDescription ? material.description : (material.description | slice:0:700) }}
+              <span *ngIf="!showFullDescription && material.description.length > 700">...</span>
+            </p>
+
+            <button *ngIf="material.description.length > 700" class="btn btn-link p-0 mt-0 d-flex"
+              (click)="toggleDescription()">
+              {{ showFullDescription ? 'show less' : 'show more' }}
             </button>
-            <button class="btn btn-danger btn-sm mt-3 ms-auto" (click)="deleteMaterial()" *ngIf="material">
-              <i class="bi bi-trash me-1"></i>
-              Törlés
+          </div>
+        </div>
+
+        <div class="row my-4">
+          <div class="col-12 d-flex justify-content-center gap-4">
+            <button class="btn w-25 d-flex align-items-center justify-content-center file-button"
+              (click)="downloadFile(material.content.file, material.content.fileName)">
+              Download
             </button>
+            <button class="btn w-25 d-flex align-items-center justify-content-center file-button">
+              Preview
+            </button>
+          </div>
         </div>
 
       </div>
     </div>
+
+    <div class="col-md-5 d-flex align-items-center justify-content-center">
+      <img src="/images/vecteezy_men-set-an-alarm-to-remember-to-always-study_4474412-1.jpg" alt="tanulj öcsi"
+        class="img-fluid rounded w-100" />
+    </div>
   </div>
+</div>

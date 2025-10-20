@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MaterialService } from '../../services/material.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialViewDto } from '../../dtos/material-view-dto';
+import { AuthService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-material-view',
@@ -13,16 +14,18 @@ export class MaterialViewComponent implements OnInit {
   material: MaterialViewDto | null = null
   loading = false
   error?: string
+  showFullDescription = false
+  currentUserId = ''
 
-  constructor(private route: ActivatedRoute, private materialService: MaterialService, private router: Router) {}
+  constructor(private route: ActivatedRoute, private materialService: MaterialService, private router: Router, private auth: AuthService) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')
-    if(!id) {
+    if (!id) {
       alert('Érvénytelen azonosító.')
       return
     }
-
+    this.currentUserId = this.auth.getUserId() || ''
     this.loading = true
     if (id) {
       this.materialService.getById(id).subscribe({
@@ -50,6 +53,14 @@ export class MaterialViewComponent implements OnInit {
   updateMaterial(): void {
     if (!this.material) return
     this.router.navigate(['/materials', this.material.id, 'update'])
+  }
+
+  toggleDescription(): void {
+    this.showFullDescription = !this.showFullDescription
+  }
+
+  openProfile(id: string) {
+    this.router.navigate(['/profile-view', id])
   }
 
   deleteMaterial(): void {
