@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Material } from '../../models/material';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 import { Router, RouterLink } from '@angular/router';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'app-material-card',
@@ -10,7 +11,7 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './material-card.component.sass'
 })
 export class MaterialCardComponent {
-  constructor(private router: Router) { }
+  constructor(private router: Router, private profileService: ProfileService) { }
 
   @Input() m!: MaterialShortViewDto[];
 

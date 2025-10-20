@@ -15,6 +15,11 @@
     background-color: $card-background-grey
     border-radius: 8px
     box-shadow: 3px 3px 8px rgba(0,0,0,0.3)
+    //transition: transform 0.2s ease
+
+    //&:hover
+    //    transform: scale(1.02)
+
 
 .title 
     text-align: center
@@ -22,6 +27,10 @@
     font-size: 30px
     margin-top: 15px
     margin-bottom: 50px
+    margin-left: 5%
+    max-width: 90% 
+    text-overflow: ellipsis
+    overflow: hidden
 
 .icon-data
     display: flex
@@ -35,6 +44,9 @@
 
 .subject
     margin: auto 0 auto 0
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
 
 .clock
     font-size: 21px
@@ -93,9 +105,13 @@
     padding: 0
     color: $card-font-puprle
     font-weight: 700
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
+    max-width: 160px
 
 .btn-profile:hover
-        text-decoration: underline
+    text-decoration: underline
 
 .btn-profile-container
     margin: auto 0 auto 0

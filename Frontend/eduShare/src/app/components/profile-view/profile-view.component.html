@@ -1,22 +1,31 @@
+    <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
+    <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+
 <div class="container mt-4">
-  <div class="position-relative mb-3">
-    <button type="button" (click)="editDetail(profile!)" class="btn btn-outline-primary position-absolute top-0 end-0">
-      <i class="bi bi-pencil-square"></i>
-    </button>
-    <div class="d-flex align-items-center justify-content-between">
-      <div class="d-flex flex-column align-items-center text-center">
+    <div class="profile-container mb-3 position-relative">
+      <div class="left-container">
         <img *ngIf="profile?.image?.file" [src]="getProfileImageSrc()" [alt]="profile?.fullName"
           class="rounded-circle me-3" width="50" height="50" />
-        <p class="mb-0">{{profile?.fullName}}</p>
+        <p class="mb-0 text-center">{{profile?.fullName}}</p>
+      </div>   
+      <div class="email">
+            <p class="text-center ">{{profile?.email}}</p>  
       </div>
-    </div>
-  </div>
-  <p class="text-center ">{{profile?.email}}</p>
+      <button *ngIf="!loading && ownProfile" type="button" (click)="editDetail(profile!)" class="btn btn-outline-primary position-absolute top-0 end-0">
+        <i class="bi bi-pencil-square"></i>
+      </button>
+    </div>      
   <hr>
 
-  <h2>Feltöltött tananyagai: </h2>
-
-  <div class="container mt-4">
+  <h2>Upload materials by {{profile?.fullName}}: </h2>
+    <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
+    <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+    <div *ngIf="!loading && (profile?.materials?.length ?? 0) > 0">
+    <app-material-card 
+      [m]="profile?.materials || []">
+    </app-material-card>
+  </div>
+  <!-- <div class="container mt-4">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
       <div class="col" *ngFor="let m of profile?.materials">
         <div class="card h-100 shadow-sm">
@@ -36,4 +45,4 @@
 
       </div>
     </div>
-  </div>
+  </div> -->

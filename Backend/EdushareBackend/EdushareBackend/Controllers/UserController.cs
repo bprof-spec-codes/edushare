@@ -15,6 +15,7 @@ using System.Text;
 using Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace EdushareBackend.Controllers
 {
@@ -25,13 +26,15 @@ namespace EdushareBackend.Controllers
         UserManager<AppUser> userManager;
         RoleManager<IdentityRole> roleManager;
         private readonly IWebHostEnvironment env;
+        private readonly JwtSettings jwtSettings;
 
 
-        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager)
+        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, IOptions<JwtSettings> jwtSettings)
         {
             this.userManager = userManager;
             this.env = env;
             this.roleManager = roleManager;
+            this.jwtSettings = jwtSettings.Value;
         }
 
         [HttpGet]
@@ -254,7 +257,7 @@ namespace EdushareBackend.Controllers
 
             var roles = await userManager.GetRolesAsync(user);
 
-            if(roles is null)
+            if(roles.Contains("Admin"))
             {
                 var admins = await userManager.GetUsersInRoleAsync("Admin");
 
@@ -273,11 +276,11 @@ namespace EdushareBackend.Controllers
         private JwtSecurityToken GenerateAccessToken(IEnumerable<Claim>? claims, int expiryInMinutes)
         {
             var signinKey = new SymmetricSecurityKey(
-                  Encoding.UTF8.GetBytes("jhsddsfjkhdsfhksfjdsdsfdsgdsfsfdhjsfdhjsfdjsjsffdsdfsdfsdfhdsfhdskhf54465g6dsgúdsg4dsdggsdglsdj4oiietrjhsddsfjkhdsfhksfjdsdsfdsgdsfsfdhjsfdhjsfdjsjsffdsdfsdfsdfhdsfhdskhf54465g6dsgúdsg4dsdggsdglsdj4oiietrjhsddsfjkhdsfhksfjdsdsfdsgdsfsfdhjsfdhjsfdjsjsffdsdfsdfsdfhdsfhdskhf54465g6dsgúdsg4dsdggsdglsdj4oiietr"));
+                  Encoding.UTF8.GetBytes(jwtSettings.Key));
 
             return new JwtSecurityToken(
-                  issuer: "edushare.com",
-                  audience: "edushare.com",
+                  issuer: jwtSettings.Issuer,
+                  audience: jwtSettings.Issuer,
                   claims: claims?.ToArray(),
                   expires: DateTime.Now.AddMinutes(expiryInMinutes),
                   signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
