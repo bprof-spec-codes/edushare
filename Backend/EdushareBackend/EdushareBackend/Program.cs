@@ -1,10 +1,12 @@
 
 using Data;
+using EdushareBackend.Helpers;
 using Entities.Models;
 using Logic.Helper;
 using Logic.Logic;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -72,7 +74,17 @@ namespace EdushareBackend
                 options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=EduShareDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True");
             });
 
-            builder.Services.AddControllers();
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
+            builder.Services.AddControllers(opt =>
+            {
+                opt.Filters.Add<ExceptionFilter>();
+                opt.Filters.Add<ValidationFilterAttribute>();
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

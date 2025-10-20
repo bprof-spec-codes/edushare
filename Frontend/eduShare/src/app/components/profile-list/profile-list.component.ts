@@ -84,7 +84,7 @@ export class ProfileListComponent {
           //console.log("Teacher added")
         },
         error: (err) => {
-          alert(err.error)
+          alert(err.error.message)
           console.log(err)
         }
       }
