@@ -3,6 +3,7 @@ import { ProfileViewDto } from '../../dtos/profile-view-dto';
 import { ProfileService } from '../../services/profile.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
+import { AuthService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-profile-view',
@@ -14,9 +15,11 @@ export class ProfileViewComponent {
   profile:ProfileViewDto|null=null
   loading = false
   error?: string
-  constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router) {}
+  ownProfile = false
+  constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router, private authService:AuthService){}
   ngOnInit(){
     const id = this.route.snapshot.paramMap.get('id')
+    
       if(!id) {
         alert('Invalid id.')
         return
@@ -36,6 +39,9 @@ export class ProfileViewComponent {
           this.loading = false
         }
       })
+      if (id===this.authService.getUserId()) {
+      this.ownProfile=true
+      }
     }
   }
   openDetail(material: MaterialShortViewDto): void {
@@ -51,4 +57,5 @@ export class ProfileViewComponent {
   if (!file) return 'assets/default-avatar.png'; // alapértelmezett kép
   return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
   }
+
 }
