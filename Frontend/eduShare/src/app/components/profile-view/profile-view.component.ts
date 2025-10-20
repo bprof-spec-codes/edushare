@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ProfileViewDto } from '../../dtos/profile-view-dto';
 import { ProfileService } from '../../services/profile.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MaterialViewForProfileDto } from '../../dtos/material-view-for-profile-dto';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 
 @Component({
@@ -13,23 +12,28 @@ import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 })
 export class ProfileViewComponent {
   profile:ProfileViewDto|null=null
+  loading = false
+  error?: string
   constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router) {}
   ngOnInit(){
     const id = this.route.snapshot.paramMap.get('id')
       if(!id) {
-        alert('Érvénytelen azonosító.')
+        alert('Invalid id.')
         return
       }
 
       if (id) {
+      this.loading = true
       this.profileService.getById(id).subscribe({
         next: (data) => {
           this.profile = data
           console.log(this.profile)
+          this.loading = false
         },
         error: (err) => {
           console.error(err)
-          alert('Nem sikerült betölteni a profilt.')
+          alert('Cannot load the profile.')
+          this.loading = false
         }
       })
     }
