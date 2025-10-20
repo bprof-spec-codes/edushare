@@ -1,43 +1,81 @@
-.login-root
-  background: linear-gradient(135deg, #0f172a 0%, #0b1220 100%)
+@use '../../../../styles/_variables' as *
+
+.login-wrapper
+  display: flex
+  background: $card-font-puprle
+  height: 100vh
+  width: 100vw
+  overflow: hidden
+
+.login-left
+  flex: 1
+  background: $edu-purple
   display: flex
   justify-content: center
   align-items: center
-  height: 100vh
+  position: relative
+  z-index: 2
+  border-top-right-radius: 30px
+  border-bottom-right-radius: 30px
+  box-shadow: 15px 0 40px rgba(0,0,0,0.25)
 
-.login-card
-  width: 420px
-  border-radius: 12px
-  background: rgba(255,255,255,0.04)
-  color: #fff
-  backdrop-filter: blur(6px)
-  -webkit-backdrop-filter: blur(6px)
-  border: 1px solid rgba(255,255,255,0.06)
-  box-shadow: 0 8px 30px rgba(2,6,23,0.7)
-  padding: 1.5rem
+  .login-content
+    width: 100%
+    max-width: 350px
+    text-align: center
 
-.input-group-text
-  background: rgba(255,255,255,0.02)
-  border: 1px solid rgba(255,255,255,0.06)
-  color: #cbd5e1
+    h2
+      font-size: 2.5rem
+      font-weight: 700
+      color: #fff
+      margin-bottom: 2rem
+      text-shadow: 0 6px 14px rgba(0,0,0,0.35)
 
-.form-control
-  background: transparent
-  border: 1px solid rgba(255,255,255,0.06)
-  color: #fff
-  &::placeholder
-    color: #fff
-    opacity: 1
+    form
+      .input-group
+        margin-bottom: 1rem
+        .input-group-text
+          background: $card-background-grey
+          border: 1px solid rgba(0,0,0,0.2)
+        input
+          background: $card-background-grey
+          border: 1px solid rgba(0,0,0,0.2)
+          border-left: none
+          &::placeholder
+            color: #333
 
-.btn-primary
-  background-image: linear-gradient(90deg,#0d6efd,#4f46e5)
-  border: none
-  box-shadow: 0 6px 18px rgba(79,70,229,0.18)
-  color: #fff
-  font-weight: 500
+      .btn-primary
+        background: $card-font-puprle
+        border: none
+        font-weight: 600
+        border-radius: 8px
+        transition: background 0.2s ease
+        &:hover
+          background: $button-hover
 
-h4
-  color: #fff
+      .register-link
+        color: $card-font-puprle
+        text-decoration: none
+        transition: text-decoration 150ms ease, color 150ms ease
+        &:hover
+          text-decoration: underline
+          color: $button-hover
 
-.alert
-  color: #fff
+    p
+      margin-top: 1.5rem
+      color: #fff
+
+// Jobb oldal
+.login-right
+  flex: 1
+  background: $card-font-puprle
+  display: flex
+  justify-content: center
+  align-items: center
+  position: relative
+  overflow: hidden
+
+  img
+    max-width: 80%
+    height: auto
+    border-radius: 12px
