@@ -5,12 +5,13 @@ import { Material } from '../models/material';
 import { MaterialCreateDto } from '../dtos/material-create-dto';
 import { MaterialShortViewDto } from '../dtos/material-short-view-dto';
 import { MaterialViewDto } from '../dtos/material-view-dto';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MaterialService {
-  private apiBaseUrl = 'http://localhost:5000/api/material'
+  private apiBaseUrl = environment.baseApiUrl + '/api/material'
 
   private materialShortSubject = new BehaviorSubject<MaterialShortViewDto[]>([])
   public materialsShort$ = this.materialShortSubject.asObservable()

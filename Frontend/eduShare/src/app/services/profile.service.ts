@@ -4,13 +4,13 @@ import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ProfileViewDto } from '../dtos/profile-view-dto';
 import { UpdateProfileDto } from '../dtos/update-profile-dto';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
-
-  private apiBaseUrl = 'http://localhost:5000/api/User'
+  private apiBaseUrl = environment.baseApiUrl + '/api/User'
   
     private profileShortSubject = new BehaviorSubject<ProfilListViewDto[]>([])
     public profilessShort$ = this.profileShortSubject.asObservable()
