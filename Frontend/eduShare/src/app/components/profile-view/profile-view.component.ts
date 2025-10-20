@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { ProfileViewDto } from '../../dtos/profile-view-dto';
 import { ProfileService } from '../../services/profile.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MaterialViewForProfileDto } from '../../dtos/material-view-for-profile-dto';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
+import { AuthService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-profile-view',
@@ -13,25 +13,35 @@ import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 })
 export class ProfileViewComponent {
   profile:ProfileViewDto|null=null
-  constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router) {}
+  loading = false
+  error?: string
+  ownProfile = false
+  constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router, private authService:AuthService){}
   ngOnInit(){
     const id = this.route.snapshot.paramMap.get('id')
+    
       if(!id) {
-        alert('Érvénytelen azonosító.')
+        alert('Invalid id.')
         return
       }
 
       if (id) {
+      this.loading = true
       this.profileService.getById(id).subscribe({
         next: (data) => {
           this.profile = data
           console.log(this.profile)
+          this.loading = false
         },
         error: (err) => {
           console.error(err)
-          alert('Nem sikerült betölteni a profilt.')
+          alert('Cannot load the profile.')
+          this.loading = false
         }
       })
+      if (id===this.authService.getUserId()) {
+      this.ownProfile=true
+      }
     }
   }
   openDetail(material: MaterialShortViewDto): void {
@@ -47,4 +57,5 @@ export class ProfileViewComponent {
   if (!file) return 'assets/default-avatar.png'; // alapértelmezett kép
   return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
   }
+
 }
