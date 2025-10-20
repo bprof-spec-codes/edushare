@@ -207,7 +207,7 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize] Admin / Own Profile
+        [Authorize(Roles = "Admin")]
         public async Task DeleteUserById(string id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
