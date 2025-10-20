@@ -1,15 +1,11 @@
-<div class="container mt-4" *ngIf="material; else loading">
-    <h2 class="mb-3">Tananyag szerkesztése</h2>
-
-    <app-material-form [isUpdateMode]="true" [initial]="{
+<app-material-form *ngIf="material; else loading" [isUpdateMode]="true" [initial]="{
       title: material.title,
       subject: material.subject,
       description: material.description,
       content: material.content
     }" submitLabel="Frissítés" (submitted)="onUpdate($event)">
-    </app-material-form>
-</div>
+</app-material-form>
 
 <ng-template #loading>
-    <div class="text-center text-muted mt-5">Betöltés...</div>
+  <div class="text-center text-muted mt-5">Betöltés...</div>
 </ng-template>
