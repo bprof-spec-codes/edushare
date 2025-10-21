@@ -3,20 +3,20 @@
 
   <div class="login-wrapper">
     <div class="login-left">
-      <form (ngSubmit)="onLogin()" #loginForm="ngForm" autocomplete="off">
+      <form (ngSubmit)="onLogin()" autocomplete="off">
         <h4 class="text-center mb-3">Login </h4>
         <div class="input-group mb-3">
           <span class="input-group-text">
             <i class="bi bi-envelope"></i>
           </span>
-          <input type="email" class="form-control" placeholder="Email" />
+          <input [(ngModel)]="email" name="email" type="email" class="form-control" placeholder="Email" required/>
         </div>
 
         <div class="input-group mb-3">
           <span class="input-group-text">
             <i class="bi bi-lock"></i>
           </span>
-          <input type="password" class="form-control" placeholder="Password" />
+          <input [(ngModel)]="password" name="password" type="password" class="form-control" placeholder="Password" required />
         </div>
 
         <button class="btn btn-primary w-100 mb-2" type="submit" [disabled]="loading"> 
@@ -31,7 +31,7 @@
     </div>
 
     <div class="login-right">
-      <img src="assets/login-illustration.svg" alt="Login Illustration" />
+      <img src="images/login.jpg" alt="Login Illustration" />
     </div>
   </div>
 </div>

@@ -1,10 +1,11 @@
+@use 'sass:color'
 @use '../../../../styles/_variables' as *
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap')
 
 .login-page
-  background: #fff
-  min-height: 100vh
+  background: #f9f9ff
+  min-height: 100dvh
   display: flex
   flex-direction: column
   align-items: center
@@ -18,74 +19,163 @@
     color: $card-font-puprle
     margin-bottom: 2rem
     cursor: pointer
-    text-shadow: 0 6px 18px rgba(0,0,0,0.25)
-    transition: transform 0.2s ease, text-shadow 0.3s ease
+    text-shadow: 0 6px 16px rgba(0,0,0,0.15)
+    transition: transform 280ms cubic-bezier(.22,.61,.36,1), text-shadow 280ms ease
+    will-change: transform, text-shadow
     &:hover
       transform: scale(1.05)
-      text-shadow: 0 8px 25px rgba(0,0,0,0.35)
+      text-shadow: 0 8px 24px rgba(0,0,0,0.25)
 
 .login-wrapper
   display: flex
-  width: 80%
-  max-width: 1100px
-  min-height: 500px
-  border-radius: 30px
+  width: clamp(300px, 90vw, 1200px)
+  min-height: 70dvh
+  border-radius: 70px
   overflow: hidden
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25)
+  box-shadow: 0 10px 35px rgba(0,0,0,0.25)
   position: relative
+  background: color.adjust($card-font-puprle, $lightness: -8%)
+  transition: border-radius 280ms ease, box-shadow 280ms ease
 
 .login-left
   flex: 1
-  background: $edu-purple
+  background: color.scale($edu-purple, $lightness: 8%)
   display: flex
   justify-content: center
   align-items: center
-  color: #fff
   position: relative
   z-index: 2
-  border-radius: 30px
+  border-radius: 70px
   margin-right: -60px
-  box-shadow: 8px 0 20px rgba(0,0,0,0.2)
+  box-shadow: 10px 0 25px rgba(0,0,0,0.2)
+  padding: 2rem
+  transition: margin 280ms cubic-bezier(.22,.61,.36,1), border-radius 280ms ease, box-shadow 280ms ease
+  will-change: margin, border-radius, box-shadow
 
-  .login-content
-    width: 80%
-    max-width: 350px
+  form
+    width: min(85%, 370px)
+    background: rgba(255,255,255,0.10)
+    border-radius: 24px
+    backdrop-filter: blur(10px)
+    -webkit-backdrop-filter: blur(10px)
+    padding: 2rem 2.5rem
+    display: flex
+    flex-direction: column
+    align-items: center
     text-align: center
-    background: rgba(255,255,255,0.08)
-    padding: 2rem
-    border-radius: 20px
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15)
+    transition: transform 220ms ease
+    will-change: transform
 
-    h2
+    h4
+      font-family: 'Nunito', sans-serif
       font-size: 2rem
-      font-weight: 700
-      margin-bottom: 2rem
-      text-shadow: 0 4px 10px rgba(0,0,0,0.25)
+      font-weight: 800
+      color: #fff
+      margin-bottom: 1.8rem
+      text-shadow: 0 6px 14px rgba(0,0,0,0.3)
+
+    .input-group
+      width: 100%
+      margin-bottom: 1.1rem
+
+      .input-group-text
+        background: $card-background-grey
+        border: 1px solid rgba(0,0,0,0.2)
+        color: #333
+
+      .form-control
+        background: $card-background-grey
+        border: 1px solid rgba(0,0,0,0.2)
+        border-left: none
+        color: #333
+        font-weight: 500
+        &:focus
+          outline: none
+          border-color: $card-font-puprle
+          box-shadow: 0 0 5px rgba(101,25,255,0.4)
+        &::placeholder
+          color: #666
 
     .btn-primary
       background: $card-font-puprle
       border: none
-      border-radius: 8px
-      font-weight: 600
-      transition: background 0.2s ease
+      border-radius: 10px
+      font-weight: 700
+      width: 100%
+      padding: 0.7rem 0
+      margin-top: 0.3rem
+      transition: background 180ms ease, transform 120ms ease, box-shadow 180ms ease
+      will-change: transform, box-shadow, background
+      box-shadow: 0 6px 18px rgba(79,70,229,0.22)
       &:hover
         background: $button-hover
+        transform: translateY(-2px)
+        box-shadow: 0 10px 24px rgba(79,70,229,0.28)
+
+    p
+      margin-top: 1.5rem
+      font-size: 0.95rem
+      color: #fff
+      text-align: center
 
     .register-link
-      color: #2563eb
+      color: #fff
       text-decoration: none
+      margin-left: 4px
+      font-weight: 800
+      transition: text-decoration 180ms ease, color 180ms ease
       &:hover
         text-decoration: underline
+        color: color.scale($card-background-grey, $lightness: 20%)
 
 .login-right
   flex: 1
-  background: $card-font-puprle
+  background: color.adjust($card-font-puprle, $lightness: -8%)
   display: flex
   justify-content: center
   align-items: center
-  border-top-left-radius: 20px
-  border-bottom-left-radius: 20px
+  border-radius: 70px
   overflow: hidden
+  position: relative
+  transition: border-radius 280ms ease
 
   img
     max-width: 80%
     height: auto
+    border-radius: 16px
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25)
+    transition: transform 300ms ease
+    will-change: transform
+    &:hover
+      transform: scale(1.03)
+
+@media (max-width: 992px)
+  .login-wrapper
+    flex-direction: column
+    width: min(95vw, 700px)
+    min-height: auto
+    border-radius: 70px
+    overflow: visible
+
+  .login-left
+    margin-right: 0
+    border-radius: 70px
+    margin-bottom: -42px
+    box-shadow: 0 14px 32px rgba(0,0,0,0.22)
+
+    form
+      width: min(92%, 420px)
+
+  .login-right
+    z-index: 1
+    border-radius: 70px
+    padding: 2rem 1rem
+    img
+      max-width: 72%
+      margin: 1.25rem 0
+
+@media (prefers-reduced-motion: reduce)
+  *
+    transition: none !important
+    animation: none !important
