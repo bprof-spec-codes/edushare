@@ -1,3 +1,9 @@
+<div class="form-wrapper d-flex justify-content-center align-items-center py-5">
+  <div class="form-card shadow-lg rounded-4 p-4 p-md-5 col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+
+    <h1 class="fw-semibold text-white text-center mb-4">
+      Profile update
+    </h1>
 <form [formGroup]="updateForm" (ngSubmit)="onUpdate()">
   <div class="mb-3 text-center">
     <img *ngIf="profile?.image?.file"
@@ -42,3 +48,5 @@
 
   <button type="submit" class="btn btn-primary w-100">Frissítés</button>
 </form>
+  </div>  
+</div>

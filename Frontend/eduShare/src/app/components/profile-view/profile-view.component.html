@@ -11,7 +11,7 @@
       <div class="email">
             <p class="text-center ">{{profile?.email}}</p>  
       </div>
-      <button *ngIf="!loading && ownProfile" type="button" (click)="editDetail(profile!)" class="btn btn-outline-primary position-absolute top-0 end-0">
+      <button *ngIf="!loading && ownProfile" type="button" (click)="editbtn editDetail(profile!)" class="btn btn-outline-primary position-absolute top-0 end-0">
         <i class="bi bi-pencil-square"></i>
       </button>
     </div>      
