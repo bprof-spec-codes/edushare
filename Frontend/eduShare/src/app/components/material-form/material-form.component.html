@@ -1,42 +1,67 @@
-<form [formGroup]="materialForm" (ngSubmit)="submit()">
-    <div class="mb-3">
-        <label class="form-label">Cím <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" formControlName="title"
-            [class.is-invalid]="materialForm.get('title')?.invalid && materialForm.get('title')?.touched" />
-        <div class="text-danger small" *ngIf="materialForm.get('title')?.invalid && materialForm.get('title')?.touched">
-            A cím megadása kötelező.
-        </div>
+<div class="form-wrapper d-flex justify-content-center align-items-center py-5">
+    <div class="form-card shadow-lg rounded-4 p-4 p-md-5 col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+
+        <h1 class="fw-semibold text-white text-center mb-4">
+            {{ isUpdateMode ? 'Update material' : 'Create material' }}
+        </h1>
+
+        <form [formGroup]="materialForm" (ngSubmit)="submit()" novalidate autocomplete="off">
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label class="form-label text-white">Title <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="title"
+                        [class.is-invalid]="materialForm.get('title')?.invalid && materialForm.get('title')?.touched"
+                        [attr.aria-invalid]="materialForm.get('title')?.invalid ? 'true' : 'false'" />
+                    <div class="text-danger small"
+                        *ngIf="materialForm.get('title')?.invalid && materialForm.get('title')?.touched">
+                        Title is required.
+                    </div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label class="form-label text-white">Subject <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="subject"
+                        [class.is-invalid]="materialForm.get('subject')?.invalid && materialForm.get('subject')?.touched"
+                        [attr.aria-invalid]="materialForm.get('subject')?.invalid ? 'true' : 'false'" />
+                    <div class="text-danger small"
+                        *ngIf="materialForm.get('subject')?.invalid && materialForm.get('subject')?.touched">
+                        Subject is required.
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" class="form-control" formControlName="description" rows="5" placeholder="max. 1500 characters"></textarea>
+
+                <div class="form-text">
+                    {{ description?.value?.length || 0 }}/1500 characters
+                </div>
+
+                <div *ngIf="description?.errors?.['maxlength'] && description?.touched" class="text-danger small mt-0">
+                    The description can be a maximum of 1500 characters.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-white">
+                    {{ isUpdateMode ? 'New file (optional)' : 'File upload *' }}
+                </label>
+                <input type="file" class="form-control" formControlName="file" (change)="onFileSelected($event)"
+                    accept=".pdf,.doc,.docx,.ppt,.pptx"
+                    [class.is-invalid]="!isUpdateMode && materialForm.get('file')?.invalid && materialForm.get('file')?.touched" />
+                <div class="text-danger small"
+                    *ngIf="!isUpdateMode && materialForm.get('file')?.invalid && materialForm.get('file')?.touched">
+                    Choosing a file is required.
+                </div>
+                <div class="text-danger small" *ngIf="fileError">{{ fileError }}</div>
+            </div>
+
+            <button type="submit" class="btn d-flex justify-content-center w-25"
+                [disabled]="materialForm.invalid || !!fileError">
+                Save
+            </button>
+        </form>
+
     </div>
-
-    <div class="mb-3">
-        <label class="form-label">Tantárgy</label>
-        <input type="text" class="form-control" formControlName="subject"
-            [class.is-invalid]="materialForm.get('subject')?.invalid && materialForm.get('subject')?.touched" />
-
-        <div class="text-danger small" *ngIf="materialForm.get('subject')?.invalid && materialForm.get('subject')?.touched">
-            A Tantárgy megadása kötelező.
-        </div>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Leírás</label>
-        <textarea class="form-control" rows="4" formControlName="description"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">
-            {{ isUpdateMode ? 'Új fájl (nem kötelező)' : 'Fájl feltöltése *' }}
-        </label>
-        <input type="file" class="form-control" formControlName="file" (change)="onFileSelected($event)"
-            [class.is-invalid]="!isUpdateMode && materialForm.get('file')?.invalid && materialForm.get('file')?.touched" />
-        <div class="text-danger small"
-            *ngIf="!isUpdateMode && materialForm.get('file')?.invalid && materialForm.get('file')?.touched">
-            Fájl kiválasztása kötelező.
-        </div>
-        <div class="text-danger small" *ngIf="fileError">{{ fileError }}</div>
-    </div>
-
-    <button type="submit" class="btn btn-primary" [disabled]="materialForm.invalid">
-        Mentés
-    </button>
-</form>
+</div>
