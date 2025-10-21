@@ -17,7 +17,7 @@
     </div>      
   <hr>
 
-  <h2>Upload materials by {{profile?.fullName}}: </h2>
+  <h2>Uploaded materials by {{profile?.fullName}}: </h2>
     <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
     <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
     <div *ngIf="!loading && (profile?.materials?.length ?? 0) > 0">

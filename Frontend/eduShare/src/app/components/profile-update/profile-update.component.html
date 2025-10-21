@@ -14,14 +14,14 @@
       height="100"
     />
     <div>
-      <label class="form-label">Új profilkép (nem kötelező)</label>
+      <label class="form-label">New profile</label>
     </div>
     
     <input type="file" class="form-control" (change)="onFileSelected($event)" />
     <div class="text-danger small" *ngIf="fileError">{{ fileError }}</div>
   </div>  
   <div class="mb-3">
-    <label for="firstname" class="form-label">Vezetéknév</label>
+    <label for="firstname" class="form-label">Surname</label>
     <input type="text" id="firstname" formControlName="firstname" class="form-control" />
     <div *ngIf="updateForm.get('firstname')?.touched && updateForm.get('firstname')?.invalid" class="text-danger">
       A vezetéknév megadása kötelező.
@@ -29,7 +29,7 @@
   </div>
 
   <div class="mb-3">
-    <label for="lastname" class="form-label">Keresztnév</label>
+    <label for="lastname" class="form-label">Firstname</label>
     <input type="text" id="lastname" formControlName="lastname" class="form-control" />
     <div *ngIf="updateForm.get('lastname')?.touched && updateForm.get('lastname')?.invalid" class="text-danger">
       A keresztnév megadása kötelező.
@@ -46,7 +46,7 @@
 
 
 
-  <button type="submit" class="btn btn-primary w-100">Frissítés</button>
+  <button type="submit" class="btn btn-primary w-100">Update</button>
 </form>
   </div>  
 </div>
