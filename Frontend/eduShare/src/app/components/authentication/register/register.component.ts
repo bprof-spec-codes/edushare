@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../services/authentication.service';
+import { RegisterService } from '../../../services/register.service';
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -21,15 +21,14 @@ export class RegisterComponent {
   success = '';
   loading = false;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private registerService: RegisterService, private router: Router) {}
 
   onRegister() {
     this.error = '';
     this.success = '';
 
-    // egyszerű kliens oldali validáció
     if (!this.fullName || !this.email || !this.password || !this.confirmPassword) {
-      this.error = 'Kérlek töltsd ki az összes mezőt.';
+      this.error = 'Kérlek, töltsd ki az összes mezőt.';
       return;
     }
 
@@ -40,7 +39,7 @@ export class RegisterComponent {
 
     this.loading = true;
 
-    this.auth
+    this.registerService
       .register(this.fullName, this.email, this.password)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
@@ -48,7 +47,7 @@ export class RegisterComponent {
           this.success = 'Sikeres regisztráció! Most már bejelentkezhetsz.';
           setTimeout(() => this.router.navigate(['/login']), 2000);
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Regisztrációs hiba:', err);
           if (err.status === 400) {
             this.error = err.error?.message ?? 'Az e-mail cím már használatban van.';
