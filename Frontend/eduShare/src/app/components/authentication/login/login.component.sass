@@ -1,8 +1,6 @@
 @use 'sass:color'
 @use '../../../../styles/_variables' as *
 
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap')
-
 .login-page
   background: #f9f9ff
   min-height: 100dvh
@@ -13,10 +11,9 @@
   padding: 2rem
 
   .logo
-    font-family: 'Nunito', sans-serif
+    font-family: 'Erica One'
     font-size: 3rem
-    font-weight: 800
-    color: $card-font-puprle
+    color: $edu-purple
     margin-bottom: 2rem
     cursor: pointer
     text-shadow: 0 6px 16px rgba(0,0,0,0.15)
@@ -39,7 +36,7 @@
 
 .login-left
   flex: 1
-  background:  $card-font-puprle
+  background:  $login-background
   display: flex
   justify-content: center
   align-items: center
@@ -54,7 +51,7 @@
 
   form
     width: min(85%, 370px)
-    background: $card-font-puprle
+    background: $login-background
     border-radius: 24px
     backdrop-filter: blur(10px)
     -webkit-backdrop-filter: blur(10px)
@@ -67,7 +64,6 @@
     will-change: transform
 
     h4
-      font-family: 'Nunito', sans-serif
       font-size: 2rem
       font-weight: 800
       color: #fff
@@ -80,24 +76,21 @@
 
       .input-group-text
         background: $card-background-grey
-        border: 1px solid rgba(0,0,0,0.2)
-        color: #333
+        color: #000000ff
 
       .form-control
         background: $card-background-grey
-        border: 1px solid rgba(0,0,0,0.2)
         border-left: none
-        color: #333
+        color: #000000ff
         font-weight: 500
         &:focus
           outline: none
           border-color: $card-font-puprle
-          box-shadow: 0 0 5px rgba(101,25,255,0.4)
         &::placeholder
-          color: #666
+          color: #000000ff
 
     .btn-primary
-      background: $edu-purple
+      background: $card-font-puprle
       border: none
       border-radius: 10px
       font-weight: 700
@@ -145,9 +138,6 @@
     border-radius: 16px
     transition: transform 300ms ease
     will-change: transform
-    &:hover
-      transform: scale(1.03)
-
 @media (max-width: 992px)
   .login-wrapper
     flex-direction: column
