@@ -11,7 +11,7 @@
       <div class="email">
             <p class="text-center ">{{profile?.email}}</p>  
       </div>
-      <button *ngIf="!loading && ownProfile" type="button" (click)="editbtn editDetail(profile!)" class="btn btn-outline-primary position-absolute top-0 end-0">
+      <button *ngIf="!loading && ownProfile" type="button" (click)="editDetail(profile!)" class="editbtn btn btn-outline-primary position-absolute top-0 end-0">
         <i class="bi bi-pencil-square"></i>
       </button>
     </div>      
@@ -25,24 +25,3 @@
       [m]="profile?.materials || []">
     </app-material-card>
   </div>
-  <!-- <div class="container mt-4">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-      <div class="col" *ngFor="let m of profile?.materials">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body">
-            <h5 class="card-title text-primary">{{m.title}}</h5>
-            <p class="card-text mb-1"><i class="bi bi-book"></i>{{m.subject}}</p>
-            <p class="card-text mb-1"><i class="bi bi-person"></i>{{profile?.fullName}}</p>
-            <p class="card-text"><i class="bi bi-clock"></i>{{m.uploadDate| date:'yyyy.MM.dd. HH:mm'}}</p>
-          </div>
-          <div class="card-footer bg-transparent border-0 d-flex align-items-center justify-content-between">
-            <button type="button" (click)="openDetail(m)" class="btn btn-outline-primary flex-grow-1 me-2">
-              Megnyitás
-            </button>
-            <i class="bi bi-bookmark fs-4 text-primary" style="cursor: pointer;"></i>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div> -->
