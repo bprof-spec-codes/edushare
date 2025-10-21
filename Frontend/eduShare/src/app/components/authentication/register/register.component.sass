@@ -1,0 +1,189 @@
+@use 'sass:color'
+@use '../../../../styles/_variables' as *
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap')
+
+/* ===== PAGE WRAPPER ===== */
+.register-page
+  background: #f9f9ff
+  min-height: 100vh
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  padding: 2rem
+
+  .logo
+    font-family: 'Nunito', sans-serif
+    font-size: 3rem
+    font-weight: 800
+    color: $card-font-puprle
+    margin-bottom: 2rem
+    cursor: pointer
+    text-shadow: 0 6px 16px rgba(0,0,0,0.15)
+    transition: transform 0.25s ease, text-shadow 0.3s ease
+    &:hover
+      transform: scale(1.05)
+      text-shadow: 0 8px 24px rgba(0,0,0,0.25)
+
+/* ===== WRAPPER BOX ===== */
+.register-wrapper
+  display: flex
+  width: min(1200px, 90vw)
+  min-height: 70vh
+  border-radius: 25px
+  overflow: hidden
+  box-shadow: 0 10px 35px rgba(0,0,0,0.25)
+  position: relative
+  background: #fff
+  transition: border-radius .35s ease, box-shadow .35s ease
+
+/* ===== LEFT (FORM) ===== */
+.register-left
+  flex: 1
+  background: color.scale($edu-purple, $lightness: 6%)
+  display: flex
+  justify-content: center
+  align-items: center
+  position: relative
+  z-index: 2
+  border-top-right-radius: 70px
+  border-bottom-right-radius: 70px
+  margin-right: -60px
+  box-shadow: 10px 0 25px rgba(0,0,0,0.2)
+  padding: 2rem
+  transition: border-radius .35s ease, margin .35s ease, box-shadow .35s ease, transform .35s ease
+
+  form
+    width: 85%
+    max-width: 380px
+    background: rgba(255,255,255,0.1)
+    border-radius: 24px
+    -webkit-backdrop-filter: blur(10px)
+    backdrop-filter: blur(10px)
+    padding: 2rem 2.5rem
+    display: flex
+    flex-direction: column
+    align-items: center
+    text-align: center
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15)
+    transition: box-shadow .35s ease, transform .35s ease
+
+    h4
+      font-family: 'Nunito', sans-serif
+      font-size: 2rem
+      font-weight: 800
+      color: #fff
+      margin-bottom: 1.8rem
+      text-shadow: 0 6px 14px rgba(0,0,0,0.3)
+
+    .input-group
+      width: 100%
+      margin-bottom: 1.1rem
+
+      .input-group-text
+        background: $card-background-grey
+        border: 1px solid rgba(0,0,0,0.2)
+        color: #333
+
+      .form-control
+        background: $card-background-grey
+        border: 1px solid rgba(0,0,0,0.2)
+        border-left: none
+        color: #333
+        font-weight: 500
+        &:focus
+          outline: none
+          border-color: $card-font-puprle
+          box-shadow: 0 0 6px rgba(101,25,255,0.4)
+        &::placeholder
+          color: #666
+
+    .btn-primary
+      background: $card-font-puprle
+      border: none
+      border-radius: 10px
+      font-weight: 700
+      width: 100%
+      padding: .7rem 0
+      margin-top: .3rem
+      transition: background .2s ease, transform .15s ease, box-shadow .2s ease
+      box-shadow: 0 8px 18px rgba(79,70,229,0.25)
+      &:hover
+        background: $button-hover
+        transform: translateY(-2px)
+        box-shadow: 0 12px 24px rgba(61,0,184,0.3)
+
+    p
+      margin-top: 1.5rem
+      font-size: .95rem
+      color: #fff
+
+    .login-link
+      color: #fff
+      text-decoration: none
+      margin-left: 4px
+      font-weight: 800
+      transition: text-decoration .2s ease, color .2s ease
+      &:hover
+        text-decoration: underline
+        color: color.scale($card-background-grey, $lightness: 20%)
+
+/* ===== RIGHT (ILLUSTRATION) ===== */
+.register-right
+  flex: 1
+  background: color.adjust($card-font-puprle, $lightness: -8%)
+  display: flex
+  justify-content: center
+  align-items: center
+  border-top-left-radius: 20px
+  border-bottom-left-radius: 20px
+  overflow: hidden
+  position: relative
+  transition: border-radius .35s ease, margin .35s ease, transform .35s ease
+
+  img
+    max-width: 80%
+    height: auto
+    border-radius: 16px
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25)
+    transition: transform .3s ease
+    &:hover
+      transform: scale(1.03)
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 992px)
+  .register-wrapper
+    flex-direction: column
+    width: min(700px, 95vw)
+    min-height: 100dvh
+    border-radius: 24px
+
+  .register-left
+    margin-right: 0
+    margin-bottom: -60px
+    border-top-left-radius: 24px
+    border-top-right-radius: 24px
+    border-bottom-left-radius: 70px
+    border-bottom-right-radius: 70px
+    box-shadow: 0 16px 28px rgba(0,0,0,0.22)
+    padding: 1.5rem
+
+  .register-right
+    border-top-left-radius: 70px
+    border-top-right-radius: 70px
+    border-bottom-left-radius: 24px
+    border-bottom-right-radius: 24px
+    padding: 2rem 0 2.5rem
+    img
+      max-width: 72%
+      margin: 1.25rem 0
+
+@media (prefers-reduced-motion: reduce)
+  .register-wrapper,
+  .register-left,
+  .register-right,
+  .register-left form,
+  .btn-primary,
+  .logo
+    transition: none !important

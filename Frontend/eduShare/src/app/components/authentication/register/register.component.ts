@@ -1,72 +1,66 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
-import { RegisterService } from '../../../services/register.service';
-import { Register } from '../../../models/register';
-import { Router } from '@angular/router';
-
+import { RouterModule, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../services/authentication.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register',
-  standalone: false,
+  standalone: true,
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.sass']
+  styleUrls: ['./register.component.sass'],
+  imports: [CommonModule, FormsModule, RouterModule],
 })
 export class RegisterComponent {
-  hidePass:boolean=true
-  hidePass2:boolean=true
-  registerForm: FormGroup
+  fullName = '';
+  email = '';
+  password = '';
+  confirmPassword = '';
+  error = '';
+  success = '';
+  loading = false;
 
-  constructor(private fb: FormBuilder, private registService:RegisterService, private router: Router) {
-    this.registerForm = this.fb.group(
-      {
-        lastname: ['', [Validators.required, Validators.minLength(3)]],
-        firstname: ['', [Validators.required, Validators.minLength(3)]],
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(8)]],
-        password2: ['', [Validators.required, Validators.minLength(8)]]
-      }
-    )
-  }
-  PasswordMatch():boolean{
-    const pw=this.registerForm.get('password')?.value;
-    const pw2=this.registerForm.get('password2')?.value;
-    return pw&&pw2&&pw!==pw2
-  }
-  passwordVisibility(field: 'password' | 'password2'): void {
-    if (field === 'password') {
-      this.hidePass = !this.hidePass;
-    } 
-    else
-    {
-        this.hidePass2 = !this.hidePass2;
+  constructor(private auth: AuthService, private router: Router) {}
+
+  onRegister() {
+    this.error = '';
+    this.success = '';
+
+    // egyszerű kliens oldali validáció
+    if (!this.fullName || !this.email || !this.password || !this.confirmPassword) {
+      this.error = 'Kérlek töltsd ki az összes mezőt.';
+      return;
     }
-  }
-  canSubmit(): boolean {
-    return this.registerForm.valid && !this.PasswordMatch();
-  }
-  onSubmit(){
-    
 
-    const formValues = this.registerForm.value;
-    const dto = {
-    lastname: formValues.lastname,
-    firstname: formValues.firstname,
-    email: formValues.email,
-    password: formValues.password
-  };
-
-    this.registService.register(dto).subscribe({
-    next: (response) => {
-      console.log('Sikeres regisztráció:', response);
-      alert('Sikeres regisztráció!');
-      this.registerForm.reset();
-      this.router.navigate(['/login']);
-    },
-    error: (err) => {
-      console.error('Sikertelen regisztráció:', err);
-      alert('Sikertelen regisztráció.');
+    if (this.password !== this.confirmPassword) {
+      this.error = 'A jelszavak nem egyeznek.';
+      return;
     }
-  });
-  }
 
+    this.loading = true;
+
+    this.auth
+      .register(this.fullName, this.email, this.password)
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe({
+        next: () => {
+          this.success = 'Sikeres regisztráció! Most már bejelentkezhetsz.';
+          setTimeout(() => this.router.navigate(['/login']), 2000);
+        },
+        error: (err) => {
+          console.error('Regisztrációs hiba:', err);
+          if (err.status === 400) {
+            this.error = err.error?.message ?? 'Az e-mail cím már használatban van.';
+          } else if (err.status === 0) {
+            this.error = 'Nem sikerült csatlakozni a szerverhez.';
+          } else {
+            this.error =
+              err?.error?.message ??
+              err?.message ??
+              'Hiba történt a regisztráció során. Kérlek próbáld újra.';
+          }
+        },
+      });
+  }
 }
