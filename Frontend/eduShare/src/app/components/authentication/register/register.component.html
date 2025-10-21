@@ -2,107 +2,96 @@
   <h1 class="logo" routerLink="/homepage">EduShare</h1>
 
   <div class="register-wrapper">
-    <!-- Bal oldal: form -->
     <div class="register-left">
       <form (ngSubmit)="onRegister()" autocomplete="off" novalidate>
         <h4 class="text-center mb-3">Register</h4>
 
-        <!-- Teljes név -->
         <div class="input-group mb-3">
           <span class="input-group-text">
-            <i class="bi bi-person-fill"></i>
+            <i class="bi bi-envelope"></i>
           </span>
           <input
-            type="text"
-            class="form-control"
-            placeholder="Full name"
-            required
-            [(ngModel)]="fullName"
-            name="fullName"
-          />
-        </div>
-
-        <!-- Email -->
-        <div class="input-group mb-3">
-          <span class="input-group-text">
-            <i class="bi bi-envelope-fill"></i>
-          </span>
-          <input
+            [(ngModel)]="email"
+            name="email"
             type="email"
             class="form-control"
             placeholder="Email"
-            required
-            [(ngModel)]="email"
-            name="email"
-          />
+            required />
         </div>
 
-        <!-- Jelszó -->
         <div class="input-group mb-3">
           <span class="input-group-text">
-            <i class="bi bi-lock-fill"></i>
+            <i class="bi bi-person"></i>
           </span>
           <input
-            type="password"
+            [(ngModel)]="firstName"
+            name="firstName"
+            type="text"
             class="form-control"
-            placeholder="Password"
-            required
-            minlength="6"
-            [(ngModel)]="password"
-            name="password"
-          />
+            placeholder="First name"
+            required />
         </div>
 
-        <!-- Jelszó megerősítése -->
+        <div class="input-group mb-3">
+          <span class="input-group-text">
+            <i class="bi bi-person"></i>
+          </span>
+          <input
+            [(ngModel)]="lastName"
+            name="lastName"
+            type="text"
+            class="form-control"
+            placeholder="Last name"
+            required />
+        </div>
+
         <div class="input-group mb-3">
           <span class="input-group-text">
             <i class="bi bi-lock"></i>
           </span>
           <input
+            [(ngModel)]="password"
+            name="password"
             type="password"
             class="form-control"
-            placeholder="Confirm password"
-            required
-            minlength="6"
-            [(ngModel)]="confirmPassword"
-            name="confirmPassword"
-          />
+            placeholder="Password"
+            required minlength="6" />
         </div>
 
-        <!-- Regisztráció gomb -->
-        <button
-          class="btn btn-primary w-100 mb-2"
-          type="submit"
-          [disabled]="loading"
-        >
-          <i class="bi bi-person-plus me-2"></i>
-          <ng-container *ngIf="!loading; else loadingTpl">Register</ng-container>
+        <div class="input-group mb-3">
+          <span class="input-group-text">
+            <i class="bi bi-lock"></i>
+          </span>
+          <input
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            class="form-control"
+            placeholder="Password again"
+            required minlength="6" />
+        </div>
+
+        <button class="btn btn-primary w-100 mb-2" type="submit" [disabled]="loading">
+          <i class="bi bi-person-plus me-2"></i> Register
         </button>
 
-        <!-- Hiba -->
-        <div *ngIf="error" class="alert alert-danger mt-2 mb-0 text-center">
+        <div *ngIf="error" class="alert alert-danger mt-2 text-center">
           {{ error }}
         </div>
 
-        <!-- Siker -->
-        <div *ngIf="success" class="alert alert-success mt-2 mb-0 text-center">
+        <div *ngIf="success" class="alert alert-success mt-2 text-center">
           {{ success }}
         </div>
 
-        <p class="text-center mt-3">
+        <p class="text-center md-3">
           Already have an account?
           <a class="login-link" routerLink="/login"><strong>Login</strong></a>
         </p>
-
-        <ng-template #loadingTpl>
-          <span>Registering…</span>
-        </ng-template>
       </form>
     </div>
 
-    <!-- Jobb oldal: illusztráció -->
     <div class="register-right">
-      <img src="assets/images/login.jpg" alt="Register Illustration" />
+      <img src="images/register.jpg" alt="Register Illustration" />
     </div>
   </div>
 </div>

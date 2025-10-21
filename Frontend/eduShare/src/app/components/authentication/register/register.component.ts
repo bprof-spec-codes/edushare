@@ -1,65 +1,63 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RegisterService } from '../../../services/register.service';
-import { finalize } from 'rxjs/operators';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: true,
+  imports: [CommonModule, FormsModule,RouterModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.sass'],
-  imports: [CommonModule, FormsModule, RouterModule],
 })
 export class RegisterComponent {
-  fullName = '';
-  email = '';
-  password = '';
-  confirmPassword = '';
-  error = '';
-  success = '';
-  loading = false;
+  email: string = '';
+  firstName: string = '';
+  lastName: string = '';
+  password: string = '';
+  confirmPassword: string = '';
 
-  constructor(private registerService: RegisterService, private router: Router) {}
+  loading = false;
+  error: string | null = null;
+  success: string | null = null;
+
+  constructor(private registerService: RegisterService) {}
 
   onRegister() {
-    this.error = '';
-    this.success = '';
+    this.error = null;
+    this.success = null;
 
-    if (!this.fullName || !this.email || !this.password || !this.confirmPassword) {
-      this.error = 'Kérlek, töltsd ki az összes mezőt.';
+    if (!this.email || !this.firstName || !this.lastName || !this.password || !this.confirmPassword) {
+      this.error = 'All fields are required.';
       return;
     }
 
     if (this.password !== this.confirmPassword) {
-      this.error = 'A jelszavak nem egyeznek.';
+      this.error = 'Passwords do not match.';
       return;
     }
 
     this.loading = true;
 
-    this.registerService
-      .register(this.fullName, this.email, this.password)
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe({
-        next: () => {
-          this.success = 'Sikeres regisztráció! Most már bejelentkezhetsz.';
-          setTimeout(() => this.router.navigate(['/login']), 2000);
-        },
-        error: (err: any) => {
-          console.error('Regisztrációs hiba:', err);
-          if (err.status === 400) {
-            this.error = err.error?.message ?? 'Az e-mail cím már használatban van.';
-          } else if (err.status === 0) {
-            this.error = 'Nem sikerült csatlakozni a szerverhez.';
-          } else {
-            this.error =
-              err?.error?.message ??
-              err?.message ??
-              'Hiba történt a regisztráció során. Kérlek próbáld újra.';
-          }
-        },
-      });
+    this.registerService.register(this.firstName, this.lastName, this.email, this.password).subscribe({
+      next: () => {
+        this.loading = false;
+        this.success = 'Registration successful!';
+        this.clearForm();
+      },
+      error: (err: any) => {
+        this.loading = false;
+        this.error = err?.error || 'Registration failed. Please try again.';
+      },
+    });
+  }
+
+  clearForm() {
+    this.email = '';
+    this.firstName = '';
+    this.lastName = '';
+    this.password = '';
+    this.confirmPassword = '';
   }
 }
