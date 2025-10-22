@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { MaterialCreateComponent } from './components/material-create/material-create.component';
@@ -33,7 +33,6 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
     MaterialCreateComponent,
     MaterialListComponent,
     HomepageComponent,
-    RegisterComponent,
     MaterialViewComponent,
     MaterialUpdateComponent,
     MaterialFormComponent,
@@ -51,9 +50,10 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
     HttpClientModule,
     NgbModule,
     ReactiveFormsModule,
-    LoginComponent,
     FormsModule,
     DatePipe,
+    RegisterComponent,
+    LoginComponent,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
