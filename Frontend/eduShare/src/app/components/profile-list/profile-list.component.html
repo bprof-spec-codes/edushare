@@ -1,0 +1,26 @@
+<div class="base-margin">
+    <h2 class="title">Users list</h2>
+    <hr class="title-hr hr">
+
+    <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
+    <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+
+    <div *ngIf="!loading && profiles.length" class="profile-container">
+        <div *ngFor="let profile of profiles">
+            <div class="profile-row">
+                <div class="picture-container">
+                    <img *ngIf="profile.image?.file" [src]="profile.image.file.startsWith('http') ? profile.image.file : 'data:image/*;base64,' + profile.image.file" [alt]="profile.fullName" class="profile-pic" width="50" height="50" />
+                    <div class="fullname">{{profile.fullName}}</div>
+                </div>  
+                <div class="email">{{profile.email}}</div>
+                <div class="button-container">
+                    <button class="button button-view" (click)="openDetail(profile.id)">View</button>
+                    <button class="button button-admin" *ngIf="hasRoleAdmin()" (click)="grantAdmin(profile.id)">Admin</button>
+                    <button class="button button-teacher" *ngIf="hasRoleAdmin()" (click)="grantTeacher(profile.id)">Teacher</button>
+                    <button class="button button-revoke" *ngIf="hasRoleAdmin()" (click)="revokeRole(profile.id)">Revoke</button>
+                </div>
+            </div>
+            <hr class="hr">
+        </div>
+    </div>
+</div>

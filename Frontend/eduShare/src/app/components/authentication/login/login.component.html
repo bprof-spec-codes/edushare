@@ -1,0 +1,42 @@
+<div class="login-page">
+  <h1 class="logo" routerLink="/homepage">EduShare</h1>
+
+  <div class="login-wrapper">
+    <div class="login-left">
+      <form (ngSubmit)="onLogin()" autocomplete="off">
+        <h4 class="text-center mb-3">Login </h4>
+        <div class="input-group mb-3">
+          <span class="input-group-text">
+            <i class="bi bi-envelope"></i>
+          </span>
+          <input [(ngModel)]="email" name="email" type="email" class="form-control" placeholder="Email" required/>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text">
+            <i class="bi bi-lock"></i>
+          </span>
+          <input [(ngModel)]="password" name="password" type="password" class="form-control" placeholder="Password" required />
+        </div>
+
+        <button class="btn btn-primary w-100 mb-2" type="submit" [disabled]="loading"> 
+          <i class="bi bi-box-arrow-in-right me-2"></i> Login 
+        </button>
+
+        <div *ngIf="error" class="alert alert-danger mt-2 text-center">
+          {{ error }}
+        </div>
+
+
+        <p class="text-center md-3">
+          New to EduShare?
+          <a class="register-link" routerLink="/register"><strong>Register</strong></a>
+        </p>
+      </form>
+    </div>
+
+    <div class="login-right">
+      <img src="images/login.jpg" alt="Login Illustration" />
+    </div>
+  </div>
+</div>

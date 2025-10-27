@@ -1,0 +1,40 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid nav-inner">
+    <a class="navbar-brand logo" routerLink="/homepage">
+      EduShare
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+      aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item me-3">
+          <a class="nav-link" routerLink="/materials/create"><strong>Upload</strong></a>
+        </li>
+        <li class="nav-item me-2">
+          <a class="nav-link" routerLink="/materials"><strong>Materials</strong></a>
+        </li>
+        <li class="nav-item me-2">
+          <a class="nav-link" routerLink="/profile-list"><strong>Profiles</strong></a>
+        </li>
+
+        <li class="nav-item dropdown" *ngIf="isLoggedIn">
+          <button class="btn p-0 avatar-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false" aria-label="User menu">
+            <img *ngIf="profile?.image?.file" [src]="getProfileImageSrc()" [alt]="profile?.fullName" class="avatar" />
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><button class="dropdown-item" (click)="openProfile(this.id)">view profile</button></li>
+            <li><button class="dropdown-item" (click)="logout()">log out</button></li>
+          </ul>
+        </li>
+        <li class="nav-item ms-2" *ngIf="!isLoggedIn">
+          <button type="button" class="btn loginbtn" routerLink="/login">Log in</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

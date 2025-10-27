@@ -1,0 +1,27 @@
+    <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
+    <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+
+<div class="container mt-4">
+    <div class="profile-container mb-3 position-relative">
+      <div class="left-container">
+        <img *ngIf="profile?.image?.file" [src]="getProfileImageSrc()" [alt]="profile?.fullName"
+          class="rounded-circle me-3" width="50" height="50" />
+        <p class="mb-0 text-center">{{profile?.fullName}}</p>
+      </div>   
+      <div class="email">
+            <p class="text-center ">{{profile?.email}}</p>  
+      </div>
+      <button *ngIf="!loading && ownProfile" type="button" (click)="editDetail(profile!)" class="editbtn btn btn-outline-primary position-absolute top-0 end-0">
+        <i class="bi bi-pencil-square"></i>
+      </button>
+    </div>      
+  <hr>
+
+  <h2>Uploaded materials by {{profile?.fullName}}: </h2>
+    <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
+    <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+    <div *ngIf="!loading && (profile?.materials?.length ?? 0) > 0">
+    <app-material-card 
+      [m]="profile?.materials || []">
+    </app-material-card>
+  </div>

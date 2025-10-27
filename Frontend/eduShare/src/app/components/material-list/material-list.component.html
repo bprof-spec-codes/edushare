@@ -1,0 +1,16 @@
+<div class="base-margin">
+  <h2 class="title">Uploaded materials:</h2>
+
+  <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
+  <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+
+  <div *ngIf="!loading && materials.length">
+    <app-material-card 
+      [m]="materials">
+    </app-material-card>
+  </div>
+
+  <p *ngIf="!loading && !materials.length" class="text-center text-muted mt-3">
+    Nincs megjeleníthető anyag.
+  </p>
+</div>

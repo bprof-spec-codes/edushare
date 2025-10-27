@@ -3,20 +3,61 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TestComponent } from './components/test/test.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { MaterialCreateComponent } from './components/material-create/material-create.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialListComponent } from './components/material-list/material-list.component';
+import { LoginComponent } from './components/authentication/login/login.component';
+import { HomepageComponent } from './components/homepage/homepage.component';
+import { RegisterComponent } from './components/authentication/register/register.component';
+import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { AuthInterceptor } from './interceptors/login.interceptor';
+import { MaterialViewComponent } from './components/material-view/material-view.component';
+import { MaterialUpdateComponent } from './components/material-update/material-update.component';
+import { MaterialFormComponent } from './components/material-form/material-form.component';
+import { ProfileListComponent } from './components/profile-list/profile-list.component';
+import { ProfileViewComponent } from './components/profile-view/profile-view.component';
+import { ProfileUpdateComponent } from './components/profile-update/profile-update.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { MaterialCardComponent } from './components/material-card/material-card.component';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TestComponent
+    NavbarComponent,
+    MaterialCreateComponent,
+    MaterialListComponent,
+    HomepageComponent,
+    MaterialViewComponent,
+    MaterialUpdateComponent,
+    MaterialFormComponent,
+    ProfileListComponent,
+    ProfileViewComponent,
+    ProfileUpdateComponent,
+    FooterComponent,
+    MaterialCardComponent,
+    MainLayoutComponent,
+    AuthLayoutComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule,
+    ReactiveFormsModule,
+    FormsModule,
+    DatePipe,
+    RegisterComponent,
+    LoginComponent,
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

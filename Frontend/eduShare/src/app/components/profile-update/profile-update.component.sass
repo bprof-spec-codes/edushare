@@ -1,0 +1,63 @@
+@use '../../../styles/_variables' as *;
+
+h1 
+  text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);
+
+
+.form-wrapper 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  min-height: calc(100vh - 200px);
+
+
+.form-card 
+  background-color: $edu-purple;
+  border-radius: 1.25rem;
+  width: 500px;
+  color: #fff;
+
+
+.form-control 
+  background-color: #fff;
+  color: #212529;
+  border: 1px solid rgba(0, 0, 0, .15);
+
+  &:focus 
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgba(255, 255, 255, .25);
+    border-color: rgba(0, 0, 0, .25);
+
+
+.is-invalid 
+  border-color: #dc3545;
+
+
+.text-danger 
+  color: #ffd7dc !important;
+
+
+.btn 
+  background-color: $card-font-puprle;
+  margin: auto;
+  color: white;
+  border: none
+
+
+.btn:hover 
+  background-color: $button-hover;
+  transition-duration: 0.3s;
+
+
+.btn:disabled 
+  background-color: grey;
+  border: none;
+
+
+@media (max-width: 576px) 
+  .form-card 
+    padding: 1.25rem !important;
+    width: 90%;

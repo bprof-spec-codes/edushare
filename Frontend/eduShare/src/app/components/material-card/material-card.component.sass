@@ -1,0 +1,122 @@
+@use '../../../styles/_variables' as *
+
+.card-container
+    display: flex
+    flex-wrap: wrap 
+    justify-content: center
+    width: auto 
+    gap: 30px
+    font-family: 'Nunito', sans-serif
+    font-weight: 700    
+    
+.card-background
+    min-width: 230px
+    width: 230px
+    //height: 310px
+    background-color: $card-background-grey
+    border-radius: 8px
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.3)
+    //transition: transform 0.2s ease
+
+    //&:hover
+    //    transform: scale(1.02)
+
+
+.title 
+    text-align: center
+    color: $card-font-puprle
+    font-size: 30px
+    margin-top: 15px
+    margin-bottom: 50px
+    margin-left: 5%
+    max-width: 90% 
+    height: 90px
+    text-overflow: ellipsis
+    overflow: hidden
+    display: -webkit-box
+    -webkit-line-clamp: 2
+    -webkit-box-orient: vertical
+
+.icon-data
+    display: flex
+    gap: 10px
+    color: $card-font-puprle
+    height: 30px
+
+.book
+    color: black
+    font-size: 21px
+
+.subject
+    margin: auto 0 auto 0
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
+
+.clock
+    font-size: 21px
+    color: black
+
+.profile-pic
+    margin: auto 0 auto 0
+    border-radius: 50%
+
+.datas
+    margin-left: 20px
+    margin-right: 20px
+
+.date
+    margin: auto
+    margin-left: 0
+    margin-right: 0
+
+.open-button
+    width: 65%
+    height: 40px
+    background-color: $card-font-puprle
+    border-radius: 10px
+    border: 0px
+    color: white 
+    font-size: 20px
+    margin-left: 20px
+    margin-right: 10px
+    transition-duration: 0.3s
+
+.open-button:hover
+    background-color: $button-hover
+    transition-duration: 0.3s
+
+.btn-bookmark
+    padding: 0
+    border: 0
+
+.icon-bookmark
+    width: 35px
+    height: 35px
+    color: $card-font-puprle
+    margin-bottom: 5px
+    transition-duration: 0.3s
+
+.icon-bookmark:hover
+    color: $button-hover
+    transition-duration: 0.3s
+
+.open-bookmark
+    margin-top: 10px
+    height: 50px
+
+.btn-profile
+    border: 0
+    padding: 0
+    color: $card-font-puprle
+    font-weight: 700
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
+    max-width: 160px
+
+.btn-profile:hover
+    text-decoration: underline
+
+.btn-profile-container
+    margin: auto 0 auto 0
