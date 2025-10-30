@@ -7,21 +7,13 @@ import { FileContentDto } from '../../dtos/file-content-dto';
 import { FileContent } from '../../models/file-content';
 import { SubjectService } from '../../services/subject.service';
 import { Subject } from '../../models/subject';
-import { Observable, combineLatest, map, startWith } from 'rxjs';
+import { Observable, combineLatest, map, startWith, tap } from 'rxjs';
 
 export interface MaterialFormValue {
   title: string
   subject: string
   description?: string
   content?: FileContentDto
-}
-
-export function subjectValidator(subjects: string[]): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value?.trim() || '';
-    const match = subjects.some(s => s.toLowerCase() === value.toLowerCase());
-    return match ? null : { invalidSubject: true };
-  };
 }
 
 @Component({
@@ -40,8 +32,7 @@ export class MaterialFormComponent implements OnInit {
   fileError = ''
   allowed = ['pdf', 'doc', 'docx', 'ppt', 'pptx']
   subjects$ = new Observable<Subject[]>
-  filteredSubjects$ = new Observable<Subject[]>
-  showDropdown = false
+  disableDefault = false
 
   constructor(private fb: FormBuilder, private fileService: FileService, private subjectService: SubjectService) { }
 
@@ -53,6 +44,10 @@ export class MaterialFormComponent implements OnInit {
       file: [null]
     })
 
+    if (this.materialForm.value.subject) {
+      this.disableDefault = true;
+    }
+
     const fileControl = this.materialForm.get('file')
     if (this.isUpdateMode) {
       fileControl?.clearValidators()
@@ -61,28 +56,9 @@ export class MaterialFormComponent implements OnInit {
     }
     fileControl?.updateValueAndValidity()
 
-    this.subjects$ = this.subjectService.subjects$;
-    this.subjects$.subscribe(subjects => {
-      const subjectNames = subjects.map(s => s.name);
-
-      const subjectControl = this.materialForm.get('subject');
-      subjectControl?.setValidators([
-        Validators.required,
-        subjectValidator(subjectNames)
-      ]);
-      subjectControl?.updateValueAndValidity();
-    });
-
-    this.filteredSubjects$ = combineLatest([
-      this.subjectService.subjects$,
-      this.materialForm.get('subject')!.valueChanges.pipe(
-        startWith(this.materialForm.get('subject')!.value || '')
-      )
-    ]).pipe(
-      map(([subjects, search]) =>
-        subjects.filter(s => s.name.toLowerCase().includes((search || '').toLowerCase()))
-      )
-    );
+    this.subjects$ = this.subjectService.subjects$.pipe(
+      map(subjects => subjects.slice().sort((a, b) => a.name.localeCompare(b.name)))
+    )
   }
 
   get description() {
@@ -124,14 +100,7 @@ export class MaterialFormComponent implements OnInit {
     this.submitted.emit(dto)
   }
 
-  selectSubject(subject: Subject) {
-    this.materialForm.get('subject')?.setValue(subject.name);
-    this.showDropdown = false;
-  }
-
-  hideDropdownWithDelay() {
-    setTimeout(() => {
-      this.showDropdown = false;
-    }, 150);
+  onSubjectChange() {
+    this.disableDefault = true
   }
 }

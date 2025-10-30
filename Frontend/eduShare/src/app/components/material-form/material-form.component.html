@@ -19,23 +19,11 @@
                 </div>
 
                 <div class="mb-3 col-md-6" style="position: relative;">
-                    <label class="form-label text-white">Subject <span class="text-danger">*</span></label>
-                    <input type="text"
-                        class="form-control"
-                        formControlName="subject"
-                        (focus)="showDropdown = true"
-                        (blur)="hideDropdownWithDelay()" />
-
-                    <ul *ngIf="showDropdown" class="dropdown">
-                        <li *ngFor="let subject of filteredSubjects$ | async" (click)="selectSubject(subject)">
-                        {{ subject.name }}
-                        </li>
-                    </ul>
-
-                    <div class="text-danger small"
-                        *ngIf="materialForm.get('subject')?.invalid && materialForm.get('subject')?.touched">
-                        Subject is required.
-                    </div>
+                    <label class="form-label text-white">Subject <span class="text-danger">*</span></label><br>
+                    <select class="form-select" (change)="onSubjectChange()" formControlName="subject">
+                        <option value="" [disabled]="disableDefault">Choose a Subject</option>
+                        <option *ngFor="let subject of subjects$ | async" [value]="subject.name">{{subject.name}}</option>
+                    </select>
                 </div>
             </div>
 
