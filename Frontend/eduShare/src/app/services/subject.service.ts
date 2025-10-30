@@ -2,6 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Subject } from '../models/subject';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +43,16 @@ export class SubjectService implements OnInit{
     ]
 
     this._subjects$.next(subjects)
+  }
+
+  getAllSubjects() {
+    this.http.get<Subject[]>(environment.baseApiUrl + "/api/Subject").subscribe({
+      next: res => { 
+        this._subjects$.next(res)
+      },
+      error: err => {
+        console.log("Error getting subjects: " + err)
+      }
+    })
   }
 }
