@@ -7,13 +7,11 @@ import { environment } from '../../environments/environment.development';
 @Injectable({
   providedIn: 'root'
 })
-export class SubjectService implements OnInit{
+export class SubjectService {
   private _subjects$ = new BehaviorSubject<Subject[]>([])
   subjects$ = this._subjects$.asObservable()
 
-  constructor(private http: HttpClient) { }
-
-  ngOnInit(): void {
+  constructor(private http: HttpClient) {
     const subjects = [
       new Subject('1', 'Programozás alapjai'),
       new Subject('2', 'Objektumorientált programozás'),
