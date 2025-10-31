@@ -23,9 +23,10 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Teacher,Admin")]
         public async Task AddSubject(SubjectCreateDto subject)
         {
-            subjectLogic.AddSubject(subject);
+            await subjectLogic.AddSubject(subject);
         }
 
         [HttpGet]
@@ -35,16 +36,17 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpDelete]
-
+        [Authorize(Roles = "Teacher,Admin")]
         public async Task DeleteSubject(string id)
         {
-            subjectLogic.DeleteSubject(id);
+            await subjectLogic.DeleteSubject(id);
         }
 
         [HttpPut]
+        [Authorize(Roles = "Teacher,Admin")]
         public async Task UpdateSubject(string id, [FromBody] SubjectCreateDto updatedSubject)
         {
-            subjectLogic.UpdateSubject(id, updatedSubject);
+            await subjectLogic.UpdateSubject(id, updatedSubject);
         }
     }
 }

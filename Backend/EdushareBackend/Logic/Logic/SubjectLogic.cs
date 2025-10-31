@@ -18,7 +18,7 @@ namespace Logic.Logic
             this.subjectRepo = subject;
         }
 
-        public void AddSubject(SubjectCreateDto subject)
+        public async Task AddSubject(SubjectCreateDto subject)
         {
             Subject newSubject = new Subject()
             {
