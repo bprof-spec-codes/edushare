@@ -38,7 +38,8 @@ const routes: Routes = [
       { path: 'materials/:id/view', component: MaterialViewComponent },
       { path: 'profile-list', component: ProfileListComponent },
       { path: 'profile-view/:id', component: ProfileViewComponent },
-      { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard] }
+      { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard] },
+      { path: 'subjects', component: SubjectListComponent, canActivate: [roleGuard], data: { roles: ['teacher', 'admin'] } }
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
