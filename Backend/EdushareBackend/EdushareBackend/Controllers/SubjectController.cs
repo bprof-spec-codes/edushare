@@ -33,5 +33,18 @@ namespace EdushareBackend.Controllers
         {
             return subjectLogic.GetAllSubjects();
         }
+
+        [HttpDelete]
+
+        public async Task DeleteSubject(string id)
+        {
+            subjectLogic.DeleteSubject(id);
+        }
+
+        [HttpPut]
+        public async Task UpdateSubject(string id, [FromBody] SubjectCreateDto updatedSubject)
+        {
+            subjectLogic.UpdateSubject(id, updatedSubject);
+        }
     }
 }

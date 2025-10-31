@@ -34,5 +34,18 @@ namespace Logic.Logic
             return subjectRepo.GetAll();
 
         }
+
+        public async Task DeleteSubject(string id)
+        {
+            subjectRepo.DeleteById(id);
+        }
+
+        public async Task UpdateSubject(string id, SubjectCreateDto updatedSubject)
+        {
+            var oldSubject = subjectRepo.FindById(id);
+            oldSubject.Name = updatedSubject.Name;
+            oldSubject.Semester = updatedSubject.Semester;
+            subjectRepo.Update(oldSubject);
+        }
     }
 }
