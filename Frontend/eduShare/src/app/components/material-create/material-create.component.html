@@ -1,8 +1,2 @@
-<div class="container mt-4">
-  <h2 class="mb-3">Új tananyag feltöltése</h2>
-  <app-material-form
-    [isUpdateMode]="false"
-    submitLabel="Létrehozás"
-    (submitted)="onCreate($event)">
-  </app-material-form>
-</div>
+<app-material-form [isUpdateMode]="false" submitLabel="Létrehozás" (submitted)="onCreate($event)">
+</app-material-form>

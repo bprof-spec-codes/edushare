@@ -1,72 +1,63 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RegisterService } from '../../../services/register.service';
-import { Register } from '../../../models/register';
-import { Router } from '@angular/router';
-
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule, FormsModule,RouterModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.sass']
+  styleUrls: ['./register.component.sass'],
 })
 export class RegisterComponent {
-  hidePass:boolean=true
-  hidePass2:boolean=true
-  registerForm: FormGroup
+  email: string = '';
+  firstName: string = '';
+  lastName: string = '';
+  password: string = '';
+  confirmPassword: string = '';
 
-  constructor(private fb: FormBuilder, private registService:RegisterService, private router: Router) {
-    this.registerForm = this.fb.group(
-      {
-        lastname: ['', [Validators.required, Validators.minLength(3)]],
-        firstname: ['', [Validators.required, Validators.minLength(3)]],
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(8)]],
-        password2: ['', [Validators.required, Validators.minLength(8)]]
-      }
-    )
-  }
-  PasswordMatch():boolean{
-    const pw=this.registerForm.get('password')?.value;
-    const pw2=this.registerForm.get('password2')?.value;
-    return pw&&pw2&&pw!==pw2
-  }
-  passwordVisibility(field: 'password' | 'password2'): void {
-    if (field === 'password') {
-      this.hidePass = !this.hidePass;
-    } 
-    else
-    {
-        this.hidePass2 = !this.hidePass2;
+  loading = false;
+  error: string | null = null;
+  success: string | null = null;
+
+  constructor(private registerService: RegisterService) {}
+
+  onRegister() {
+    this.error = null;
+    this.success = null;
+
+    if (!this.email || !this.firstName || !this.lastName || !this.password || !this.confirmPassword) {
+      this.error = 'All fields are required.';
+      return;
     }
-  }
-  canSubmit(): boolean {
-    return this.registerForm.valid && !this.PasswordMatch();
-  }
-  onSubmit(){
-    
 
-    const formValues = this.registerForm.value;
-    const dto = {
-    lastname: formValues.lastname,
-    firstname: formValues.firstname,
-    email: formValues.email,
-    password: formValues.password
-  };
-
-    this.registService.register(dto).subscribe({
-    next: (response) => {
-      console.log('Sikeres regisztráció:', response);
-      alert('Sikeres regisztráció!');
-      this.registerForm.reset();
-      this.router.navigate(['/login']);
-    },
-    error: (err) => {
-      console.error('Sikertelen regisztráció:', err);
-      alert('Sikertelen regisztráció.');
+    if (this.password !== this.confirmPassword) {
+      this.error = 'Passwords do not match.';
+      return;
     }
-  });
+
+    this.loading = true;
+
+    this.registerService.register(this.firstName, this.lastName, this.email, this.password).subscribe({
+      next: () => {
+        this.loading = false;
+        this.success = 'Registration successful!';
+        this.clearForm();
+      },
+      error: (err: any) => {
+        this.loading = false;
+        this.error = err?.error || 'Registration failed. Please try again.';
+      },
+    });
   }
 
+  clearForm() {
+    this.email = '';
+    this.firstName = '';
+    this.lastName = '';
+    this.password = '';
+    this.confirmPassword = '';
+  }
 }

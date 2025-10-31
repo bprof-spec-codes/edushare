@@ -35,7 +35,7 @@ export class MaterialFormComponent implements OnInit {
     this.materialForm = this.fb.group({
       title: [this.initial?.title ?? '', Validators.required],
       subject: [this.initial?.subject ?? '', Validators.required],
-      description: [this.initial?.description ?? ''],
+      description: [this.initial?.description ?? '', Validators.maxLength(1500)],
       file: [null]
     })
 
@@ -46,6 +46,10 @@ export class MaterialFormComponent implements OnInit {
       fileControl?.setValidators([Validators.required])
     }
     fileControl?.updateValueAndValidity()
+  }
+
+  get description() {
+    return this.materialForm.get('description')
   }
 
   async onFileSelected(event: Event) {
