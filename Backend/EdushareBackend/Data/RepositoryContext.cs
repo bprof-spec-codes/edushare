@@ -1,6 +1,7 @@
 ﻿using Entities.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,10 @@ namespace Data
     {
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Material> Materials { get; set; }
+
+        public DbSet<Subject> Subjects { get; set; }
+
+        
         public RepositoryContext(DbContextOptions<RepositoryContext> ctx) : base(ctx)
         {
 
