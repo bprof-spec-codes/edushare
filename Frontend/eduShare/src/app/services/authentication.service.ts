@@ -19,7 +19,7 @@ export class AuthService {
   private apiUrl = environment.baseApiUrl + '/api/User/Login';
   private storageKey = 'edu_token';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
   login(email: string, password: string): Observable<LoginResult> {
     return this.http.post<LoginResult>(`${this.apiUrl}`, { email, password });
@@ -66,30 +66,30 @@ export class AuthService {
   }
 
   getRoles(): string[] {
-  const token = this.getToken()
-  if (!token) return []
+    const token = this.getToken()
+    if (!token) return []
 
-  const payload = this.getPayload(token)
-  if (!payload) return []
+    const payload = this.getPayload(token)
+    if (!payload) return []
 
-  // minden kulcsot végignézünk, és ami role, azt összegyűjtjük
-  const roles: string[] = []
+    // minden kulcsot végignézünk, és ami role, azt összegyűjtjük
+    const roles: string[] = []
 
-  for (const key in payload) {
-    if (key.endsWith('/role')) {
-      const value = (payload as any)[key]
-      if (Array.isArray(value)) {
-        roles.push(...value)
-      } else {
-        roles.push(value)
+    for (const key in payload) {
+      if (key.endsWith('/role')) {
+        const value = (payload as any)[key]
+        if (Array.isArray(value)) {
+          roles.push(...value)
+        } else {
+          roles.push(value)
+        }
       }
     }
+
+    return roles
   }
 
-  return roles
-}
-
-getUserId(): string | null {
+  getUserId(): string | null {
     const token = this.getToken();
     if (!token) return null;
     const payload = this.decodePayload(token);

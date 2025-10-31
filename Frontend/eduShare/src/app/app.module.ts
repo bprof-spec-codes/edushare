@@ -25,6 +25,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { MaterialCardComponent } from './components/material-card/material-card.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+import { SubjectListComponent } from './components/subject-list/subject-list.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
     MaterialCardComponent,
     MainLayoutComponent,
     AuthLayoutComponent,
+    SubjectListComponent,
   ],
   imports: [
     BrowserModule,
