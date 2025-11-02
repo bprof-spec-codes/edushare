@@ -1,4 +1,4 @@
-﻿using Entities.Dtos.User;
+using Entities.Dtos.User;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -13,8 +13,8 @@ namespace Entities.Dtos.Material
     {
         public string Id { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
-        public string Subject { get; set; } = string.Empty;
         public bool IsRecommended { get; set; } = false;
+        public Entities.Models.Subject Subject { get; set; }
         public AppUserMaterialShortViewDto Uploader { get; set; } = null!;
         public DateTime UploadDate { get; set; }
     }

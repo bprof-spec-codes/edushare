@@ -15,7 +15,7 @@ namespace Entities.Dtos.Material
     {
         public string Id { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
-        public string Subject { get; set; } = string.Empty;
+        public Entities.Models.Subject Subject { get; set; } = null!;
         public string Description { get; set; } = string.Empty;
         public bool IsRecommended { get; set; } = false;
         public DateTime UploadDate { get; set; } = DateTime.Now;

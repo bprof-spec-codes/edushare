@@ -17,18 +17,31 @@ namespace Logic.Logic
         Repository<AppUser> appuserRepo;
          Repository<Material> materialRepo;
         DtoProviders dtoProviders;
-        
-        public MaterialLogic(Repository<Material> repo, DtoProviders dtoProviders, Repository<AppUser> appRepo)
+        Repository<Subject> subjectRepo;
+
+        public MaterialLogic(Repository<Material> repo, DtoProviders dtoProviders, Repository<AppUser> appRepo, Repository<Subject> subjectRepo)
         {
             this.materialRepo = repo;
             this.dtoProviders = dtoProviders;
             this.appuserRepo = appRepo;
+            this.subjectRepo = subjectRepo;
         }
 
         public void AddMaterial(MaterialCreateUpdateDto material , string id)
         {
             Material mat = dtoProviders.Mapper.Map<Material>(material);
             mat.Uploader = appuserRepo.FindById(id);
+
+            Subject subject = subjectRepo.FindById(material.SubjectId);
+
+            if (subject == null)
+            {
+                throw new Exception("Subject not found");
+            }
+
+            mat.Subject = subject;
+
+
             if (material.Content != null)
             {
                 
@@ -43,7 +56,7 @@ namespace Logic.Logic
         }
         public IEnumerable<MaterialShortViewDto> GetAllMaterials()
         {
-            return materialRepo.GetAll().Include(u => u.Uploader).ThenInclude(u => u.Image).Select(x => dtoProviders.Mapper.Map<MaterialShortViewDto>(x));
+            return materialRepo.GetAll().Include(u => u.Subject).Include(u => u.Uploader).ThenInclude(u => u.Image).Select(x => dtoProviders.Mapper.Map<MaterialShortViewDto>(x));
                 
         }
         public void DeleteMaterialById(string id)
@@ -57,7 +70,9 @@ namespace Logic.Logic
 
             old.Title = dto.Title;
             old.Description = dto.Description;
-            old.Subject = dto.Subject;
+
+            var newSubject = subjectRepo.FindById(dto.SubjectId);
+            old.Subject = newSubject;
 
             if (dto.Content != null)
             {
@@ -81,6 +96,7 @@ namespace Logic.Logic
         public MaterialViewDto GetMaterialById(string id)
         {
             var mat = materialRepo.GetAll()
+                .Include(m => m.Subject)
              .Include(m => m.Content)
              .Include(m => m.Uploader)
                  .ThenInclude(u => u.Image)
