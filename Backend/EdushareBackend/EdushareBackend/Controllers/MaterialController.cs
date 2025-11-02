@@ -32,11 +32,11 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize] 
+        [Authorize]
         public void DeleteMaterialById(string id)
         {
-            var userid=User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userid!=materialLogic.GetMaterialById(id).Uploader.Id)
+            var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userid != materialLogic.GetMaterialById(id).Uploader.Id)
             {
                 throw new UnauthorizedAccessException("You are not allowed to do this");
             }
@@ -44,11 +44,11 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize] 
+        [Authorize]
         public void UpdateMaterial(string id, [FromBody] MaterialCreateUpdateDto dto)
         {
-            var userid=User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userid!=materialLogic.GetMaterialById(id).Uploader.Id)
+            var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userid != materialLogic.GetMaterialById(id).Uploader.Id)
             {
                 throw new UnauthorizedAccessException("You are not allowed to do this");
             }
@@ -87,6 +87,12 @@ namespace EdushareBackend.Controllers
             //    Uploader = new AppUserMaterialShortViewDto { Id = "123123-1231431-1234134", FullName = "UserName", Image = new ContentViewDto("ImageId", "fileTitle", "fileInBase64") },
             //    Content = new ContentViewDto("FileId", "fileTitle", "fileInBase64")
             //};
+        }
+        [HttpPut("{id}/recommended")]
+        [Authorize(Roles = "Teacher,Admin")]
+        public void SetMaterialRecommendedStatus(string id, [FromBody] bool isRecommended)
+        {
+            materialLogic.SetRecommendationStatus(id, isRecommended);
         }
     }
 }
