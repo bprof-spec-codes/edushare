@@ -91,6 +91,14 @@ namespace Logic.Logic
 
             return dtoProviders.Mapper.Map<MaterialViewDto>(mat);
         }
+        public void SetRecommendationStatus(string id, bool isRecommended)
+        {
+            var material = materialRepo.FindById(id);
+            if (material == null)
+                throw new Exception("Material not found");
+            material.IsRecommended = isRecommended;
+            materialRepo.Update(material);
+        }
 
     }
 }

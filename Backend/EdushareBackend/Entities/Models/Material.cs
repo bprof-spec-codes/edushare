@@ -29,5 +29,7 @@ namespace Entities.Models
         public virtual AppUser? Uploader { get; set; }
         public FileContent Content { get; set; } = null!;
 
+        public bool IsRecommended { get; set; } = false;
+
     }
 }

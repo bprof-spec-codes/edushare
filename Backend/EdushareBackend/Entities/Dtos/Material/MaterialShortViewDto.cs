@@ -14,6 +14,7 @@ namespace Entities.Dtos.Material
         public string Id { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string Subject { get; set; } = string.Empty;
+        public bool IsRecommended { get; set; } = false;
         public AppUserMaterialShortViewDto Uploader { get; set; } = null!;
         public DateTime UploadDate { get; set; }
     }
