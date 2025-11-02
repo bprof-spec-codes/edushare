@@ -19,7 +19,11 @@ namespace Entities.Models
         public string Title { get; set; } = string.Empty;
 
         [StringLength(50)]
-        public string Subject { get; set; } = string.Empty;
+        public string SubjectId { get; set; } = string.Empty;
+
+        public virtual Subject Subject { get; set; }
+
+        //stringId
 
         [StringLength(1500)]
         public string Description { get; set; } = string.Empty;

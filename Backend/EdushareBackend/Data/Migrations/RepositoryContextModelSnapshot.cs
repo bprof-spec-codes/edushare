@@ -56,7 +56,7 @@ namespace Data.Migrations
                         .HasMaxLength(1500)
                         .HasColumnType("nvarchar(1500)");
 
-                    b.Property<string>("Subject")
+                    b.Property<string>("SubjectId")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -76,6 +76,8 @@ namespace Data.Migrations
 
                     b.HasIndex("ContentId");
 
+                    b.HasIndex("SubjectId");
+
                     b.HasIndex("UploaderId");
 
                     b.ToTable("Materials");
@@ -84,11 +86,13 @@ namespace Data.Migrations
             modelBuilder.Entity("Entities.Models.Subject", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Semester")
                         .HasColumnType("int");
@@ -333,11 +337,19 @@ namespace Data.Migrations
                         .WithMany()
                         .HasForeignKey("ContentId");
 
+                    b.HasOne("Entities.Models.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entities.Models.AppUser", "Uploader")
                         .WithMany("Materials")
                         .HasForeignKey("UploaderId");
 
                     b.Navigation("Content");
+
+                    b.Navigation("Subject");
 
                     b.Navigation("Uploader");
                 });

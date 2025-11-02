@@ -25,7 +25,8 @@ namespace Logic.Helper
             {
                 cfg.CreateMap<Material, MaterialAppUserShortViewDto>();
                 cfg.CreateMap<MaterialCreateUpdateDto, Material>()
-                    .ForMember(dest => dest.Content, opt => opt.Ignore());
+                    .ForMember(dest => dest.Content, opt => opt.Ignore())
+                    .ForMember(dest => dest.Subject, opt => opt.Ignore());
                 cfg.CreateMap<Material, MaterialShortViewDto>()
                     .ForMember(dest => dest.Uploader, opt => opt.MapFrom(src => new AppUserMaterialShortViewDto
                     {

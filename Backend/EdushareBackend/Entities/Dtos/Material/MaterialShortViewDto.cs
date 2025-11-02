@@ -13,7 +13,7 @@ namespace Entities.Dtos.Material
     {
         public string Id { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
-        public string Subject { get; set; } = string.Empty;
+        public Entities.Models.Subject Subject { get; set; }
         public AppUserMaterialShortViewDto Uploader { get; set; } = null!;
         public DateTime UploadDate { get; set; }
     }
