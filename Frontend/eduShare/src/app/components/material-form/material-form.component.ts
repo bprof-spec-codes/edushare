@@ -11,7 +11,7 @@ import { Observable, combineLatest, map, startWith, tap } from 'rxjs';
 
 export interface MaterialFormValue {
   title: string
-  subject: string
+  subjectId: string
   description?: string
   content?: FileContentDto
 }
@@ -39,7 +39,7 @@ export class MaterialFormComponent implements OnInit {
   ngOnInit(): void {
     this.materialForm = this.fb.group({
       title: [this.initial?.title ?? '', Validators.required],
-      subject: [this.initial?.subject ?? '', Validators.required],
+      subject: [this.initial?.subjectId ?? '', Validators.required],
       description: [this.initial?.description ?? '', Validators.maxLength(1500)],
       file: [null]
     })
@@ -92,10 +92,12 @@ export class MaterialFormComponent implements OnInit {
 
     const dto: MaterialFormValue = {
       title: this.materialForm.value.title,
-      subject: this.materialForm.value.subject,
+      subjectId: this.materialForm.value.subject,
       description: this.materialForm.value.description?.trim() || undefined,
       ...(this.materialForm.value.file ? { content: this.content } : {})
     }
+
+    console.log(dto)
 
     this.submitted.emit(dto)
   }

@@ -21,7 +21,7 @@ constructor(private materialService: MaterialService, private router: Router) {}
 
     const dto = {
       title: value.title,
-      subject: value.subject,
+      subjectId: value.subjectId,
       description: value.description,
       content: value.content
     }
