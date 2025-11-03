@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251102184205_SubjectDbExtended")]
-    partial class SubjectDbExtended
+    [Migration("20251103081701_Base")]
+    partial class Base
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,6 +58,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasMaxLength(1500)
                         .HasColumnType("nvarchar(1500)");
+
+                    b.Property<bool>("IsRecommended")
+                        .HasColumnType("bit");
 
                     b.Property<string>("SubjectId")
                         .IsRequired()

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class SubjectDbExtended : Migration
+    public partial class Base : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -201,7 +201,8 @@ namespace Data.Migrations
                     Description = table.Column<string>(type: "nvarchar(1500)", maxLength: 1500, nullable: false),
                     UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UploaderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ContentId = table.Column<string>(type: "nvarchar(50)", nullable: true)
+                    ContentId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    IsRecommended = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
