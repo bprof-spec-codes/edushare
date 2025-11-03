@@ -27,6 +27,7 @@ import { MainLayoutComponent } from './layouts/main-layout/main-layout.component
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { SubjectListComponent } from './components/subject-list/subject-list.component';
 import { SubjectCreateModalComponent } from './components/subject-create-modal/subject-create-modal.component';
+import { SubjectUpdateFormComponent } from './components/subject-update-form/subject-update-form.component';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import { SubjectCreateModalComponent } from './components/subject-create-modal/s
     AuthLayoutComponent,
     SubjectListComponent,
     SubjectCreateModalComponent,
+    SubjectUpdateFormComponent,
   ],
   imports: [
     BrowserModule,

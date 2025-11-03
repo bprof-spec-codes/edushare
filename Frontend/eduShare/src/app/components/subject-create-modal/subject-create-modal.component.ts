@@ -22,8 +22,8 @@ export class SubjectCreateModalComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.createForm = this.fb.group({
-      name: ['', Validators.required],
-      semester: [null, Validators.max(20)],
+      name: ['', [Validators.required]],
+      semester: [null, [Validators.min(1), Validators.max(20)]]
     })
   }
 

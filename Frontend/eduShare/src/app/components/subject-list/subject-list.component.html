@@ -11,21 +11,31 @@
     <ul *ngIf="!loading" class="list-group shadow-sm rounded-3 overflow-hidden">
         <ng-container *ngFor="let subject of subjects$ | async">
 
-            <li class="list-group-item d-flex align-items-center justify-content-between">
+            <li *ngIf="editingId!== subject.id"
+                class="list-group-item d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
                     <span class="fw-medium">{{ subject.name }}</span>
                     <span class="badge text-bg-light border">{{ subject.semester }}</span>
                 </div>
 
                 <div class="btn-group">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" aria-label="Edit">
+                    <button type="button" (click)="startEdit(subject)" class="btn btn-outline-secondary btn-sm" aria-label="Edit">
                         <i class="bi bi-pencil"></i>
                     </button>
-                    <button type="button" class="btn btn-outline-danger btn-sm" aria-label="Delete">
+                    <button type="button" (click)="deleteSubject(subject.id)" class="btn btn-outline-danger btn-sm"
+                        aria-label="Delete">
                         <i class="bi bi-trash"></i>
                     </button>
                 </div>
             </li>
+
+            <app-subject-update-form 
+                *ngIf="editingId === subject.id" 
+                [subject]="subject"
+                [saving]="savingId === subject.id" 
+                (save)="handleEdit($event,subject.id)" 
+                (cancel)="cancelEdit()">
+            </app-subject-update-form>
 
         </ng-container>
         <li class="list-group-item list-group-item-action text-center d-flex align-items-center justify-content-center"
