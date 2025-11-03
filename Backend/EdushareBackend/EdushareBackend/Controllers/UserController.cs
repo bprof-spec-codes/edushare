@@ -63,6 +63,7 @@ namespace EdushareBackend.Controllers
             var user = await userManager.Users
                 .Include(u => u.Image)
                 .Include(u => u.Materials)
+                !.ThenInclude(m => m.Subject )
                 .FirstOrDefaultAsync(u => u.Id == id); //id alapján keresés (első találat de elv. nem is lehet több)
 
             if (user is null) return NotFound("User Not Found"); //hiba ha nincs találat
