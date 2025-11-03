@@ -16,6 +16,8 @@ namespace Entities.Dtos.Content
         
         public ContentCreateUpdateDto() {}
 
+        public ContentCreateUpdateDto() {}
+
         public required string FileName { get; set; }
         public required string File { get; set; }
     }
