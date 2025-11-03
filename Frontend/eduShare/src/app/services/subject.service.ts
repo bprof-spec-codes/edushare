@@ -44,4 +44,14 @@ export class SubjectService {
       })
     )
   }
+
+  deleteSubject(id: string): Observable<void> {
+    return this.http.delete<void>(`${environment.baseApiUrl}/api/Subject/${id}`).pipe(
+      tap(() => {
+        const current = this._subjects$.value
+        const next = current.filter(s => s.id !== id)
+        this._subjects$.next(next)
+      })
+    )
+  }
 }

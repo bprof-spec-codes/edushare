@@ -30,7 +30,7 @@ namespace EdushareBackend.Controllers
             return subjectLogic.GetAllSubjects();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize(Roles = "Teacher,Admin")]
         public async Task DeleteSubject(string id)
         {
