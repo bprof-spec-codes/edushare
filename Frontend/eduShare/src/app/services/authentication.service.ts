@@ -85,7 +85,7 @@ export class AuthService {
         }
       }
     }
-
+    
     return roles
   }
 

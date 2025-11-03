@@ -39,7 +39,7 @@ const routes: Routes = [
       { path: 'profile-list', component: ProfileListComponent },
       { path: 'profile-view/:id', component: ProfileViewComponent },
       { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard] },
-      { path: 'subjects', component: SubjectListComponent, canActivate: [roleGuard], data: { roles: ['teacher', 'admin'] } }
+      { path: 'subjects', component: SubjectListComponent, canActivate: [roleGuard], data: { roles: ['Teacher', 'Admin'] } }
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
