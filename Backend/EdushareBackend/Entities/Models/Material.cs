@@ -19,7 +19,11 @@ namespace Entities.Models
         public string Title { get; set; } = string.Empty;
 
         [StringLength(50)]
-        public string Subject { get; set; } = string.Empty;
+        public string SubjectId { get; set; } = string.Empty;
+
+        public virtual Subject Subject { get; set; }
+
+        //stringId
 
         [StringLength(1500)]
         public string Description { get; set; } = string.Empty;
@@ -28,6 +32,8 @@ namespace Entities.Models
         [NotMapped]
         public virtual AppUser? Uploader { get; set; }
         public FileContent Content { get; set; } = null!;
+
+        public bool IsRecommended { get; set; } = false;
 
     }
 }

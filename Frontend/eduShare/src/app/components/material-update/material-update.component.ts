@@ -35,7 +35,7 @@ export class MaterialUpdateComponent implements OnInit{
     if (!this.material) return
     const dto = {
       title: value.title,
-      subject: value.subject,
+      subjectId: value.subjectId,
       description: value.description,
       content: value.content ? value.content : this.material.content
     }

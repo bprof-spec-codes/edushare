@@ -27,6 +27,7 @@ import { MainLayoutComponent } from './layouts/main-layout/main-layout.component
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { SubjectListComponent } from './components/subject-list/subject-list.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
