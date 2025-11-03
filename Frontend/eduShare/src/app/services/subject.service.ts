@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Subject } from '../models/subject';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
@@ -15,15 +15,9 @@ export class SubjectService {
     this.getAllSubjects()
   }
 
-  getAllSubjects() {
-    this.http.get<Subject[]>(environment.baseApiUrl + "/api/Subject").subscribe({
-      next: res => { 
-        console.log(res)
-        this._subjects$.next(res)
-      },
-      error: err => {
-        console.log("Error getting subjects: " + err)
-      }
-    })
+  getAllSubjects(): Observable<Subject[]> {
+    return this.http.get<Subject[]>(`${environment.baseApiUrl}/api/Subject`).pipe(
+      tap(subjects=> this._subjects$.next(subjects))
+    )
   }
 }

@@ -1,2 +1,32 @@
-<h1>Subjects</h1>
-<p *ngFor="let subject of subjects$ |async">{{subject.name}}</p>
+<div class="container py-3 w-50">
+    <div class="d-flex align-items-center gap-3 mb-2">
+        <h2 class="m-0">Subject list</h2>
+        <span *ngIf="(subjects$ | async)?.length as count" class="badge text-bg-secondary">{{ count }}</span>
+    </div>
+    <hr>
+
+    <div *ngIf="loading" class="text-center text-secondary my-4">Loading...</div>
+    <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+
+    <ul *ngIf="!loading" class="list-group shadow-sm rounded-3 overflow-hidden">
+        <ng-container *ngFor="let subject of subjects$ | async">
+
+            <li class="list-group-item d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="fw-medium">{{ subject.name }}</span>
+                    <span class="badge text-bg-light border">{{ subject.semester }}</span>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" aria-label="Edit">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-danger btn-sm" aria-label="Delete">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </li>
+
+        </ng-container>
+    </ul>
+</div>
