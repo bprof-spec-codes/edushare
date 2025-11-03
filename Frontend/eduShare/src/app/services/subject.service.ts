@@ -22,11 +22,25 @@ export class SubjectService {
     )
   }
 
-  createSubject(subject: SubjectCreateDto): Observable<any> {
-    return this.http.post<any>(`${environment.baseApiUrl}/api/Subject`, subject).pipe(
+  createSubject(subject: SubjectCreateDto): Observable<Subject> {
+    return this.http.post<Subject>(`${environment.baseApiUrl}/api/Subject`, subject).pipe(
       tap(newSub => {
         const current = this._subjects$.value
         this._subjects$.next([...current, newSub])
+      })
+    )
+  }
+
+  updateSubject(subject: SubjectCreateDto, id: string): Observable<void> {
+    return this.http.put<void>(`${environment.baseApiUrl}/api/Subject/${id}`, subject).pipe(
+      tap(() => {
+        const current = this._subjects$.value;
+        const index = current.findIndex(s => s.id === id);
+        if (index > -1) {
+          const next = [...current];
+          next[index] = { ...next[index], ...subject };
+          this._subjects$.next(next);
+        }
       })
     )
   }

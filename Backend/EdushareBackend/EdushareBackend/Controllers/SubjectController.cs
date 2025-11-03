@@ -1,19 +1,14 @@
-﻿using Entities.Dtos.Content;
-using Entities.Dtos.Material;
-using Entities.Dtos.Subject;
-using Entities.Dtos.User;
+﻿using Entities.Dtos.Subject;
 using Entities.Models;
 using Logic.Logic;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace EdushareBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SubjectController:ControllerBase
+    public class SubjectController : ControllerBase
     {
         SubjectLogic subjectLogic;
 
@@ -42,7 +37,8 @@ namespace EdushareBackend.Controllers
             await subjectLogic.DeleteSubject(id);
         }
 
-        [HttpPut]
+
+        [HttpPut("{id}")]
         [Authorize(Roles = "Teacher,Admin")]
         public async Task UpdateSubject(string id, [FromBody] SubjectCreateDto updatedSubject)
         {
