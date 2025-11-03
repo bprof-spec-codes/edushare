@@ -25,7 +25,7 @@ export class SubjectListComponent implements OnInit {
       },
       error: (err) => {
         console.error(err)
-        this.error = 'Nem sikerült betölteni az anyagokat.'
+        this.error = "Could not load subjects."
         this.loading = false
       },
     })
