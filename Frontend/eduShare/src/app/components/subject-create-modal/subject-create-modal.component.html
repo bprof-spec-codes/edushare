@@ -1,0 +1,51 @@
+<div *ngIf="open">
+  <div class="modal-backdrop fade show"></div>
+
+  <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <form [formGroup]="createForm" (ngSubmit)="submit()">
+          <div class="modal-header">
+            <h5 class="modal-title">Új tantárgy</h5>
+            <button type="button" class="btn-close" aria-label="Bezárás" (click)="onCancel()"></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Név</label>
+              <input class="form-control" type="text" formControlName="name" placeholder="Pl. Analízis">
+              <div class="form-text text-danger"
+                   *ngIf="createForm.get('name')?.invalid && (createForm.get('name')?.dirty || createForm.get('name')?.touched)">
+                A név kötelező (max 120 karakter).
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Szemeszter</label>
+              <input class="form-control" type="number" formControlName="semester" min="1">
+              <div class="form-text text-danger"
+                   *ngIf="createForm.get('semester')?.invalid && (createForm.get('semester')?.dirty || createForm.get('semester')?.touched)">
+                Érvényes szemeszter szükséges (≥ 1).
+              </div>
+            </div>
+
+            <div *ngIf="error" class="alert alert-danger py-2">{{ error }}</div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" (click)="onCancel()" [disabled]="loading">
+              Mégse
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="createForm.invalid || loading">
+              <span *ngIf="!loading"><i class="bi bi-check-lg me-1"></i>Mentés</span>
+              <span *ngIf="loading" class="d-inline-flex align-items-center gap-2">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Mentés...
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

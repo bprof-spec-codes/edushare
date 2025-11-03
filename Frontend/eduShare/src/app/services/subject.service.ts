@@ -22,11 +22,11 @@ export class SubjectService {
     )
   }
 
-  createSubject(subject: SubjectCreateDto): Observable<Subject> {
-    return this.http.post<Subject>(`${environment.baseApiUrl}/api/Subject`, subject).pipe(
-      tap(newSub => {
+  createSubject(subject: SubjectCreateDto): Observable<void> {
+    return this.http.post<void>(`${environment.baseApiUrl}/api/Subject`, subject).pipe(
+      tap(() => {
         const current = this._subjects$.value
-        this._subjects$.next([...current, newSub])
+        this._subjects$.next([...current, subject as Subject])
       })
     )
   }
