@@ -24,6 +24,7 @@ namespace BackendNUnitTests
         private Mock<DtoProviders> dtoProviderMock;
         private MaterialLogic logic;
         private Mock<UserManager<AppUser>> _userManagerMock;
+        private Mock<Repository<Subject>> subjectRepoMock;
 
         [SetUp]
         public void Setup()
@@ -32,7 +33,8 @@ namespace BackendNUnitTests
             appuserRepoMock = new Mock<Repository<AppUser>>();
             dtoProviderMock = new Mock<DtoProviders>(null!);
             _userManagerMock = new Mock<UserManager<AppUser>>();
-            logic = new MaterialLogic(materialRepoMock.Object, dtoProviderMock.Object, appuserRepoMock.Object);
+            subjectRepoMock = new Mock<Repository<Subject>>();
+            logic = new MaterialLogic(materialRepoMock.Object, dtoProviderMock.Object, appuserRepoMock.Object, subjectRepoMock.Object);
         }
 
         [Test]
@@ -99,7 +101,7 @@ namespace BackendNUnitTests
                 Id = "mat123",
                 Title = "Old Title",
                 Description = "Old Description",
-                Subject = "Old Subject",
+                SubjectId = "placeholder",
                 Content = new FileContent("oldfile.txt", Encoding.UTF8.GetBytes("Old content")),
                 Uploader = new AppUser { Id = "user123", UserName = "testuser" }
             };
@@ -108,7 +110,7 @@ namespace BackendNUnitTests
             {
                 Title = "New Title",
                 Description = "New Description",
-                Subject = "New Subject",
+                SubjectId = "placeholder",
                 Content = new ContentCreateUpdateDto
                 {
                     FileName = "newfile.txt",
@@ -127,7 +129,7 @@ namespace BackendNUnitTests
                 m.Title == dto.Title &&
                 m.Description == dto.Description &&
                 m.Uploader.Id == "user123" &&
-                m.Subject == dto.Subject &&
+                m.SubjectId == dto.SubjectId &&
                 m.Content != null &&
                 m.Content.FileName == dto.Content.FileName &&
                 Encoding.UTF8.GetString(m.Content.File) == "New content"

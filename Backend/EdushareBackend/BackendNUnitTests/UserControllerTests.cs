@@ -81,7 +81,7 @@ namespace BackendNUnitTests
             var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
                 await _controller.RegisterUser(dto));
 
-            Assert.That(ex.Message, Is.EqualTo("A jelszónak legalább 8 karakter hosszúnak kell lennie"));
+            Assert.That(ex.Message, Is.EqualTo("A jelszÃ³nak legalÃ¡bb 8 karakter hosszÃºnak kell lennie"));
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace BackendNUnitTests
             var ex = Assert.ThrowsAsync<ArgumentException>(async () =>
                 await _controller.RegisterUser(dto));
 
-            Assert.That(ex.Message, Is.EqualTo("Az email cím formátuma nem megfelelõ"));
+            Assert.That(ex.Message, Is.EqualTo("Az email cÃ­m formÃ¡tuma nem megfelelÅ‘"));
         }
 
         [Test]
@@ -121,9 +121,19 @@ namespace BackendNUnitTests
             _userManagerMock.Setup(u => u.Users)
                 .Returns(new List<AppUser>().AsQueryable());
 
-            _envMock.Setup(e => e.WebRootPath).Returns("C:\\temp");
-            System.IO.Directory.CreateDirectory("C:\\temp\\images");
-            System.IO.File.WriteAllBytes("C:\\temp\\images\\default.png", new byte[1]);
+            // PlatformfÃ¼ggetlen temp kÃ¶nyvtÃ¡r
+            var tempPath = Path.Combine(Path.GetTempPath(), "images");
+
+            // Mock beÃ¡llÃ­tÃ¡sa
+            _envMock.Setup(e => e.WebRootPath).Returns(tempPath);
+
+            // KÃ¶nyvtÃ¡r lÃ©trehozÃ¡sa, ha nem lÃ©tezik
+            Directory.CreateDirectory(tempPath);
+
+            // TesztfÃ¡jl lÃ©trehozÃ¡sa
+            var filePath = Path.Combine(tempPath, "default.png");
+            File.WriteAllBytes(filePath, new byte[1]);
+
 
             Assert.DoesNotThrowAsync(async () => await _controller.RegisterUser(dto));
         }
@@ -276,9 +286,9 @@ namespace BackendNUnitTests
         {
             // Arrange
             var currentUserId = "11111111-1111-1111-1111-111111111111"; // a bejelentkezett user
-            var targetUserId = "22222222-2222-2222-2222-222222222222"; // a törölni kívánt user
+            var targetUserId = "22222222-2222-2222-2222-222222222222"; // a tï¿½rï¿½lni kï¿½vï¿½nt user
 
-            // Mockolt ClaimsPrincipal – más user próbál törölni
+            // Mockolt ClaimsPrincipal ï¿½ mï¿½s user prï¿½bï¿½l tï¿½rï¿½lni
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
             {
                 new Claim(ClaimTypes.NameIdentifier, currentUserId)
