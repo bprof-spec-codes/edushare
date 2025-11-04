@@ -51,4 +51,7 @@ export class MaterialService {
       map(() => void 0)
     )
   }
+  updateRecommended(id: string, isRecommended: boolean): Observable<void> {
+  return this.http.put<void>(`${this.apiBaseUrl}/${id}/recommended`, isRecommended);
+  }
 }

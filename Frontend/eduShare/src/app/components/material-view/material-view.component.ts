@@ -41,15 +41,12 @@ export class MaterialViewComponent implements OnInit {
     }
   }
 
-  recommendedMaterial(){
-    if (this.material?.isRecommended) {
-      this.material.isRecommended= false;
-      
-    }
-    else
-    {
-      this.material!.isRecommended=true;
-    }
+  recommendedMaterial(id: string){
+  this.material!.isRecommended=!this.material?.isRecommended;
+  this.materialService.updateRecommended(id, this.material!.isRecommended).subscribe({
+    next: () => console.log('Sikeres mentés!'),
+    error: (err) => console.error('Hiba történt:', err)
+  });
     console.log(this.material!.isRecommended);
   }
 
