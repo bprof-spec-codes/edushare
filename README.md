@@ -3,9 +3,7 @@
 
 ## Team
 
-- [Task description](https://github.com/bprof-spec-codes/docs/blob/master/BPROF-2024/%C3%96LAB-2025-26-1/edushare.md)
-- [Repository](https://github.com/bprof-spec-codes/edushare)
-- [EduShare description](./edushare.md)
+- [EduShare description](https://github.com/bprof-spec-codes/docs/blob/master/BPROF-2024/%C3%96LAB-2025-26-1/edushare.md)
 - [CoC](https://github.com/bprof-spec-codes/docs/blob/master/BPROF-2024/%C3%96LAB-2025-26-1/coc.md)
 
 | Név                          | Beosztás | GitHub profil |
