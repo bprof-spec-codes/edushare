@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   selector: 'app-subject-update-form',
   standalone: false,
   templateUrl: './subject-update-form.component.html',
-  styleUrl: './subject-update-form.component.sass'
+  styleUrls: ['./subject-update-form.component.sass']
 })
 export class SubjectUpdateFormComponent implements OnInit, OnChanges {
   @Input() subject!: Subject
@@ -28,7 +28,7 @@ export class SubjectUpdateFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['model']?.currentValue && this.updateForm) {
+    if (changes['subject']?.currentValue && this.updateForm) {
       this.updateForm.patchValue({
         name: this.subject?.name ?? '',
         semester: this.subject?.semester ?? 1

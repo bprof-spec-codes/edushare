@@ -8,7 +8,7 @@ import { SubjectCreateDto } from '../../dtos/subject-create-dto';
   selector: 'app-subject-list',
   standalone: false,
   templateUrl: './subject-list.component.html',
-  styleUrl: './subject-list.component.sass'
+  styleUrls: ['./subject-list.component.sass']
 })
 export class SubjectListComponent implements OnInit {
   loading = false

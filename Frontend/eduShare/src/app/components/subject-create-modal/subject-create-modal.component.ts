@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   selector: 'app-subject-create-modal',
   standalone: false,
   templateUrl: './subject-create-modal.component.html',
-  styleUrl: './subject-create-modal.component.sass'
+  styleUrls: ['./subject-create-modal.component.sass']
 })
 export class SubjectCreateModalComponent implements OnInit, OnChanges {
   @Input() open = false
