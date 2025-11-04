@@ -97,12 +97,12 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpGet("searchMaterials")]
-        public async Task<IEnumerable<MaterialViewDto>> GetFilteredMaterials(
+        public async Task<IEnumerable<MaterialViewDto>> GetFilteredMaterialsAsync(
             string? name,
             int? semester,
             string? fileType)
         {
-            var materials = await materialLogic.GetFilteredMaterials(name, semester, fileType);
+            var materials = await materialLogic.GetFilteredMaterialsAsync(name, semester, fileType);
             return materials;
         }
 

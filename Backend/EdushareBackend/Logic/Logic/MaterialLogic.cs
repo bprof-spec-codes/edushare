@@ -41,21 +41,7 @@ namespace Logic.Logic
 
             mat.Subject = subject;
 
-            //innen
-
-            byte[] fileBytes = Convert.FromBase64String(material.Content.File);
-
-            string? extension = Path.GetExtension(material.Content.FileName)?.TrimStart('.').ToLower();
-
-            string fileType = !string.IsNullOrWhiteSpace(extension)
-            ? extension
-            : GetFileTypeFromBytes(fileBytes);
-
-
-
-
-
-            //idáig
+            
 
             if (material.Content != null)
             {
@@ -90,19 +76,21 @@ namespace Logic.Logic
             var newSubject = subjectRepo.FindById(dto.SubjectId);
             old.Subject = newSubject;
 
+
             if (dto.Content != null)
             {
                 if (old.Content == null)
                 {
                     old.Content = new FileContent(
                         dto.Content.FileName,
-                        Convert.FromBase64String(dto.Content.File)
+                        Convert.FromBase64String(dto.Content.File)                   
                     );
                 }
                 else
                 {
                     old.Content.FileName = dto.Content.FileName;
                     old.Content.File = Convert.FromBase64String(dto.Content.File);
+                    
                 }
             }
 
@@ -132,30 +120,6 @@ namespace Logic.Logic
             materialRepo.Update(material);
         }
 
-        private string GetFileTypeFromBytes(byte[] file)
-        {
-            if (file.Length < 4) return "bin"; // alapértelmezett
-
-            // PDF
-            if (file[0] == 0x25 && file[1] == 0x50 && file[2] == 0x44 && file[3] == 0x46)
-                return "pdf";
-
-            // PNG
-            if (file.Length > 8 &&
-                file[0] == 0x89 && file[1] == 0x50 && file[2] == 0x4E && file[3] == 0x47)
-                return "png";
-
-            // JPG
-            if (file[0] == 0xFF && file[1] == 0xD8 && file[2] == 0xFF)
-                return "jpg";
-
-            // ZIP / DOCX / XLSX
-            if (file[0] == 0x50 && file[1] == 0x4B && file[2] == 0x03 && file[3] == 0x04)
-                return "zip";
-
-            return "bin"; // ismeretlen fájl
-        }
-
 
         public async Task<IEnumerable<MaterialViewDto>> GetFilteredMaterialsAsync(
             string? name,
@@ -176,7 +140,7 @@ namespace Logic.Logic
                 query = query.Where(m => m.Subject.Semester == semester.Value);
 
             if (!string.IsNullOrWhiteSpace(fileType))
-                query = query.Where(m => m.Content.FileName == fileType);
+                query = query.Where(m => m.Content.FileName.Contains(fileType));
 
             var materials = await query.ToListAsync();
 

@@ -23,7 +23,6 @@ namespace Entities.Helpers
         [StringLength(50)]
         public string FileName { get; set; }
 
-        public string FileType { get; set; } = string.Empty;
         public byte[] File { get; set; }
     }
 }
