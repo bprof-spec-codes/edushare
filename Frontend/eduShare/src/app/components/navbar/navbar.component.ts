@@ -15,6 +15,7 @@ export class NavbarComponent implements OnChanges, OnInit {
   isLoggedIn: boolean = false;
   profile: ProfileViewDto | null = null
   id: string = ''
+  isTeacher: boolean = false
 
   constructor(private auth: AuthService, private profileService: ProfileService, private router: Router,private modalService: NgbModal) {
     console.log('userid: ', auth.getUserId());
@@ -33,6 +34,7 @@ export class NavbarComponent implements OnChanges, OnInit {
         alert('Nem sikerült betölteni a profilt.')
       }
     })
+    this.isTeacher = this.auth.getRoles().some(r => r === 'Teacher' || r === 'Admin')
   }
 
   getProfileImageSrc(): string {

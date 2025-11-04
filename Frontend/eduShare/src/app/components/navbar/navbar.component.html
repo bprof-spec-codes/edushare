@@ -17,6 +17,9 @@
         <li class="nav-item me-2">
           <a class="nav-link" routerLink="/materials"><strong>Materials</strong></a>
         </li>
+        <li class="nav-item me-2" *ngIf="isTeacher">
+          <a class="nav-link" routerLink="/subjects"><strong>Subjects</strong></a>
+        </li>
         <li class="nav-item me-2">
           <a class="nav-link" routerLink="/profile-list"><strong>Profiles</strong></a>
         </li>
