@@ -6,6 +6,7 @@ using Logic.Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 using System.Security.Claims;
 
 namespace EdushareBackend.Controllers
@@ -94,5 +95,14 @@ namespace EdushareBackend.Controllers
         {
             materialLogic.SetRecommendationStatus(id, isRecommended);
         }
+
+        [HttpGet("searchMaterialsByName")]
+        public IEnumerable<MaterialViewDto> GetMaterialsByName(string name)
+        {
+            return materialLogic.GetMaterialsByName(name);
+        }
+
+
+
     }
 }

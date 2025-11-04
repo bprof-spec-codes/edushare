@@ -15,7 +15,7 @@ namespace Logic.Logic
     public class MaterialLogic
     {
         Repository<AppUser> appuserRepo;
-         Repository<Material> materialRepo;
+        Repository<Material> materialRepo;
         DtoProviders dtoProviders;
         Repository<Subject> subjectRepo;
 
@@ -27,7 +27,7 @@ namespace Logic.Logic
             this.subjectRepo = subjectRepo;
         }
 
-        public void AddMaterial(MaterialCreateUpdateDto material , string id)
+        public void AddMaterial(MaterialCreateUpdateDto material, string id)
         {
             Material mat = dtoProviders.Mapper.Map<Material>(material);
             mat.Uploader = appuserRepo.FindById(id);
@@ -44,7 +44,7 @@ namespace Logic.Logic
 
             if (material.Content != null)
             {
-                
+
                 mat.Content = new FileContent(
                     material.Content.FileName,
                     Convert.FromBase64String(material.Content.File)
@@ -57,7 +57,7 @@ namespace Logic.Logic
         public IEnumerable<MaterialShortViewDto> GetAllMaterials()
         {
             return materialRepo.GetAll().Include(u => u.Subject).Include(u => u.Uploader).ThenInclude(u => u.Image).Select(x => dtoProviders.Mapper.Map<MaterialShortViewDto>(x));
-                
+
         }
         public void DeleteMaterialById(string id)
         {
@@ -115,6 +115,23 @@ namespace Logic.Logic
             material.IsRecommended = isRecommended;
             materialRepo.Update(material);
         }
+
+        public IEnumerable<MaterialViewDto> GetMaterialsByName(string name)
+        { 
+            var materials = materialRepo.GetAll()
+                .Include(m => m.Subject)
+                .Include(m => m.Content)
+                .Include(m => m.Uploader)
+                    .ThenInclude(u => u.Image)
+                .Where(m => m.Title.Contains(name))
+                .ToList();
+
+            return materials.Select(m => dtoProviders.Mapper.Map<MaterialViewDto>(m));
+
+        }
+        
+
+
 
     }
 }
