@@ -35,7 +35,6 @@ namespace Entities.Models
 
         public bool IsRecommended { get; set; } = false;
 
-        public string FileType { get; set; } = string.Empty;
 
     }
 }
