@@ -41,6 +41,8 @@ namespace Logic.Logic
 
             mat.Subject = subject;
 
+            byte[] fileBytes;
+
 
             if (material.Content != null)
             {
@@ -50,6 +52,7 @@ namespace Logic.Logic
                     Convert.FromBase64String(material.Content.File)
                 );
             }
+
 
             materialRepo.Add(mat);
 
@@ -116,20 +119,33 @@ namespace Logic.Logic
             materialRepo.Update(material);
         }
 
-        public IEnumerable<MaterialViewDto> GetMaterialsByName(string name)
-        { 
-            var materials = materialRepo.GetAll()
+        public async Task<IEnumerable<MaterialViewDto>> GetFilteredMaterialsAsync(
+            string? name,
+            int? semester,
+            string? fileType)
+        {
+            var query = materialRepo.GetAll()
                 .Include(m => m.Subject)
                 .Include(m => m.Content)
                 .Include(m => m.Uploader)
                     .ThenInclude(u => u.Image)
-                .Where(m => m.Title.Contains(name))
-                .ToList();
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(name))
+                query = query.Where(m => m.Title.Contains(name));
+
+            if (semester.HasValue)
+                query = query.Where(m => m.Subject.Semester == semester.Value);
+
+            if (!string.IsNullOrWhiteSpace(fileType))
+                query = query.Where(m => m.Content.FileName == fileType);
+
+            var materials = await query.ToListAsync();
 
             return materials.Select(m => dtoProviders.Mapper.Map<MaterialViewDto>(m));
-
         }
-        
+
+
 
 
 

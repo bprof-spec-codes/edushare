@@ -96,11 +96,17 @@ namespace EdushareBackend.Controllers
             materialLogic.SetRecommendationStatus(id, isRecommended);
         }
 
-        [HttpGet("searchMaterialsByName")]
-        public IEnumerable<MaterialViewDto> GetMaterialsByName(string name)
+        [HttpGet("searchMaterials")]
+        public async Task<IEnumerable<MaterialViewDto>> GetFilteredMaterials(
+            string? name,
+            int? semester,
+            string? fileType)
         {
-            return materialLogic.GetMaterialsByName(name);
+            var materials = await materialLogic.GetFilteredMaterials(name, semester, fileType);
+            return materials;
         }
+
+
 
 
 
