@@ -1,11 +1,11 @@
 
 
-# EduShare
+# 📚 EduShare
 
 - [EduShare description](https://github.com/bprof-spec-codes/docs/blob/master/BPROF-2024/%C3%96LAB-2025-26-1/edushare.md)
 - [CoC](https://github.com/bprof-spec-codes/docs/blob/master/BPROF-2024/%C3%96LAB-2025-26-1/coc.md)
 
-## Team
+## 👥 Team
 
 | Name                          | Role | GitHub profile |
 |------------------------------| ---- |---------------|
@@ -18,7 +18,7 @@
 
 ---
 
-## Developer Guide
+## 🧑‍💻 Developer Guide
 
 ### Requirements
 - Node.js + npm
@@ -46,7 +46,7 @@ update-database
 
 ---
 
-## Default Accounts
+## 🔐 Default Accounts
 
 | Role | Email | Password |
 |---|---|---|
@@ -58,7 +58,7 @@ update-database
 
 ---
 
-## Usage
+## 🧭 Use-cases
 
 ### Users
 - Register / log in
@@ -82,7 +82,7 @@ update-database
 
 ---
 
-## API Function List (excerpt)
+## 🔌 API Function List (excerpt)
 
 | Endpoint | Method | Description |
 |---|---|---|
@@ -100,7 +100,7 @@ update-database
 
 ---
 
-## UI Screens (overview)
+## 🖼️ UI Screens (overview)
 
 | Screen | Purpose |
 |---|---|
@@ -115,7 +115,7 @@ update-database
 
 ---
 
-## Problem Log
+## 🧾 Problem Log
 
 | Problem | Area | Resolution |
 |---|---|---|
@@ -127,7 +127,7 @@ update-database
 
 ---
 
-## Documentation
+## 📂 Documentation
 
 The repository must include a `docs/` directory containing:
 - `usermanual.pdf` — step-by-step end-user manual
