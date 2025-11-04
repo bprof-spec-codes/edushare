@@ -37,7 +37,7 @@
                             [disabled]="loading">
                             Cancel
                         </button>
-                        <button type="submit" class="btn btn-primary" [disabled]="createForm.invalid || loading">
+                        <button type="submit" class="btn btn-save" [disabled]="createForm.invalid || loading">
                             <span *ngIf="!loading"><i class="bi bi-check-lg me-1"></i>Save</span>
                             <span *ngIf="loading" class="d-inline-flex align-items-center gap-2">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>

@@ -29,7 +29,14 @@ export class SubjectCreateModalComponent implements OnInit, OnChanges {
 
   submit() {
     if (this.createForm.valid) {
-      this.save.emit(this.createForm.getRawValue())
+      const { name, semester } = this.createForm.getRawValue();
+
+      const formattedName = name ? name.charAt(0).toUpperCase() + name.slice(1) : name;
+
+      this.save.emit({
+        name: formattedName,
+        semester
+      });
     }
   }
 

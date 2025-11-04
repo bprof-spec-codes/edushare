@@ -18,7 +18,10 @@ export class SubjectService {
 
   getAllSubjects(): Observable<Subject[]> {
     return this.http.get<Subject[]>(`${environment.baseApiUrl}/api/Subject`).pipe(
-      tap(subjects => this._subjects$.next(subjects))
+      tap(subjects => {
+        const sortedSubjects = subjects.sort((a, b) => a.name.localeCompare(b.name))
+        this._subjects$.next(sortedSubjects)
+      })
     )
   }
 

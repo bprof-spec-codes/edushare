@@ -15,7 +15,7 @@
            style="max-width: 120px;"
            [class.is-invalid]="updateForm.get('semester')?.invalid && (updateForm.get('semester')?.dirty || updateForm.get('semester')?.touched)">
 
-    <button type="submit" class="btn btn-success btn-sm" [disabled]="updateForm.invalid || saving">
+    <button type="submit" class="btn btn-save btn-sm" [disabled]="updateForm.invalid || saving">
       <i class="bi bi-check-lg"></i>
     </button>
 
