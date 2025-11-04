@@ -21,8 +21,8 @@ const routes: Routes = [
     path: '',
     component: AuthLayoutComponent,
     children: [
-      { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
-      { path: 'register', component: RegisterComponent, canActivate: [NoAuthGuard] },
+      { path: 'login', component: LoginComponent , canActivate:[NoAuthGuard]},
+      { path: 'register', component: RegisterComponent, canActivate:[NoAuthGuard] },
     ]
   },
   {
