@@ -18,5 +18,6 @@ namespace Entities.Dtos.Content
 
         public required string FileName { get; set; }
         public required string File { get; set; }
+
     }
 }
