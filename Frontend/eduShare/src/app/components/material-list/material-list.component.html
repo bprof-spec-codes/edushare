@@ -11,9 +11,9 @@
   <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
   <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
   
-  <div *ngIf="!loading && materials.length">
+  <div *ngIf="!loading && nonRecommendedMaterials.length">
     <app-material-card 
-      [m]="materials">
+      [m]="nonRecommendedMaterials">
     </app-material-card>
   </div>
 

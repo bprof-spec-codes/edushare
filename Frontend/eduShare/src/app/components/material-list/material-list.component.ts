@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class MaterialListComponent {
   materials: MaterialShortViewDto[] = []
   recommendedMaterials: MaterialShortViewDto[] = []
+  nonRecommendedMaterials: MaterialShortViewDto[] = [];
   loading = false
   error?: string
 
@@ -27,6 +28,7 @@ export class MaterialListComponent {
       next: (data) => {
         this.materials = data
         this.recommendedMaterials = data.filter(m => m.isRecommended)
+        this.nonRecommendedMaterials = data.filter(m => !m.isRecommended)
         this.loading = false
       },
       error: (err) => {

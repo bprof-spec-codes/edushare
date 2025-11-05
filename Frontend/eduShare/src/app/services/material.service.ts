@@ -15,6 +15,7 @@ export class MaterialService {
 
   private materialShortSubject = new BehaviorSubject<MaterialShortViewDto[]>([])
   public materialsShort$ = this.materialShortSubject.asObservable()
+  
 
   constructor(private http: HttpClient) { }
 
@@ -51,7 +52,16 @@ export class MaterialService {
       map(() => void 0)
     )
   }
-  updateRecommended(id: string, isRecommended: boolean): Observable<void> {
-  return this.http.put<void>(`${this.apiBaseUrl}/${id}/recommended`, isRecommended);
-  }
+ updateRecommended(id: string, isRecommended: boolean): Observable<void> {
+  return this.http.put<void>(`${this.apiBaseUrl}/${id}/recommended`, isRecommended).pipe(
+    tap(() => {
+      const current = this.materialShortSubject.getValue();
+      const updated = current.map(m =>
+        m.id === id ? { ...m, isRecommended } : m
+      );
+      this.materialShortSubject.next(updated);
+    })
+  );
+}
+
 }
