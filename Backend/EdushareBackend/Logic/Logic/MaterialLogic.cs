@@ -121,7 +121,7 @@ namespace Logic.Logic
         }
 
 
-        public async Task<IEnumerable<MaterialViewDto>> GetFilteredMaterialsAsync(
+        public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync(
             string? name,
             int? semester,
             string? fileType,
@@ -151,7 +151,7 @@ namespace Logic.Logic
 
                 var materials = await query.ToListAsync();
 
-            return materials.Select(m => dtoProviders.Mapper.Map<MaterialViewDto>(m));
+            return materials.Select(m => dtoProviders.Mapper.Map<MaterialShortViewDto>(m));
         }
 
 

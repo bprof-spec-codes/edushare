@@ -97,7 +97,7 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpGet("searchMaterials")]
-        public async Task<IEnumerable<MaterialViewDto>> GetFilteredMaterialsAsync(
+        public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync(
             string? name,
             int? semester,
             string? fileType,
