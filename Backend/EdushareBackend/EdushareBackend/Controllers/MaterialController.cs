@@ -96,7 +96,7 @@ namespace EdushareBackend.Controllers
             materialLogic.SetRecommendationStatus(id, isRecommended);
         }
 
-        [HttpGet("searchMaterials")]
+        [HttpPost("searchMaterials")]
         public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync( [FromBody] MaterialFilterDto filter)
         {
             var materials = await materialLogic.GetFilteredMaterialsAsync(filter);
