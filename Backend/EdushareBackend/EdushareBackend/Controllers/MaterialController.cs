@@ -97,13 +97,9 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpGet("searchMaterials")]
-        public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync(
-            string? name,
-            int? semester,
-            string? fileType,
-            DateTime? uploadDate)
+        public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync( [FromBody] MaterialFilterDto filter)
         {
-            var materials = await materialLogic.GetFilteredMaterialsAsync(name, semester, fileType, uploadDate);
+            var materials = await materialLogic.GetFilteredMaterialsAsync(filter);
             return materials;
         }
 

@@ -121,11 +121,7 @@ namespace Logic.Logic
         }
 
 
-        public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync(
-            string? name,
-            int? semester,
-            string? fileType,
-            DateTime? uploadDate)
+        public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync(MaterialFilterDto filter)
         {
             var query = materialRepo.GetAll()
                 .Include(m => m.Subject)
@@ -134,19 +130,21 @@ namespace Logic.Logic
                     .ThenInclude(u => u.Image)
                 .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(name))
-                query = query.Where(m => m.Title.Contains(name));
+            if (!string.IsNullOrWhiteSpace(filter.Name))
+                query = query.Where(m => m.Title.Contains(filter.Name));
 
-            if (semester.HasValue)
-                query = query.Where(m => m.Subject.Semester == semester.Value);
+            if (filter.Semester.HasValue)
+                query = query.Where(m => m.Subject.Semester == filter.Semester.Value);
 
-            if (!string.IsNullOrWhiteSpace(fileType))
-                query = query.Where(m => m.Content.FileName.Contains(fileType));
+            if (!string.IsNullOrWhiteSpace(filter.FileType))
+                query = query.Where(m => m.Content.FileName.Contains(filter.FileType));
 
-            if (uploadDate.HasValue)
+            if (filter.UploadDate.HasValue)
             {
-                var date = uploadDate.Value.Date;
-                query = query.Where(m => m.UploadDate.Date == date);
+                var date = filter.UploadDate.Value.Date;
+                var nextDay = date.AddDays(1);
+
+                query = query.Where(m => m.UploadDate >= date && m.UploadDate < nextDay);
             }
 
                 var materials = await query.ToListAsync();
