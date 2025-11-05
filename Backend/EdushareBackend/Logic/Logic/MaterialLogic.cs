@@ -124,7 +124,8 @@ namespace Logic.Logic
         public async Task<IEnumerable<MaterialViewDto>> GetFilteredMaterialsAsync(
             string? name,
             int? semester,
-            string? fileType)
+            string? fileType,
+            DateTime? uploadDate)
         {
             var query = materialRepo.GetAll()
                 .Include(m => m.Subject)
@@ -142,7 +143,13 @@ namespace Logic.Logic
             if (!string.IsNullOrWhiteSpace(fileType))
                 query = query.Where(m => m.Content.FileName.Contains(fileType));
 
-            var materials = await query.ToListAsync();
+            if (uploadDate.HasValue)
+            {
+                var date = uploadDate.Value.Date;
+                query = query.Where(m => m.UploadDate.Date == date);
+            }
+
+                var materials = await query.ToListAsync();
 
             return materials.Select(m => dtoProviders.Mapper.Map<MaterialViewDto>(m));
         }

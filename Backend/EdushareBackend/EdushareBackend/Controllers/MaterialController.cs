@@ -100,9 +100,10 @@ namespace EdushareBackend.Controllers
         public async Task<IEnumerable<MaterialViewDto>> GetFilteredMaterialsAsync(
             string? name,
             int? semester,
-            string? fileType)
+            string? fileType,
+            DateTime? uploadDate)
         {
-            var materials = await materialLogic.GetFilteredMaterialsAsync(name, semester, fileType);
+            var materials = await materialLogic.GetFilteredMaterialsAsync(name, semester, fileType, uploadDate);
             return materials;
         }
 
