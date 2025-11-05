@@ -29,6 +29,11 @@ namespace Data
                 .HasOne(u => u.Uploader)
                 .WithMany(m => m.Materials);
 
+            modelBuilder.Entity<AppUser>()
+                .HasMany(u => u.FavouriteMaterials)
+                .WithMany(m => m.UsersWhoFavourited)
+                .UsingEntity(j => j.ToTable("AppUserFavouriteMaterials"));
+
 
             base.OnModelCreating(modelBuilder);
         }
