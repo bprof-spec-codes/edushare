@@ -50,9 +50,9 @@ update-database
 
 | Role | Email | Password |
 |---|---|---|
-| Admin | admin@gmail.com | password |
+| Admin | molnar.tamas@example.com | 123123123 |
 | Teacher | testteacher@gmail.com | test |
-| Student | teststudent@gmail.com | test |
+| Student | toth.milan@example.com | 123123123 |
 
 > Seeded users, subjects and materials are included.
 
@@ -86,15 +86,23 @@ update-database
 
 | Endpoint | Method | Description |
 |---|---|---|
-| `/api/auth/login` | POST | User login |
-| `/api/auth/register` | POST | User registration |
-| `/api/materials` | GET | List materials |
-| `/api/materials/upload` | POST | Upload material |
-| `/api/materials/{id}/rate` | POST | Rate a material |
-| `/api/materials/{id}/comment` | POST | Comment on a material |
-| `/api/favourites` | GET | Get favourite materials |
-| `/api/admin/moderate` | DELETE | Remove material/comment |
-| `/api/admin/stats` | GET | Admin statistics |
+| `/api/user/login` | POST | User login |
+| `/api/user/register` | POST | User registration |
+| `/api/user` | GET | List users |
+| `/api/user/{id}` | GET | List user by ID |
+| `/api/user/{id}` | PUT | Update user |
+| `/api/user/{id}` | DELETE | Delete user |
+| `/api/user/grantadmin/{userid}` | GET | Give admin |
+| `/api/user/grantteacher/{userid}` | GET | Give teacher |
+| `/api/user/revokerole/{userid}` | GET | Delete roles |
+| `/api/material` | GET | List materials |
+| `/api/material/{id}` | GET | List material by ID |
+| `/api/material` | POST | Upload material |
+| `/api/material/{id}` | DELETE | Delete material |
+| `/api/material/{id}` | PUT | Update material |
+| `/api/material/{id}/recommended` | PUT | Recommended status changes |
+| `/api/material` | POST | Upload material |
+
 
 > Full API is available via Swagger UI.
 
