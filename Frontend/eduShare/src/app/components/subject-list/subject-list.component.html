@@ -1,0 +1,53 @@
+<div class="container py-3 w-50">
+    <div class="d-flex align-items-center gap-3 mb-2">
+        <h2 class="m-0">Subject list</h2>
+        <span *ngIf="(subjects$ | async)?.length as count" class="badge count">{{ count }}</span>
+    </div>
+    <hr>
+
+    <div *ngIf="loading" class="text-center text-secondary my-4">Loading...</div>
+    <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+
+    <ul *ngIf="!loading" class="list-group shadow-sm rounded-3 overflow-hidden">
+        <ng-container *ngFor="let subject of subjects$ | async">
+
+            <li *ngIf="editingId!== subject.id"
+                class="list-group-item d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="fw-medium">{{ subject.name }}</span>
+                    <span class="badge text-bg-light border">{{ subject.semester }}</span>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" (click)="startEdit(subject)" class="btn btn-outline-edupurple btn-sm" aria-label="Edit">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button type="button" (click)="deleteSubject(subject.id)" class="btn btn-outline-danger btn-sm"
+                        aria-label="Delete">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </li>
+
+            <app-subject-update-form 
+                *ngIf="editingId === subject.id" 
+                [subject]="subject"
+                [saving]="savingId === subject.id" 
+                (save)="handleEdit($event,subject.id)" 
+                (cancel)="cancelEdit()">
+            </app-subject-update-form>
+
+        </ng-container>
+        <li class="list-group-item list-group-item-action text-center d-flex align-items-center justify-content-center"
+            (click)="openCreate()" role="button">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-plus-lg fs-4 plus"></i>
+                <span class="visually-hidden">Add subject</span>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<app-subject-create-modal [open]="createOpen" [loading]="creating" [error]="createError" (save)="handleCreate($event)"
+    (close)="closeCreate()">
+</app-subject-create-modal>

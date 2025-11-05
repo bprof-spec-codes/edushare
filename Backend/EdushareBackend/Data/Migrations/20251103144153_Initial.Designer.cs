@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251001174046_SetupMigration")]
-    partial class SetupMigration
+    [Migration("20251103144153_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,10 +56,13 @@ namespace Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(1500)
+                        .HasColumnType("nvarchar(1500)");
 
-                    b.Property<string>("Subject")
+                    b.Property<bool>("IsRecommended")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SubjectId")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -79,9 +82,30 @@ namespace Data.Migrations
 
                     b.HasIndex("ContentId");
 
+                    b.HasIndex("SubjectId");
+
                     b.HasIndex("UploaderId");
 
                     b.ToTable("Materials");
+                });
+
+            modelBuilder.Entity("Entities.Models.Subject", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Semester")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -319,11 +343,19 @@ namespace Data.Migrations
                         .WithMany()
                         .HasForeignKey("ContentId");
 
+                    b.HasOne("Entities.Models.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entities.Models.AppUser", "Uploader")
                         .WithMany("Materials")
                         .HasForeignKey("UploaderId");
 
                     b.Navigation("Content");
+
+                    b.Navigation("Subject");
 
                     b.Navigation("Uploader");
                 });

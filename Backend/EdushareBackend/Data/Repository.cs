@@ -15,27 +15,30 @@ namespace Data
         {
             this.ctx = ctx;
         }
+        public Repository()
+        {
+        }
 
-        public void Add(T entity)
+        public virtual void Add(T entity)
         {
             ctx.Set<T>().Add(entity);
             ctx.SaveChanges();
         }
 
-        public void DeleteById(string id)
+        public virtual void DeleteById(string id)
         { 
             var entity = FindById(id);
             ctx.Set<T>().Remove(entity);
             ctx.SaveChanges();
         }
 
-        public void Delete(T entity)
+        public virtual void Delete(T entity)
         { 
             ctx.Set<T>().Remove(entity);
             ctx.SaveChanges();
         }
 
-        public void Update(T entity)
+        public virtual void Update(T entity)
         { 
             var old = FindById(entity.Id);
             foreach (var prop in typeof(T).GetProperties())
@@ -46,12 +49,12 @@ namespace Data
             ctx.SaveChanges();
         }
 
-        public T FindById(string id)
+        public virtual T FindById(string id)
         { 
             return ctx.Set<T>().First(e => e.Id == id);
         }
 
-        public IQueryable<T> GetAll()
+        public virtual IQueryable<T> GetAll()
         {
             return ctx.Set<T>();
         }
