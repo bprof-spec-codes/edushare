@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -225,6 +225,35 @@ namespace Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AppUserFavouriteMaterials",
+                columns: table => new
+                {
+                    FavouriteMaterialsId = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    UsersWhoFavouritedId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUserFavouriteMaterials", x => new { x.FavouriteMaterialsId, x.UsersWhoFavouritedId });
+                    table.ForeignKey(
+                        name: "FK_AppUserFavouriteMaterials_AspNetUsers_UsersWhoFavouritedId",
+                        column: x => x.UsersWhoFavouritedId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppUserFavouriteMaterials_Materials_FavouriteMaterialsId",
+                        column: x => x.FavouriteMaterialsId,
+                        principalTable: "Materials",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppUserFavouriteMaterials_UsersWhoFavouritedId",
+                table: "AppUserFavouriteMaterials",
+                column: "UsersWhoFavouritedId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -288,6 +317,9 @@ namespace Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AppUserFavouriteMaterials");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
