@@ -16,6 +16,7 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { SubjectListComponent } from './components/subject-list/subject-list.component';
 import { roleGuard } from './guards/role.guard';
+import { FavMaterialsComponent } from './components/fav-materials/fav-materials.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -39,7 +40,8 @@ const routes: Routes = [
       { path: 'profile-list', component: ProfileListComponent },
       { path: 'profile-view/:id', component: ProfileViewComponent },
       { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard] },
-      { path: 'subjects', component: SubjectListComponent, canActivate: [roleGuard], data: { roles: ['Teacher', 'Admin'] } }
+      { path: 'subjects', component: SubjectListComponent, canActivate: [roleGuard], data: { roles: ['Teacher', 'Admin'] } },
+      { path: 'fav-materials', component: FavMaterialsComponent, canActivate: [AuthGuard] }
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
