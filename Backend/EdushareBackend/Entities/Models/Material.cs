@@ -35,5 +35,6 @@ namespace Entities.Models
 
         public bool IsRecommended { get; set; } = false;
 
+
     }
 }
