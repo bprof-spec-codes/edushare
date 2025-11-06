@@ -89,6 +89,14 @@ export class AuthService {
     return roles
   }
 
+  isTeacher():boolean{
+    return this.getRoles().includes('Teacher');
+  }
+  
+  isAdmin():boolean{
+    return this.getRoles().includes('Admin');
+  }
+ 
   getUserId(): string | null {
     const token = this.getToken();
     if (!token) return null;

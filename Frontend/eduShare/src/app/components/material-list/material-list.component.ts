@@ -11,12 +11,15 @@ import { Router } from '@angular/router';
 })
 export class MaterialListComponent {
   materials: MaterialShortViewDto[] = []
+  recommendedMaterials: MaterialShortViewDto[] = []
+  nonRecommendedMaterials: MaterialShortViewDto[] = [];
   loading = false
   error?: string
 
   constructor(private materialService: MaterialService, private router: Router) { }
   ngOnInit(): void {
     this.loadMaterials()
+    
   }
 
   loadMaterials(): void {
@@ -24,6 +27,8 @@ export class MaterialListComponent {
     this.materialService.loadAll().subscribe({
       next: (data) => {
         this.materials = data
+        this.recommendedMaterials = data.filter(m => m.isRecommended)
+        this.nonRecommendedMaterials = data.filter(m => !m.isRecommended)
         this.loading = false
       },
       error: (err) => {

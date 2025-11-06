@@ -1,10 +1,11 @@
 <div class="card-container">
     <div class="card-background" *ngFor="let material of m">
-        <div class="title">{{material.title}}</div>
+        <div class="isrecommended" *ngIf="material.isRecommended"><i class="bi bi-pin-angle-fill fs-3  position-absolute "></i></div>
+        <div class="title" *ngIf="material.uploader.image?.file">{{material.title}}</div>
         <div class="datas">
             <div class="icon-data">
                 <i class="bi bi-book book"></i>
-                <div class="subject">{{material.subject.name}}</div>
+                <div class="subject">{{material.subject}}</div>
             </div>
             <div class="icon-data">
                 <img *ngIf="material.uploader.image?.file" [src]="material.uploader.image.file.startsWith('http')

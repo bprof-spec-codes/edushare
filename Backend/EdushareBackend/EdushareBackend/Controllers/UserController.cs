@@ -84,6 +84,7 @@ namespace EdushareBackend.Controllers
                     Id = m.Id,
                     Title = m.Title,
                     Subject = m.Subject,
+                    IsRecommended = m.IsRecommended,
                     Uploader = new AppUserMaterialShortViewDto
                     {
                         Id = user.Id,
