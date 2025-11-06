@@ -25,4 +25,13 @@ export class FavMaterialService {
       })
     )
   }
+
+  setFavouriteMaterial(id: string): Observable<MaterialShortViewDto>{
+    return this.http.post<MaterialShortViewDto>(`${this.apiBaseUrl}/setFavouriteMaterial`, id, { headers: { 'Content-Type': 'text/plain' } }).pipe(
+      tap(newFav => {
+        const current = this._favMaterials$.value
+        this._favMaterials$.next([...current, newFav])
+      })
+    )
+  }
 }
