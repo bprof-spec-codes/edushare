@@ -14,23 +14,31 @@ export class FavMaterialService {
   private _favMaterials$ = new BehaviorSubject<MaterialShortViewDto[]>([])
   public favMaterials$ = this._favMaterials$.asObservable()
 
+  constructor(private http: HttpClient) { }
 
-
-  constructor(private http: HttpClient) {}
-
-  getAll():Observable<MaterialShortViewDto[]>{
+  getAll(): Observable<MaterialShortViewDto[]> {
     return this.http.get<MaterialShortViewDto[]>(`${this.apiBaseUrl}/favouriteMaterials`).pipe(
-      tap( favMaterials =>{
+      tap(favMaterials => {
         this._favMaterials$.next(favMaterials)
       })
     )
   }
 
-  setFavouriteMaterial(id: string): Observable<MaterialShortViewDto>{
-    return this.http.post<MaterialShortViewDto>(`${this.apiBaseUrl}/setFavouriteMaterial`, id, { headers: { 'Content-Type': 'text/plain' } }).pipe(
-      tap(newFav => {
+  setFavouriteMaterial(id: string, material: MaterialShortViewDto): Observable<void> {
+    return this.http.post<void>(`${this.apiBaseUrl}/setFavouriteMaterial/${id}`, {}).pipe(
+      tap(() => {
         const current = this._favMaterials$.value
-        this._favMaterials$.next([...current, newFav])
+        this._favMaterials$.next([...current, material])
+      })
+    )
+  }
+
+  removeFavouriteMaterial(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiBaseUrl}/removeFavouriteMaterial/${id}`).pipe(
+      tap(() => {
+        const current = this._favMaterials$.value
+        const next = current.filter(m => m.id !== id)
+        this._favMaterials$.next(next)
       })
     )
   }

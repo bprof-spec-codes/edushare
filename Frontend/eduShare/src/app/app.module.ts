@@ -28,6 +28,7 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { SubjectListComponent } from './components/subject-list/subject-list.component';
 import { SubjectCreateModalComponent } from './components/subject-create-modal/subject-create-modal.component';
 import { SubjectUpdateFormComponent } from './components/subject-update-form/subject-update-form.component';
+import { FavMaterialsComponent } from './components/fav-materials/fav-materials.component';
 
 
 @NgModule({
@@ -50,6 +51,7 @@ import { SubjectUpdateFormComponent } from './components/subject-update-form/sub
     SubjectListComponent,
     SubjectCreateModalComponent,
     SubjectUpdateFormComponent,
+    FavMaterialsComponent,
   ],
   imports: [
     BrowserModule,

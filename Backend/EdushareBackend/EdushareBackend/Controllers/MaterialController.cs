@@ -1,12 +1,9 @@
-﻿using Entities.Dtos.Content;
-using Entities.Dtos.Material;
-using Entities.Dtos.User;
+﻿using Entities.Dtos.Material;
 using Entities.Models;
 using Logic.Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections;
 using System.Security.Claims;
 
 namespace EdushareBackend.Controllers
@@ -97,19 +94,21 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPost("searchMaterials")]
-        public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync( [FromBody] MaterialFilterDto filter)
+        public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync([FromBody] MaterialFilterDto filter)
         {
             var materials = await materialLogic.GetFilteredMaterialsAsync(filter);
             return materials;
         }
 
-        [HttpPost("setFavouriteMaterial")]
+        [HttpPost("setFavouriteMaterial/{materialId}")]
         [Authorize]
-        public async Task SetFavouriteMaterial([FromBody] string materialId)
-        { 
+        public async Task<IActionResult> SetFavouriteMaterial([FromRoute] string materialId)
+        {
             AppUser currentUser = await UserManager.GetUserAsync(User);
 
             await materialLogic.SetFavouriteMaterial(materialId, currentUser);
+
+            return NoContent();
         }
 
         [HttpGet("favouriteMaterials")]
@@ -124,12 +123,13 @@ namespace EdushareBackend.Controllers
             return materials;
         }
 
-        [HttpDelete("removeFavouriteMaterial")]
+        [HttpDelete("removeFavouriteMaterial/{materialId}")]
         [Authorize]
-        public async Task RemoveFavouriteMaterial([FromBody] string materialId)
+        public async Task<IActionResult> RemoveFavouriteMaterial([FromRoute] string materialId)
         {
             AppUser currentUser = await UserManager.GetUserAsync(User);
             await materialLogic.RemoveFavouriteMaterial(materialId, currentUser);
+            return NoContent();
         }
 
 
