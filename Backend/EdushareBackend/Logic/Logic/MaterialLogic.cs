@@ -3,6 +3,7 @@ using Entities.Dtos.Material;
 using Entities.Helpers;
 using Entities.Models;
 using Logic.Helper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,13 +19,16 @@ namespace Logic.Logic
         Repository<Material> materialRepo;
         DtoProviders dtoProviders;
         Repository<Subject> subjectRepo;
+        UserManager<AppUser> userManager;
 
-        public MaterialLogic(Repository<Material> repo, DtoProviders dtoProviders, Repository<AppUser> appRepo, Repository<Subject> subjectRepo)
+
+        public MaterialLogic(Repository<Material> repo, DtoProviders dtoProviders, Repository<AppUser> appRepo, Repository<Subject> subjectRepo, UserManager<AppUser> userManager)
         {
             this.materialRepo = repo;
             this.dtoProviders = dtoProviders;
             this.appuserRepo = appRepo;
             this.subjectRepo = subjectRepo;
+            this.userManager = userManager;
         }
 
         public void AddMaterial(MaterialCreateUpdateDto material, string id)
@@ -150,6 +154,51 @@ namespace Logic.Logic
                 var materials = await query.ToListAsync();
 
             return materials.Select(m => dtoProviders.Mapper.Map<MaterialShortViewDto>(m));
+        }
+
+        public async Task SetFavouriteMaterial(string materialId, AppUser user)
+        {
+            Material newFavourite = materialRepo.FindById(materialId);
+
+            user.FavouriteMaterials.Add(newFavourite);
+
+            await userManager.UpdateAsync(user);
+        }
+
+        public async Task<IEnumerable<MaterialShortViewDto>> GetFavouriteMaterials(AppUser user)
+        {
+            var dbUser = await appuserRepo.GetAll()
+                .Include(u => u.FavouriteMaterials)
+                    .ThenInclude(m => m.Subject)
+                .Include(u => u.FavouriteMaterials)
+                    .ThenInclude(m => m.Uploader)
+                        .ThenInclude(u => u.Image)
+                .FirstOrDefaultAsync(u => u.Id == user.Id);
+
+            if (dbUser?.FavouriteMaterials == null)
+                return Enumerable.Empty<MaterialShortViewDto>();
+
+            return dbUser.FavouriteMaterials
+                .Select(m => dtoProviders.Mapper.Map<MaterialShortViewDto>(m));
+        }
+
+        public async Task RemoveFavouriteMaterial(string materialId, AppUser user)
+        {
+            var dbUser = await userManager.Users
+                .Include(u => u.FavouriteMaterials)
+                .FirstOrDefaultAsync(u => u.Id == user.Id);
+
+            if (dbUser == null || dbUser.FavouriteMaterials == null)
+                throw new Exception("User or favourites not found");
+
+            var materialToRemove = dbUser.FavouriteMaterials
+                .FirstOrDefault(m => m.Id == materialId);
+
+            if (materialToRemove != null)
+            {
+                dbUser.FavouriteMaterials.Remove(materialToRemove);
+                await userManager.UpdateAsync(dbUser);
+            }
         }
 
 

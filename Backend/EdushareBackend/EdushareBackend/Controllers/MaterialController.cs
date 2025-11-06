@@ -103,6 +103,36 @@ namespace EdushareBackend.Controllers
             return materials;
         }
 
+        [HttpPost("setFavouriteMaterial")]
+        [Authorize]
+        public async Task SetFavouriteMaterial([FromBody] string materialId)
+        { 
+            AppUser currentUser = await UserManager.GetUserAsync(User);
+
+            await materialLogic.SetFavouriteMaterial(materialId, currentUser);
+        }
+
+        [HttpGet("favouriteMaterials")]
+        [Authorize]
+        public async Task<IEnumerable<MaterialShortViewDto>> GetFavouriteMaterials()
+        {
+            var currentUser = await UserManager.GetUserAsync(User);
+            if (currentUser == null)
+                return Enumerable.Empty<MaterialShortViewDto>();
+
+            var materials = await materialLogic.GetFavouriteMaterials(currentUser);
+            return materials;
+        }
+
+        [HttpDelete("removeFavouriteMaterial")]
+        [Authorize]
+        public async Task RemoveFavouriteMaterial([FromBody] string materialId)
+        {
+            AppUser currentUser = await UserManager.GetUserAsync(User);
+            await materialLogic.RemoveFavouriteMaterial(materialId, currentUser);
+        }
+
+
 
 
 
