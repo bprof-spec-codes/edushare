@@ -16,6 +16,8 @@ export class MaterialService {
 
   private materialShortSubject = new BehaviorSubject<MaterialShortViewDto[]>([])
   public materialsShort$ = this.materialShortSubject.asObservable()
+
+  public searchDto = new SearchDto()
   
 
   constructor(private http: HttpClient) { }
@@ -66,10 +68,10 @@ export class MaterialService {
     );
   }
 
-  searchMaterials(searchDto: SearchDto): Observable<MaterialShortViewDto[]> {
-    console.log('Küldött body:', JSON.stringify(searchDto));
+  searchMaterials(): Observable<MaterialShortViewDto[]> {
+    console.log('Küldött body:', JSON.stringify(this.searchDto));
 
-    return this.http.post<MaterialShortViewDto[]>(this.apiBaseUrl + "/searchMaterials", searchDto).pipe(
+    return this.http.post<MaterialShortViewDto[]>(this.apiBaseUrl + "/searchMaterials", this.searchDto).pipe(
       tap(m => this.materialShortSubject.next(m))
     )
   }

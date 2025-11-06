@@ -29,6 +29,7 @@ import { SubjectListComponent } from './components/subject-list/subject-list.com
 import { SubjectCreateModalComponent } from './components/subject-create-modal/subject-create-modal.component';
 import { SubjectUpdateFormComponent } from './components/subject-update-form/subject-update-form.component';
 import { SearchbarComponent } from './components/searchbar/searchbar.component';
+import { MaterialSearchListComponent } from './components/material-search-list/material-search-list.component';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { SearchbarComponent } from './components/searchbar/searchbar.component';
     SubjectListComponent,
     SubjectCreateModalComponent,
     SubjectUpdateFormComponent,
-    SearchbarComponent
+    SearchbarComponent,
+    MaterialSearchListComponent
     
   ],
   imports: [

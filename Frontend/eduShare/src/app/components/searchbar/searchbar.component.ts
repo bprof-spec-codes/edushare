@@ -31,6 +31,23 @@ export class SearchbarComponent implements OnInit{
       title: [""]
     })
 
+    const savedState = this.materialService.searchDto
+
+    if (savedState) {
+      this.form.patchValue({
+        title: savedState.name,
+        semester: savedState.semester,
+        uploader: savedState.uploaderId,
+        subject: savedState.subjectId
+      })
+    }
+
+    if (savedState.semester === 0 || savedState.semester === null) {
+      this.form.patchValue({
+        semester: "0"
+      })
+    }
+
     this.subjects$ = this.subjectService.getAllSubjects().pipe(
       map(subjects => subjects.slice().sort((a, b) => a.name.localeCompare(b.name)))
     );
@@ -48,11 +65,11 @@ export class SearchbarComponent implements OnInit{
       const {title, subject, semester, uploader} = this.form.value
       const searchDto = new SearchDto(title, semester === "0" ? null : Number(semester), subject, uploader)
 
-      console.log(searchDto)
+      this.materialService.searchDto = searchDto
 
-      this.materialService.searchMaterials(searchDto).subscribe({
+      this.materialService.searchMaterials().subscribe({
         next: () => {
-          this.router.navigate([""])
+          this.router.navigate(["/material-search"])
         },
         error: (err) => console.error("Hiba a keresésnél:", err)
       });
