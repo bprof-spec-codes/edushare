@@ -1,1 +1,3 @@
-<pre>{{ favMaterials$ | async | json }}</pre>
+<ng-container *ngIf="favMaterials$ | async as favs">
+    <app-material-card [m]="favs"></app-material-card>
+</ng-container>

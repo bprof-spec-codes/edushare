@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Material } from '../../models/material';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 import { Router, RouterLink } from '@angular/router';
@@ -14,6 +14,12 @@ export class MaterialCardComponent {
   constructor(private router: Router, private profileService: ProfileService) { }
 
   @Input() m!: MaterialShortViewDto[];
+  @Input() isFavourite!: boolean
+  @Output() isFavouriteChange = new EventEmitter<MaterialShortViewDto>()
+
+  toggleFavourite(material: MaterialShortViewDto) {
+    this.isFavouriteChange.emit(material)
+  }
 
   openMaterial(material: MaterialShortViewDto){
     this.router.navigate(['/materials/' + material.id + '/view'])

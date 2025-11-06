@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FavMaterialService } from '../../services/fav-material.service';
 import { Observable } from 'rxjs';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
@@ -7,15 +7,21 @@ import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
   selector: 'app-fav-materials',
   standalone: false,
   templateUrl: './fav-materials.component.html',
-  styleUrl: './fav-materials.component.sass'
+  styleUrls: ['./fav-materials.component.sass']
 })
-export class FavMaterialsComponent {
+export class FavMaterialsComponent implements OnInit {
   public favMaterials$: Observable<MaterialShortViewDto[]> = new Observable<MaterialShortViewDto[]>()
 
-  constructor(public favMatService: FavMaterialService) {
-    this.favMatService.getAll().subscribe()
-    this.favMaterials$ = this.favMatService.favMaterials$
-   }
+  constructor(public favMatService: FavMaterialService) {}
 
-
+  ngOnInit(): void {
+    this.favMatService.getAll().subscribe({
+      next: () => {
+        this.favMaterials$ = this.favMatService.favMaterials$
+      },
+      error: (error) => {
+        console.error('Error loading favorite materials:', error)
+      }
+    })
+  }
 }
