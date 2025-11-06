@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { concatWith, map, Observable, of } from 'rxjs';
 import { Subject } from '../../models/subject';
 import { SubjectService } from '../../services/subject.service';
@@ -16,6 +16,8 @@ import { MaterialService } from '../../services/material.service';
   styleUrl: './searchbar.component.sass'
 })
 export class SearchbarComponent implements OnInit{
+  @Output() isInSearch = new EventEmitter<boolean>
+  
   subjects$ = new Observable<Subject[]>()
   semesters$ = new Observable<number[]>()
   uploaders$ = new Observable<Profile[]>()
@@ -31,23 +33,6 @@ export class SearchbarComponent implements OnInit{
       title: [""]
     })
 
-    const savedState = this.materialService.searchDto
-
-    if (savedState) {
-      this.form.patchValue({
-        title: savedState.name,
-        semester: savedState.semester,
-        uploader: savedState.uploaderId,
-        subject: savedState.subjectId
-      })
-    }
-
-    if (savedState.semester === 0 || savedState.semester === null) {
-      this.form.patchValue({
-        semester: "0"
-      })
-    }
-
     this.subjects$ = this.subjectService.getAllSubjects().pipe(
       map(subjects => subjects.slice().sort((a, b) => a.name.localeCompare(b.name)))
     );
@@ -62,14 +47,16 @@ export class SearchbarComponent implements OnInit{
 
   search() {
     if (this.form.valid) {
+      if (this.isDefaultForm()) {
+        this.isInSearch.emit(false)
+        return
+      }
       const {title, subject, semester, uploader} = this.form.value
       const searchDto = new SearchDto(title, semester === "0" ? null : Number(semester), subject, uploader)
 
-      this.materialService.searchDto = searchDto
-
-      this.materialService.searchMaterials().subscribe({
+      this.materialService.searchMaterials(searchDto).subscribe({
         next: () => {
-          this.router.navigate(["/material-search"])
+          this.isInSearch.emit(true)
         },
         error: (err) => console.error("Hiba a keresésnél:", err)
       });

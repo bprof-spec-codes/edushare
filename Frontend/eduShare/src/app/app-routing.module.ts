@@ -34,7 +34,7 @@ const routes: Routes = [
     component: MainLayoutComponent,
     children: [
       { path: 'homepage', component: HomepageComponent },
-      { path: 'materials', component: MaterialListComponent },
+      { path: 'materials', component: MainlistComponent },
       { path: 'materials/create', component: MaterialCreateComponent, canActivate: [AuthGuard] },
       { path: 'materials/:id/update', component: MaterialUpdateComponent, canActivate: [AuthGuard] },
       { path: 'materials/:id/view', component: MaterialViewComponent },
@@ -43,7 +43,6 @@ const routes: Routes = [
       { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard] },
       { path: 'subjects', component: SubjectListComponent, canActivate: [roleGuard], data: { roles: ['Teacher', 'Admin'] } },
       { path: 'material-search', component: MaterialSearchListComponent},
-      { path: 'mainlist', component: MainlistComponent}
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
