@@ -5,7 +5,7 @@
         <div class="datas">
             <div class="icon-data">
                 <i class="bi bi-book book"></i>
-                <div class="subject">{{material.subject}}</div>
+                <div class="subject">{{material.subject.name}}</div>
             </div>
             <div class="icon-data">
                 <img *ngIf="material.uploader.image?.file" [src]="material.uploader.image.file.startsWith('http')
