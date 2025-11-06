@@ -1,15 +1,27 @@
 <form>
     <div>
         <label>Subject</label>
-        <select class="form-select subject-select"></select>
+        <select class="form-select subject-select">
+            <option value="">Any</option>
+            <option *ngFor="let subject of subjects$ | async" [value]="subject.id">{{subject.name}}</option>
+        </select>
     </div>
     <div>
         <label>Semester</label>
-        <select class="form-select semester-select"></select>
+        <select class="form-select semester-select">
+            <option value="">Any</option>
+            <option *ngFor="let semester of semesters$ | async" [value]="semester">{{semester}}</option>
+        </select>
     </div>
     <div>
-        <label>Title / Description</label>
+        <label>Uploader</label>
+        <select class="form-select uploader-select">
+
+        </select>
+    </div>
+    <div>
+        <label>Title</label>
         <input type="text" class="form-control text-input">
     </div>
-    <button class="search-button">Search</button>
+    <button class="search-button" type="submit">Search</button>
 </form>
