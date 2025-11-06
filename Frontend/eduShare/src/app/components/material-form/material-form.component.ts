@@ -56,9 +56,9 @@ export class MaterialFormComponent implements OnInit {
     }
     fileControl?.updateValueAndValidity()
 
-    this.subjects$ = this.subjectService.subjects$.pipe(
+    this.subjects$ = this.subjectService.getAllSubjects().pipe(
       map(subjects => subjects.slice().sort((a, b) => a.name.localeCompare(b.name)))
-    )
+    );
   }
 
   get description() {

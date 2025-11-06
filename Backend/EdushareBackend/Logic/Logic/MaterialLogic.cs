@@ -15,7 +15,7 @@ namespace Logic.Logic
     public class MaterialLogic
     {
         Repository<AppUser> appuserRepo;
-         Repository<Material> materialRepo;
+        Repository<Material> materialRepo;
         DtoProviders dtoProviders;
         Repository<Subject> subjectRepo;
 
@@ -27,7 +27,7 @@ namespace Logic.Logic
             this.subjectRepo = subjectRepo;
         }
 
-        public void AddMaterial(MaterialCreateUpdateDto material , string id)
+        public void AddMaterial(MaterialCreateUpdateDto material, string id)
         {
             Material mat = dtoProviders.Mapper.Map<Material>(material);
             mat.Uploader = appuserRepo.FindById(id);
@@ -41,15 +41,17 @@ namespace Logic.Logic
 
             mat.Subject = subject;
 
+            
 
             if (material.Content != null)
             {
-                
+
                 mat.Content = new FileContent(
                     material.Content.FileName,
                     Convert.FromBase64String(material.Content.File)
                 );
             }
+
 
             materialRepo.Add(mat);
 
@@ -57,7 +59,7 @@ namespace Logic.Logic
         public IEnumerable<MaterialShortViewDto> GetAllMaterials()
         {
             return materialRepo.GetAll().Include(u => u.Subject).Include(u => u.Uploader).ThenInclude(u => u.Image).Select(x => dtoProviders.Mapper.Map<MaterialShortViewDto>(x));
-                
+
         }
         public void DeleteMaterialById(string id)
         {
@@ -74,19 +76,21 @@ namespace Logic.Logic
             var newSubject = subjectRepo.FindById(dto.SubjectId);
             old.Subject = newSubject;
 
+
             if (dto.Content != null)
             {
                 if (old.Content == null)
                 {
                     old.Content = new FileContent(
                         dto.Content.FileName,
-                        Convert.FromBase64String(dto.Content.File)
+                        Convert.FromBase64String(dto.Content.File)                   
                     );
                 }
                 else
                 {
                     old.Content.FileName = dto.Content.FileName;
                     old.Content.File = Convert.FromBase64String(dto.Content.File);
+                    
                 }
             }
 
@@ -115,6 +119,42 @@ namespace Logic.Logic
             material.IsRecommended = isRecommended;
             materialRepo.Update(material);
         }
+
+
+        public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync(MaterialFilterDto filter)
+        {
+            var query = materialRepo.GetAll()
+                .Include(m => m.Subject)
+                .Include(m => m.Content)
+                .Include(m => m.Uploader)
+                    .ThenInclude(u => u.Image)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filter.Name))
+                query = query.Where(m => m.Title.Contains(filter.Name));
+
+            if (filter.Semester.HasValue)
+                query = query.Where(m => m.Subject.Semester == filter.Semester.Value);
+
+            if (!string.IsNullOrWhiteSpace(filter.FileType))
+                query = query.Where(m => m.Content.FileName.Contains(filter.FileType));
+
+            if (filter.UploadDate.HasValue)
+            {
+                var date = filter.UploadDate.Value.Date;
+                var nextDay = date.AddDays(1);
+
+                query = query.Where(m => m.UploadDate >= date && m.UploadDate < nextDay);
+            }
+
+                var materials = await query.ToListAsync();
+
+            return materials.Select(m => dtoProviders.Mapper.Map<MaterialShortViewDto>(m));
+        }
+
+
+
+
 
     }
 }
