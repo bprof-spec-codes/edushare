@@ -30,6 +30,7 @@ import { SubjectCreateModalComponent } from './components/subject-create-modal/s
 import { SubjectUpdateFormComponent } from './components/subject-update-form/subject-update-form.component';
 import { SearchbarComponent } from './components/searchbar/searchbar.component';
 import { MaterialSearchListComponent } from './components/material-search-list/material-search-list.component';
+import { MainlistComponent } from './components/mainlist/mainlist.component';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { MaterialSearchListComponent } from './components/material-search-list/m
     SubjectCreateModalComponent,
     SubjectUpdateFormComponent,
     SearchbarComponent,
-    MaterialSearchListComponent
+    MaterialSearchListComponent,
+    MainlistComponent
     
   ],
   imports: [
