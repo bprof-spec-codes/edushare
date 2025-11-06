@@ -10,8 +10,9 @@ namespace Entities.Dtos.Material
     {
         public string? Name { get; set; }
         public int? Semester { get; set; }
-        public string? FileType { get; set; }
-        public DateTime? UploadDate { get; set; }
+        
+        public string? SubjectId { get; set; }
+        public string? UploaderId { get; set; }
 
     }
 }
