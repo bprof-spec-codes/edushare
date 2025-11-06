@@ -6,6 +6,7 @@ import { MaterialCreateDto } from '../dtos/material-create-dto';
 import { MaterialShortViewDto } from '../dtos/material-short-view-dto';
 import { MaterialViewDto } from '../dtos/material-view-dto';
 import { environment } from '../../environments/environment.development';
+import { SearchDto } from '../dtos/search-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -52,16 +53,24 @@ export class MaterialService {
       map(() => void 0)
     )
   }
- updateRecommended(id: string, isRecommended: boolean): Observable<void> {
-  return this.http.put<void>(`${this.apiBaseUrl}/${id}/recommended`, isRecommended).pipe(
-    tap(() => {
-      const current = this.materialShortSubject.getValue();
-      const updated = current.map(m =>
-        m.id === id ? { ...m, isRecommended } : m
-      );
-      this.materialShortSubject.next(updated);
-    })
-  );
-}
 
+  updateRecommended(id: string, isRecommended: boolean): Observable<void> {
+    return this.http.put<void>(`${this.apiBaseUrl}/${id}/recommended`, isRecommended).pipe(
+      tap(() => {
+        const current = this.materialShortSubject.getValue();
+        const updated = current.map(m =>
+          m.id === id ? { ...m, isRecommended } : m
+        );
+        this.materialShortSubject.next(updated);
+      })
+    );
+  }
+
+  searchMaterials(searchDto: SearchDto): Observable<MaterialShortViewDto[]> {
+    console.log('Küldött body:', JSON.stringify(searchDto));
+
+    return this.http.post<MaterialShortViewDto[]>(this.apiBaseUrl + "/searchMaterials", searchDto).pipe(
+      tap(m => this.materialShortSubject.next(m))
+    )
+  }
 }

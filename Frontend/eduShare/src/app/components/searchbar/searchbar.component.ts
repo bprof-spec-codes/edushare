@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { map, Observable, of } from 'rxjs';
+import { concatWith, map, Observable, of } from 'rxjs';
 import { Subject } from '../../models/subject';
 import { SubjectService } from '../../services/subject.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Profile } from '../../models/profile';
 import { ProfileService } from '../../services/profile.service';
 import { SearchDto } from '../../dtos/search-dto';
+import { Router } from '@angular/router';
+import { MaterialService } from '../../services/material.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -19,7 +21,7 @@ export class SearchbarComponent implements OnInit{
   uploaders$ = new Observable<Profile[]>()
   form!: FormGroup
 
-  constructor(private subjectService: SubjectService, private fb: FormBuilder, private profilService: ProfileService) { }
+  constructor(private subjectService: SubjectService, private fb: FormBuilder, private profilService: ProfileService, private router: Router, private materialService: MaterialService) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -44,9 +46,16 @@ export class SearchbarComponent implements OnInit{
   search() {
     if (this.form.valid) {
       const {title, subject, semester, uploader} = this.form.value
-      const searchDto = new SearchDto(title, semester, subject, uploader)
+      const searchDto = new SearchDto(title, semester === "0" ? null : Number(semester), subject, uploader)
 
       console.log(searchDto)
+
+      this.materialService.searchMaterials(searchDto).subscribe({
+        next: () => {
+          this.router.navigate([""])
+        },
+        error: (err) => console.error("Hiba a keresésnél:", err)
+      });
     }
   }
 
