@@ -28,6 +28,7 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { SubjectListComponent } from './components/subject-list/subject-list.component';
 import { SubjectCreateModalComponent } from './components/subject-create-modal/subject-create-modal.component';
 import { SubjectUpdateFormComponent } from './components/subject-update-form/subject-update-form.component';
+import { SearchbarComponent } from './components/searchbar/searchbar.component';
 
 
 @NgModule({
@@ -50,6 +51,8 @@ import { SubjectUpdateFormComponent } from './components/subject-update-form/sub
     SubjectListComponent,
     SubjectCreateModalComponent,
     SubjectUpdateFormComponent,
+    SearchbarComponent
+    
   ],
   imports: [
     BrowserModule,
