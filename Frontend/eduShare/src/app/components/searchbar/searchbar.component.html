@@ -1,27 +1,28 @@
-<form>
+<form [formGroup]="form" (ngSubmit)="search()">
     <div>
         <label>Subject</label>
-        <select class="form-select subject-select">
+        <select class="form-select subject-select" formControlName="subject">
             <option value="">Any</option>
             <option *ngFor="let subject of subjects$ | async" [value]="subject.id">{{subject.name}}</option>
         </select>
     </div>
     <div>
         <label>Semester</label>
-        <select class="form-select semester-select">
-            <option value="">Any</option>
+        <select class="form-select semester-select" formControlName="semester">
+            <option value="0">Any</option>
             <option *ngFor="let semester of semesters$ | async" [value]="semester">{{semester}}</option>
         </select>
     </div>
     <div>
         <label>Uploader</label>
-        <select class="form-select uploader-select">
-
+        <select class="form-select uploader-select" formControlName="uploader">
+            <option value="">Any</option>
+            <option *ngFor="let uploader of uploaders$ | async" [value]="uploader.id">{{uploader.fullName}}</option>
         </select>
     </div>
     <div>
         <label>Title</label>
-        <input type="text" class="form-control text-input">
+        <input type="text" class="form-control text-input" formControlName="title">
     </div>
-    <button class="search-button" type="submit">Search</button>
+    <button class="search-button" type="submit" [disabled]="isDefaultForm()">Search</button>
 </form>

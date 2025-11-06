@@ -12,20 +12,21 @@ import { environment } from '../../environments/environment.development';
 export class ProfileService {
   private apiBaseUrl = environment.baseApiUrl + '/api/User'
   
-    private profileShortSubject = new BehaviorSubject<ProfilListViewDto[]>([])
-    public profilessShort$ = this.profileShortSubject.asObservable()
+  private profileShortSubject = new BehaviorSubject<ProfilListViewDto[]>([])
+  public profilessShort$ = this.profileShortSubject.asObservable()
 
   constructor(private http: HttpClient) 
   { }
 
   loadAll(): Observable<ProfilListViewDto[]> {
-      return this.http.get<ProfilListViewDto[]>(this.apiBaseUrl).pipe(
-        tap(profiles => this.profileShortSubject.next(profiles))
-      )
+    return this.http.get<ProfilListViewDto[]>(this.apiBaseUrl).pipe(
+      tap(profiles => this.profileShortSubject.next(profiles))
+    )
+  }
+
+  getById(id: string): Observable<ProfileViewDto> {
+      return this.http.get<ProfileViewDto>(`${this.apiBaseUrl}/${id}`);
     }
-    getById(id: string): Observable<ProfileViewDto> {
-        return this.http.get<ProfileViewDto>(`${this.apiBaseUrl}/${id}`);
-      }
       
   update(id: string, profile: UpdateProfileDto): Observable<void> {
     return this.http.put<void>(`${this.apiBaseUrl}/${id}`, profile).pipe(
