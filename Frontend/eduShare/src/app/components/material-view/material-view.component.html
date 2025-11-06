@@ -74,7 +74,7 @@
             <button class="btn w-25 d-flex align-items-center justify-content-center file-button">
               Preview
             </button>
-            <button class="btn w-25 d-flex align-items-center justify-content-center file-button" *ngIf="auth.isTeacher()" (click)="recommendedMaterial(material.id)">
+            <button class="btn w-25 d-flex align-items-center justify-content-center file-button" *ngIf="auth.isAdmin() || auth.isTeacher()" (click)="recommendedMaterial(material.id)">
               <i class="bi bi-pin-angle-fill"></i> Recommended
             </button>
           </div>

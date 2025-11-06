@@ -1,17 +1,19 @@
 <div class="base-margin">
-  <h2 class="title">Recommended materials:</h2>
   <div *ngIf="!loading && recommendedMaterials.length">
+    <h2 class="title">Recommended materials:</h2>
     <app-material-card 
       [m]="recommendedMaterials">
     </app-material-card>
+  <hr>
   </div>
-    <hr>
-  <h2 class="title">Uploaded materials:</h2>
+    
+  
 
   <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
   <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
   
   <div *ngIf="!loading && nonRecommendedMaterials.length">
+    <h2 class="title">Uploaded materials:</h2>
     <app-material-card 
       [m]="nonRecommendedMaterials">
     </app-material-card>

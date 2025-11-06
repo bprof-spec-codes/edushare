@@ -85,7 +85,7 @@ export class AuthService {
         }
       }
     }
-    
+    console.log(roles)
     return roles
   }
 

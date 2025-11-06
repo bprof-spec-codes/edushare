@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251105210326_UserFavouriteMaterialProp")]
-    partial class UserFavouriteMaterialProp
+    [Migration("20251106103642_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("AppUserMaterial", b =>
+                {
+                    b.Property<string>("FavouriteMaterialsId")
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UsersWhoFavouritedId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("FavouriteMaterialsId", "UsersWhoFavouritedId");
+
+                    b.HasIndex("UsersWhoFavouritedId");
+
+                    b.ToTable("AppUserFavouriteMaterials", (string)null);
+                });
 
             modelBuilder.Entity("Entities.Helpers.FileContent", b =>
                 {
@@ -50,9 +65,6 @@ namespace Data.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ContentId")
                         .HasColumnType("nvarchar(50)");
@@ -82,8 +94,6 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("ContentId");
 
@@ -342,12 +352,23 @@ namespace Data.Migrations
                     b.HasDiscriminator().HasValue("AppUser");
                 });
 
+            modelBuilder.Entity("AppUserMaterial", b =>
+                {
+                    b.HasOne("Entities.Models.Material", null)
+                        .WithMany()
+                        .HasForeignKey("FavouriteMaterialsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersWhoFavouritedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Entities.Models.Material", b =>
                 {
-                    b.HasOne("Entities.Models.AppUser", null)
-                        .WithMany("FavouriteMaterials")
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("Entities.Helpers.FileContent", "Content")
                         .WithMany()
                         .HasForeignKey("ContentId");
@@ -431,8 +452,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Entities.Models.AppUser", b =>
                 {
-                    b.Navigation("FavouriteMaterials");
-
                     b.Navigation("Materials");
                 });
 #pragma warning restore 612, 618
