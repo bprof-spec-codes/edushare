@@ -134,22 +134,29 @@ namespace Logic.Logic
                     .ThenInclude(u => u.Image)
                 .AsQueryable();
 
+            
+
             if (!string.IsNullOrWhiteSpace(filter.Name))
-                query = query.Where(m => m.Title.Contains(filter.Name));
+            {
+                var lowerName = filter.Name.ToLower();
+                query = query.Where(m => m.Title.ToLower().Contains(lowerName));
+            }
+                
 
             if (filter.Semester.HasValue)
                 query = query.Where(m => m.Subject.Semester == filter.Semester.Value);
 
-            if (!string.IsNullOrWhiteSpace(filter.FileType))
-                query = query.Where(m => m.Content.FileName.Contains(filter.FileType));
-
-            if (filter.UploadDate.HasValue)
+            if(!string.IsNullOrWhiteSpace(filter.SubjectId))
             {
-                var date = filter.UploadDate.Value.Date;
-                var nextDay = date.AddDays(1);
-
-                query = query.Where(m => m.UploadDate >= date && m.UploadDate < nextDay);
+                query = query.Where(m => m.SubjectId == filter.SubjectId);
             }
+
+            if(!string.IsNullOrWhiteSpace(filter.UploaderId))
+            {
+                query = query.Where(m => m.Uploader.Id == filter.UploaderId);
+            }
+
+
 
                 var materials = await query.ToListAsync();
 
