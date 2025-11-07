@@ -29,6 +29,9 @@ import { SubjectListComponent } from './components/subject-list/subject-list.com
 import { SubjectCreateModalComponent } from './components/subject-create-modal/subject-create-modal.component';
 import { SubjectUpdateFormComponent } from './components/subject-update-form/subject-update-form.component';
 import { FavMaterialsComponent } from './components/fav-materials/fav-materials.component';
+import { SearchbarComponent } from './components/searchbar/searchbar.component';
+import { MaterialSearchListComponent } from './components/material-search-list/material-search-list.component';
+import { MainlistComponent } from './components/mainlist/mainlist.component';
 
 
 @NgModule({
@@ -52,6 +55,9 @@ import { FavMaterialsComponent } from './components/fav-materials/fav-materials.
     SubjectCreateModalComponent,
     SubjectUpdateFormComponent,
     FavMaterialsComponent,
+    MaterialSearchListComponent,
+    SearchbarComponent,
+    MainlistComponent
   ],
   imports: [
     BrowserModule,

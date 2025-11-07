@@ -1,0 +1,60 @@
+@use '../../../styles/_variables' as *
+    
+form
+    display: flex
+    justify-content: flex-end
+    gap: 10px
+
+.subject-select
+    width: 200px
+
+.semester-select
+    width: 80px
+
+.uploader-select
+    width: 200px
+
+.text-input
+    width: 350px
+
+.form-select, .form-control
+    background-color: #fff
+    color: #212529
+    border: 1px solid rgba(0,0,0,.15)
+    &:focus
+        outline: 0
+        box-shadow: 0 0 0 .25rem rgba(255,255,255,.25)
+        border-color: rgba(0,0,0,.25)
+
+.search-button
+    width: 80px
+    height: 38px
+    margin-top: 24px
+    background-color: $card-font-puprle
+    border-radius: 10px
+    border: 0px
+    color: white 
+    font-size: 16px
+    transition-duration: 0.3s
+
+.search-button:hover
+    background-color: $button-hover
+    transition-duration: 0.3s
+
+.search-button:disabled
+    background-color: #a0a0a0 
+
+.reset-button
+    width: 80px
+    height: 38px
+    margin-top: 24px
+    background-color: $card-font-puprle
+    border-radius: 10px
+    border: 0px
+    color: white 
+    font-size: 16px
+    transition-duration: 0.3s
+
+.reset-button:hover
+    background-color: $button-hover
+    transition-duration: 0.3s
