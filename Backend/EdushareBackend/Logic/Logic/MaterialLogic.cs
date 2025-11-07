@@ -124,6 +124,14 @@ namespace Logic.Logic
             materialRepo.Update(material);
         }
 
+        public void SetExamStatus(string id, bool isExam)
+        {
+            var material = materialRepo.FindById(id);
+            if (material == null)
+                throw new Exception("Material not found");
+            material.IsExam = isExam;
+            materialRepo.Update(material);
+        }
 
         public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync(MaterialFilterDto filter)
         {
@@ -175,9 +183,9 @@ namespace Logic.Logic
         public async Task<IEnumerable<MaterialShortViewDto>> GetFavouriteMaterials(AppUser user)
         {
             var dbUser = await appuserRepo.GetAll()
-                .Include(u => u.FavouriteMaterials)
+                .Include(u => u.FavouriteMaterials)!
                     .ThenInclude(m => m.Subject)
-                .Include(u => u.FavouriteMaterials)
+                .Include(u => u.FavouriteMaterials)!
                     .ThenInclude(m => m.Uploader)
                         .ThenInclude(u => u.Image)
                 .FirstOrDefaultAsync(u => u.Id == user.Id);

@@ -95,6 +95,12 @@ namespace EdushareBackend.Controllers
         {
             materialLogic.SetRecommendationStatus(id, isRecommended);
         }
+        [HttpPatch("{id}/exam")]
+        [Authorize(Roles = "Teacher,Admin")]
+        public void SetMaterialExamStatus(string id, [FromBody] bool isExam)
+        {
+            materialLogic.SetExamStatus(id, isExam);
+        }
 
         [HttpPost("searchMaterials")]
         public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync( [FromBody] MaterialFilterDto filter)

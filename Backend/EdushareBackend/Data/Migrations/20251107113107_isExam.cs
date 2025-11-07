@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class isExam : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -202,7 +202,8 @@ namespace Data.Migrations
                     UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UploaderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ContentId = table.Column<string>(type: "nvarchar(50)", nullable: true),
-                    IsRecommended = table.Column<bool>(type: "bit", nullable: false)
+                    IsRecommended = table.Column<bool>(type: "bit", nullable: false),
+                    IsExam = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
