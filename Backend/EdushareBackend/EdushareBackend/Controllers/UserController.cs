@@ -25,16 +25,18 @@ namespace EdushareBackend.Controllers
     {
         UserManager<AppUser> userManager;
         RoleManager<IdentityRole> roleManager;
+        Repository<AppUser> appuserRepo;
         private readonly IWebHostEnvironment env;
         private readonly JwtSettings jwtSettings;
 
 
-        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, IOptions<JwtSettings> jwtSettings)
+        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, IOptions<JwtSettings> jwtSettings, Repository<AppUser> appuserRepo)
         {
             this.userManager = userManager;
             this.env = env;
             this.roleManager = roleManager;
             this.jwtSettings = jwtSettings.Value;
+            this.appuserRepo = appuserRepo;
         }
 
         [HttpGet]
@@ -270,8 +272,23 @@ namespace EdushareBackend.Controllers
             {
                 throw new ArgumentException("User has no roles");
             }
-
+            
             await userManager.RemoveFromRolesAsync(user, roles);
+        }
+
+        [HttpGet("GetUploaders")]
+        public async Task<IEnumerable<AppUserToSelectUploader>> GetAllUsersWhoUploaded()
+        {
+           var uploaders = await appuserRepo.GetAll()
+                .Where(u => u.Materials != null && u.Materials.Any()).ToListAsync();
+
+           return uploaders.Select(u => new AppUserToSelectUploader
+           {
+               Id = u.Id,
+               FullName = $"{u.FirstName} {u.LastName}"
+           });
+
+
         }
 
 

@@ -34,7 +34,8 @@ namespace BackendNUnitTests
             dtoProviderMock = new Mock<DtoProviders>(null!);
             _userManagerMock = new Mock<UserManager<AppUser>>();
             subjectRepoMock = new Mock<Repository<Subject>>();
-            logic = new MaterialLogic(materialRepoMock.Object, dtoProviderMock.Object, appuserRepoMock.Object, subjectRepoMock.Object);
+            var usermanagerMock = new Mock<UserManager<AppUser>>();
+            logic = new MaterialLogic(materialRepoMock.Object, dtoProviderMock.Object, appuserRepoMock.Object, subjectRepoMock.Object, usermanagerMock.Object);
         }
 
         [Test]
