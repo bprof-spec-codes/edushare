@@ -23,7 +23,7 @@
               </div>
             </div>
 
-            <img *ngIf="material.uploader?.image?.file" [src]="material.uploader.image.file.startsWith('http')
+            <img *ngIf="material.uploader.image.file" [src]="material.uploader.image.file.startsWith('http')
                        ? material.uploader.image.file
                        : 'data:image/*;base64,' + material.uploader.image.file"
               alt="{{ material.uploader.fullName || 'Feltöltő' }}" class="rounded-circle" width="42" height="42" />
