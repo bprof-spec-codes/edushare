@@ -73,4 +73,13 @@ export class SearchbarComponent implements OnInit{
       value.title === ""
     )
   }
+
+  resetSearch() {
+    this.form.patchValue({
+      subject: "",
+      semester: "0",
+      uploader: "",
+      title: ""
+    })
+  }
 }
