@@ -8,6 +8,7 @@ import { ProfileService } from '../../services/profile.service';
 import { SearchDto } from '../../dtos/search-dto';
 import { Router } from '@angular/router';
 import { MaterialService } from '../../services/material.service';
+import { SearchUploaderDto } from '../../dtos/search-uploader-dto';
 
 @Component({
   selector: 'app-searchbar',
@@ -20,7 +21,7 @@ export class SearchbarComponent implements OnInit{
   
   subjects$ = new Observable<Subject[]>()
   semesters$ = new Observable<number[]>()
-  uploaders$ = new Observable<Profile[]>()
+  uploaders$ = new Observable<SearchUploaderDto[]>()
   form!: FormGroup
 
   constructor(private subjectService: SubjectService, private fb: FormBuilder, private profilService: ProfileService, private router: Router, private materialService: MaterialService) { }
@@ -40,7 +41,7 @@ export class SearchbarComponent implements OnInit{
     const semesters: number[] = [1, 2, 3, 4, 5, 6, 7, 8]
     this.semesters$ = of(semesters)
 
-    this.uploaders$ = this.profilService.loadAll().pipe(
+    this.uploaders$ = this.profilService.loadUploaders().pipe(
       map(uploader => uploader.slice().sort((a, b) => a.fullName.localeCompare(b.fullName)))
     )
   }
