@@ -12,7 +12,9 @@ import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 export class FavMaterialsComponent implements OnInit {
   public favMaterials$: Observable<MaterialShortViewDto[]> = new Observable<MaterialShortViewDto[]>()
 
-  constructor(public favMatService: FavMaterialService) {}
+  constructor(public favMatService: FavMaterialService) { }
+
+  trackById = (_: number, m: MaterialShortViewDto) => m.id;
 
   ngOnInit(): void {
     this.favMatService.getAll().subscribe({
@@ -20,7 +22,7 @@ export class FavMaterialsComponent implements OnInit {
         this.favMaterials$ = this.favMatService.favMaterials$
       },
       error: (error) => {
-        console.error('Error loading favorite materials:', error)
+        console.error(error)
       }
     })
   }

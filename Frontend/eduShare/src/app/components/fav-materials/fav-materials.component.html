@@ -1,3 +1,14 @@
-<ng-container *ngIf="favMaterials$ | async as favs">
-    <app-material-card [m]="favs"></app-material-card>
-</ng-container>
+<div class="base-margin">
+<section *ngIf="(favMaterials$ | async) as favs; else loading">
+    <h2 class="title">Favorite materials:</h2>
+    <div class="card-list">
+        <ng-container *ngIf="favs.length; else empty">
+            <app-material-card *ngFor="let m of favs; trackBy: trackById" [m]="m">
+            </app-material-card>
+        </ng-container>
+    </div>
+</section>
+
+<ng-template #loading>Loading...</ng-template>
+<ng-template #empty>No favorite materials yet.</ng-template>
+</div>

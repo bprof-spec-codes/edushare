@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnChanges, SimpleChanges } from '@angular/core';
 import { AuthService } from './services/authentication.service';
+import { FavMaterialService } from './services/fav-material.service';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +10,9 @@ import { AuthService } from './services/authentication.service';
 })
 export class AppComponent {
   title = 'eduShare';
-  constructor(public auth:AuthService) {}
+  constructor(public auth:AuthService,private fav:FavMaterialService) {
+        if (this.auth.isLoggedIn()) {
+      this.fav.getAll().subscribe()
+    }
+  }
 }
