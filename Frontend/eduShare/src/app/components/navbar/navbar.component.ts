@@ -4,6 +4,7 @@ import { ProfileService } from '../../services/profile.service';
 import { ProfileViewDto } from '../../dtos/profile-view-dto';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FavMaterialService } from '../../services/fav-material.service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,7 +18,11 @@ export class NavbarComponent implements OnChanges, OnInit {
   id: string = ''
   isTeacher: boolean = false
 
-  constructor(private auth: AuthService, private profileService: ProfileService, private router: Router,private modalService: NgbModal) {
+  constructor(private auth: AuthService,
+    private profileService: ProfileService,
+    private router: Router,
+    private fav: FavMaterialService,
+    private modalService: NgbModal) {
     console.log('userid: ', auth.getUserId());
   }
 
@@ -43,6 +48,10 @@ export class NavbarComponent implements OnChanges, OnInit {
     return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
   }
 
+  openFavs(){
+    this.router.navigate(['/fav-materials'])
+  }
+
   openProfile(profileId: string): void {
     this.router.navigate(['/profile-view', profileId])
   }
@@ -57,6 +66,7 @@ export class NavbarComponent implements OnChanges, OnInit {
 
   logout() {
   //  this.modalService.dismissAll()
+  this.fav.clear()
   this.auth.logout()
   }
 }

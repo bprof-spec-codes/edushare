@@ -12,20 +12,20 @@ import { AuthService } from '../../services/authentication.service';
   styleUrl: './profile-view.component.sass'
 })
 export class ProfileViewComponent {
-  profile:ProfileViewDto|null=null
+  profile: ProfileViewDto | null = null
   loading = false
   error?: string
   ownProfile = false
-  constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router, private authService:AuthService){}
-  ngOnInit(){
+  constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router, private authService: AuthService) { }
+  ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')
-    
-      if(!id) {
-        alert('Invalid id.')
-        return
-      }
 
-      if (id) {
+    if (!id) {
+      alert('Invalid id.')
+      return
+    }
+
+    if (id) {
       this.loading = true
       this.profileService.getById(id).subscribe({
         next: (data) => {
@@ -39,23 +39,26 @@ export class ProfileViewComponent {
           this.loading = false
         }
       })
-      if (id===this.authService.getUserId()) {
-      this.ownProfile=true
+      if (id === this.authService.getUserId()) {
+        this.ownProfile = true
       }
     }
   }
+
+  trackById = (_: number, m: MaterialShortViewDto) => m.id;
+
   openDetail(material: MaterialShortViewDto): void {
-        this.router.navigate(['/materials', material.id, 'view']);
-      }
+    this.router.navigate(['/materials', material.id, 'view']);
+  }
 
   editDetail(profile: ProfileViewDto): void {
-       this.router.navigate(['/profile-update', profile.id])
+    this.router.navigate(['/profile-update', profile.id])
   }
-      
+
   getProfileImageSrc(): string {
-  const file = this.profile?.image?.file;
-  if (!file) return 'assets/default-avatar.png'; // alapértelmezett kép
-  return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
+    const file = this.profile?.image?.file;
+    if (!file) return 'assets/default-avatar.png'; // alapértelmezett kép
+    return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
   }
 
 }

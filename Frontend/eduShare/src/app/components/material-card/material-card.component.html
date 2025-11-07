@@ -1,34 +1,45 @@
 <div class="card-container">
-    <div class="card-background" *ngFor="let material of m">
-        <div class="isrecommended" *ngIf="material.isRecommended"><i class="bi bi-pin-angle-fill fs-3  position-absolute "></i></div>
+    <div class="card-background">
+        <div class="isrecommended" *ngIf="m.isRecommended"><i class="bi bi-pin-angle-fill fs-3  position-absolute "></i>
+        </div>
         <br>
-        <div class="title" *ngIf="material.uploader.image.file">{{material.title}}</div>
+        <div class="title" *ngIf="m.uploader.image.file">{{m.title}}</div>
         <div class="datas">
             <div class="icon-data">
                 <i class="bi bi-book book"></i>
-                <div class="subject">{{material.subject.name}}</div>
+                <div class="subject">{{m.subject.name}}</div>
             </div>
             <div class="icon-data">
-                <img *ngIf="material.uploader.image.file" [src]="material.uploader.image.file.startsWith('http')
-                            ? material.uploader.image.file
-                            : 'data:image/*;base64,' + material.uploader.image.file" [alt]="material.uploader.fullName"
-                    class="profile-pic" width="21" height="21" />              
-                <div class="btn-profile-container"><button class="btn-profile" (click)="openProfile(material.uploader.id)">{{material.uploader.fullName}}</button></div>
+                <img *ngIf="m.uploader.image.file" [src]="m.uploader.image.file.startsWith('http')
+                            ? m.uploader.image.file
+                            : 'data:image/*;base64,' + m.uploader.image.file" [alt]="m.uploader.fullName"
+                    class="profile-pic" width="21" height="21" />
+                <div class="btn-profile-container"><button class="btn-profile"
+                        (click)="openProfile(m.uploader.id)">{{m.uploader.fullName}}</button></div>
             </div>
             <div class="icon-data">
                 <i class="bi bi-clock clock"></i>
-                <div class="date">{{material.uploadDate | date:'yyyy.MM.dd'}}</div>
+                <div class="date">{{m.uploadDate | date:'yyyy.MM.dd'}}</div>
             </div>
         </div>
         <div class="open-bookmark">
-            <button class="open-button" (click)="openMaterial(material)">Open</button>
-            <button class="btn-bookmark">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark icon-bookmark" viewBox="0 0 16 16">
-                    <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/>
-                </svg>
+            <button class="open-button" (click)="openMaterial(m)" [style]="isLoggedIn ? 'width: 65%' : 'width: 190px'">Open</button>
+            <button type="button" class="btn-bookmark" (click)="toggleFavourite()" *ngIf="isLoggedIn"
+                [attr.aria-pressed]="((isFav$ | async) ?? false) ? 'true' : 'false'">
+
+                <ng-container [ngSwitch]="(isFav$ | async) ?? false">
+                    <svg *ngSwitchCase="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-bookmark icon-bookmark" viewBox="0 0 16 16">
+                        <path
+                            d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z" />
+                    </svg>
+
+                    <svg *ngSwitchCase="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-bookmark-fill icon-bookmark" viewBox="0 0 16 16">
+                        <path d="M2 2v13.5l6-3.25 6 3.25V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z" />
+                    </svg>
+                </ng-container>
             </button>
         </div>
     </div>
 </div>
-
-
