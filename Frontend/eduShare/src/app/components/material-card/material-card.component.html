@@ -2,7 +2,7 @@
     <div class="card-background" *ngFor="let material of m">
         <div class="isrecommended" *ngIf="material.isRecommended"><i class="bi bi-pin-angle-fill fs-3  position-absolute "></i></div>
         <br>
-        <div class="title" *ngIf="material.uploader.image?.file">{{material.title}}</div>
+        <div class="title" *ngIf="material.uploader.image.file">{{material.title}}</div>
         <div class="datas">
             <div class="icon-data">
                 <i class="bi bi-book book"></i>
