@@ -8,8 +8,13 @@ import { Component } from '@angular/core';
 })
 export class MainlistComponent {
   isInSearch: boolean = false
+  search: string = ""
 
   changeIsInSearch(isInSearch: boolean) {
     this.isInSearch = isInSearch
+  }
+
+  searchValue(searchValue: string) {
+    this.search = searchValue
   }
 }
