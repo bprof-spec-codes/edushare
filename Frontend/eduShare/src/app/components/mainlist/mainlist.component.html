@@ -1,0 +1,5 @@
+<div class="searchbar">
+    <app-searchbar (isInSearch)="changeIsInSearch($event)" (searchValue)="searchValue($event)"></app-searchbar>
+</div>
+<app-material-list *ngIf="!isInSearch"></app-material-list>
+<app-material-search-list *ngIf="isInSearch" [search]="search"></app-material-search-list>

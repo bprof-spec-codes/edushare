@@ -1,16 +1,31 @@
 <div class="base-margin">
-  <h2 class="title">Uploaded materials:</h2>
+  <div *ngIf="!loading && recommendedMaterials.length">
+    <h2 class="title">Recommended materials:</h2>
+    <div class="card-list">
+      <div *ngFor="let material of recommendedMaterials; trackBy: trackById">
+        <app-material-card [m]="material">
+        </app-material-card>
+      </div>
+    </div>
+    <hr>
+  </div>
+
+
 
   <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
   <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
 
-  <div *ngIf="!loading && materials.length">
-    <app-material-card 
-      [m]="materials">
-    </app-material-card>
-  </div>
+  <div *ngIf="!loading && nonRecommendedMaterials.length">
+    <h2 class="title">Uploaded materials:</h2>
+    <div class="card-list">
+      <div *ngFor="let material of nonRecommendedMaterials; trackBy: trackById">
+        <app-material-card [m]="material">
+        </app-material-card>
+      </div>
+    </div>
 
-  <p *ngIf="!loading && !materials.length" class="text-center text-muted mt-3">
-    No materials have been uploaded yet.
-  </p>
+    <p *ngIf="!loading && !materials.length" class="text-center text-muted mt-3">
+      No materials have been uploaded yet.
+    </p>
+  </div>
 </div>

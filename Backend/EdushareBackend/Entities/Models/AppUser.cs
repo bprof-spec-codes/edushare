@@ -24,5 +24,12 @@ namespace Entities.Models
         [NotMapped]
         public virtual List<Material>? Materials { get; set; }
 
+        public virtual List<Material>? FavouriteMaterials { get; set; }
+
+        public AppUser()
+        {
+            FavouriteMaterials = new List<Material>();
+        }
+
     }
 }

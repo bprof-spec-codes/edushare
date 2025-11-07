@@ -16,6 +16,9 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { SubjectListComponent } from './components/subject-list/subject-list.component';
 import { roleGuard } from './guards/role.guard';
+import { FavMaterialsComponent } from './components/fav-materials/fav-materials.component';
+import { MaterialSearchListComponent } from './components/material-search-list/material-search-list.component';
+import { MainlistComponent } from './components/mainlist/mainlist.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -23,8 +26,8 @@ const routes: Routes = [
     path: '',
     component: AuthLayoutComponent,
     children: [
-      { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
-      { path: 'register', component: RegisterComponent, canActivate: [NoAuthGuard] },
+      { path: 'login', component: LoginComponent , canActivate:[NoAuthGuard]},
+      { path: 'register', component: RegisterComponent, canActivate:[NoAuthGuard] },
     ]
   },
   {
@@ -32,14 +35,16 @@ const routes: Routes = [
     component: MainLayoutComponent,
     children: [
       { path: 'homepage', component: HomepageComponent },
-      { path: 'materials', component: MaterialListComponent },
+      { path: 'materials', component: MainlistComponent },
       { path: 'materials/create', component: MaterialCreateComponent, canActivate: [AuthGuard] },
       { path: 'materials/:id/update', component: MaterialUpdateComponent, canActivate: [AuthGuard] },
       { path: 'materials/:id/view', component: MaterialViewComponent },
       { path: 'profile-list', component: ProfileListComponent },
       { path: 'profile-view/:id', component: ProfileViewComponent },
       { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard] },
-      { path: 'subjects', component: SubjectListComponent, canActivate: [roleGuard], data: { roles: ['Teacher', 'Admin'] } }
+      { path: 'subjects', component: SubjectListComponent, canActivate: [roleGuard], data: { roles: ['Teacher', 'Admin'] } },
+      { path: 'material-search', component: MaterialSearchListComponent},
+      { path: 'fav-materials', component: FavMaterialsComponent, canActivate: [AuthGuard] }
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }

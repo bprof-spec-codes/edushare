@@ -17,7 +17,7 @@ export class MaterialViewComponent implements OnInit {
   showFullDescription = false
   currentUserId = ''
 
-  constructor(private route: ActivatedRoute, private materialService: MaterialService, private router: Router, private auth: AuthService) { }
+  constructor(private route: ActivatedRoute, private materialService: MaterialService, private router: Router, public auth: AuthService) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')
@@ -41,6 +41,15 @@ export class MaterialViewComponent implements OnInit {
     }
   }
 
+  recommendedMaterial(id: string){
+  this.material!.isRecommended=!this.material?.isRecommended;
+  this.materialService.updateRecommended(id, this.material!.isRecommended).subscribe({
+    next: () => console.log('Sikeres mentés!'),
+    error: (err) => console.error('Hiba történt:', err)
+  });
+    console.log(this.material!.isRecommended);
+  }
+
   downloadFile(base64: string | undefined, fileName: string | undefined): void {
     if (!base64 || !fileName) return
 
@@ -49,6 +58,8 @@ export class MaterialViewComponent implements OnInit {
     link.download = fileName
     link.click()
   }
+
+
 
   updateMaterial(): void {
     if (!this.material) return

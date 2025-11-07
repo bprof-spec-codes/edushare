@@ -22,6 +22,21 @@ namespace Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AppUserMaterial", b =>
+                {
+                    b.Property<string>("FavouriteMaterialsId")
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UsersWhoFavouritedId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("FavouriteMaterialsId", "UsersWhoFavouritedId");
+
+                    b.HasIndex("UsersWhoFavouritedId");
+
+                    b.ToTable("AppUserFavouriteMaterials", (string)null);
+                });
+
             modelBuilder.Entity("Entities.Helpers.FileContent", b =>
                 {
                     b.Property<string>("Id")
@@ -332,6 +347,21 @@ namespace Data.Migrations
                     b.HasIndex("ImageId");
 
                     b.HasDiscriminator().HasValue("AppUser");
+                });
+
+            modelBuilder.Entity("AppUserMaterial", b =>
+                {
+                    b.HasOne("Entities.Models.Material", null)
+                        .WithMany()
+                        .HasForeignKey("FavouriteMaterialsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersWhoFavouritedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Entities.Models.Material", b =>

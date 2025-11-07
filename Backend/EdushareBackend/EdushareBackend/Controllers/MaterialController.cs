@@ -1,6 +1,4 @@
-﻿using Entities.Dtos.Content;
-using Entities.Dtos.Material;
-using Entities.Dtos.User;
+﻿using Entities.Dtos.Material;
 using Entities.Models;
 using Logic.Logic;
 using Microsoft.AspNetCore.Authorization;
@@ -94,5 +92,50 @@ namespace EdushareBackend.Controllers
         {
             materialLogic.SetRecommendationStatus(id, isRecommended);
         }
+
+        [HttpPost("searchMaterials")]
+        public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync([FromBody] MaterialFilterDto filter)
+        {
+            var materials = await materialLogic.GetFilteredMaterialsAsync(filter);
+            return materials;
+        }
+
+        [HttpPost("setFavouriteMaterial/{materialId}")]
+        [Authorize]
+        public async Task<IActionResult> SetFavouriteMaterial([FromRoute] string materialId)
+        {
+            AppUser currentUser = await UserManager.GetUserAsync(User);
+
+            await materialLogic.SetFavouriteMaterial(materialId, currentUser);
+
+            return NoContent();
+        }
+
+        [HttpGet("favouriteMaterials")]
+        [Authorize]
+        public async Task<IEnumerable<MaterialShortViewDto>> GetFavouriteMaterials()
+        {
+            var currentUser = await UserManager.GetUserAsync(User);
+            if (currentUser == null)
+                return Enumerable.Empty<MaterialShortViewDto>();
+
+            var materials = await materialLogic.GetFavouriteMaterials(currentUser);
+            return materials;
+        }
+
+        [HttpDelete("removeFavouriteMaterial/{materialId}")]
+        [Authorize]
+        public async Task<IActionResult> RemoveFavouriteMaterial([FromRoute] string materialId)
+        {
+            AppUser currentUser = await UserManager.GetUserAsync(User);
+            await materialLogic.RemoveFavouriteMaterial(materialId, currentUser);
+            return NoContent();
+        }
+
+
+
+
+
+
     }
 }

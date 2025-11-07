@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251103144153_Initial")]
-    partial class Initial
+    [Migration("20251106103642_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("AppUserMaterial", b =>
+                {
+                    b.Property<string>("FavouriteMaterialsId")
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UsersWhoFavouritedId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("FavouriteMaterialsId", "UsersWhoFavouritedId");
+
+                    b.HasIndex("UsersWhoFavouritedId");
+
+                    b.ToTable("AppUserFavouriteMaterials", (string)null);
+                });
 
             modelBuilder.Entity("Entities.Helpers.FileContent", b =>
                 {
@@ -335,6 +350,21 @@ namespace Data.Migrations
                     b.HasIndex("ImageId");
 
                     b.HasDiscriminator().HasValue("AppUser");
+                });
+
+            modelBuilder.Entity("AppUserMaterial", b =>
+                {
+                    b.HasOne("Entities.Models.Material", null)
+                        .WithMany()
+                        .HasForeignKey("FavouriteMaterialsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Models.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersWhoFavouritedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Entities.Models.Material", b =>

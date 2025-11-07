@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { JwtPayload } from '../models/jwt-payload';
 import { environment } from '../../environments/environment.development';
+import { FavMaterialService } from './fav-material.service';
 
 interface LoginResult {
   Token?: string;
@@ -22,7 +23,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
 
   login(email: string, password: string): Observable<LoginResult> {
-    return this.http.post<LoginResult>(`${this.apiUrl}`, { email, password });
+    return this.http.post<LoginResult>(`${this.apiUrl}`, { email, password })
   }
 
   saveToken(token: string) {
@@ -85,8 +86,16 @@ export class AuthService {
         }
       }
     }
-    
+    console.log(roles)
     return roles
+  }
+
+  isTeacher(): boolean {
+    return this.getRoles().includes('Teacher');
+  }
+
+  isAdmin(): boolean {
+    return this.getRoles().includes('Admin');
   }
 
   getUserId(): string | null {

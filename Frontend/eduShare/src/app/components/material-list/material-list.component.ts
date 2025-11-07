@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 import { MaterialService } from '../../services/material.service';
 import { Router } from '@angular/router';
+import { FavMaterialService } from '../../services/fav-material.service';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-material-list',
@@ -11,6 +13,8 @@ import { Router } from '@angular/router';
 })
 export class MaterialListComponent {
   materials: MaterialShortViewDto[] = []
+  recommendedMaterials: MaterialShortViewDto[] = []
+  nonRecommendedMaterials: MaterialShortViewDto[] = [];
   loading = false
   error?: string
 
@@ -19,11 +23,15 @@ export class MaterialListComponent {
     this.loadMaterials()
   }
 
+  trackById = (_: number, m: MaterialShortViewDto) => m.id;
+
   loadMaterials(): void {
     this.loading = true
     this.materialService.loadAll().subscribe({
       next: (data) => {
         this.materials = data
+        this.recommendedMaterials = data.filter(m => m.isRecommended)
+        this.nonRecommendedMaterials = data.filter(m => !m.isRecommended)
         this.loading = false
       },
       error: (err) => {
