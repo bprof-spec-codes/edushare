@@ -30,8 +30,8 @@
             <img *ngIf="profile?.image?.file" [src]="getProfileImageSrc()" [alt]="profile?.fullName" class="avatar" />
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><button class="dropdown-item" (click)="openFavs()">Favourite materials</button></li>
             <li><button class="dropdown-item" (click)="openProfile(this.id)">View profile</button></li>
+            <li><button class="dropdown-item" (click)="openFavs()">Favourites</button></li>
             <li><button class="dropdown-item" (click)="logout()">Log out</button></li>
           </ul>
         </li>

@@ -1,6 +1,6 @@
 <div class="base-margin">
 <section *ngIf="(favMaterials$ | async) as favs; else loading">
-    <h2 class="title">Favorite materials:</h2>
+    <h2 class="title">Favourite materials:</h2>
     <div class="card-list">
         <ng-container *ngIf="favs.length; else empty">
             <app-material-card *ngFor="let m of favs; trackBy: trackById" [m]="m">
@@ -10,5 +10,5 @@
 </section>
 
 <ng-template #loading>Loading...</ng-template>
-<ng-template #empty>No favorite materials yet.</ng-template>
+<ng-template #empty>No favourite materials yet.</ng-template>
 </div>
