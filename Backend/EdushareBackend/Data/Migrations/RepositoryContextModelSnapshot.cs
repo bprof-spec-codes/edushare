@@ -71,6 +71,9 @@ namespace Data.Migrations
                         .HasMaxLength(1500)
                         .HasColumnType("nvarchar(1500)");
 
+                    b.Property<bool>("IsExam")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsRecommended")
                         .HasColumnType("bit");
 

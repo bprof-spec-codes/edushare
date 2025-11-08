@@ -182,5 +182,16 @@ namespace BackendNUnitTests
             Assert.AreEqual("Mat123", result.Title);
             Assert.AreEqual("user123", result.Uploader.Id);
         }
+        [Test]
+        public void SetMaterialExamStatus_ShouldUpdateIsExam()
+        {
+            var material = new Material { Id = "m1", IsExam = false };
+            materialRepoMock.Setup(r => r.FindById("m1")).Returns(material);
+
+            logic.SetExamStatus("m1", true);
+
+            materialRepoMock.Verify(r => r.Update(It.Is<Material>(m => m.IsExam == true)), Times.Once);
+        }
+
     }
 }

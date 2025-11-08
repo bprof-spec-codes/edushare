@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251106103642_initial")]
-    partial class initial
+    [Migration("20251107113107_isExam")]
+    partial class isExam
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,6 +73,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasMaxLength(1500)
                         .HasColumnType("nvarchar(1500)");
+
+                    b.Property<bool>("IsExam")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsRecommended")
                         .HasColumnType("bit");
