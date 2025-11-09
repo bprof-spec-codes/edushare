@@ -75,7 +75,6 @@ export class MaterialViewComponent implements OnInit {
     }else {
       alert('Preview is only available for PDF files.');
     }
-
   }
 
   updateMaterial(): void {
