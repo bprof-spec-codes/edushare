@@ -15,5 +15,8 @@ namespace Entities.Dtos.User
         public string Email { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public ContentViewDto Image { get; set; } = null!;
+        
+        public bool IsWarned { get; set; } = false;
+        public bool IsBanned { get; set; } = false;
     }
 }
