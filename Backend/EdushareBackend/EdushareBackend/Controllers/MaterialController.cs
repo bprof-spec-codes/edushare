@@ -20,7 +20,7 @@ namespace EdushareBackend.Controllers
             this.UserManager = userManager;
         }
         [HttpPost]
-        // [Authorize]
+        [Authorize]
         public async Task AddMaterial(MaterialCreateUpdateDto dto)
         {
             var user = await UserManager.GetUserAsync(User);
