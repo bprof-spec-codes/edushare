@@ -334,5 +334,28 @@ namespace EdushareBackend.Controllers
                 
             return Ok(new { message = "User warned successfully" });
         }
+
+        [HttpPost("RemoveWarning/{userId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RemoveWarning(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            user.IsWarned = false;
+            user.WarnedAt = null;
+
+            var result = await userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Failed to remove warning" });
+            }
+
+            return Ok(new { message = "Warning removed successfully" });
+        }
     }
 }
