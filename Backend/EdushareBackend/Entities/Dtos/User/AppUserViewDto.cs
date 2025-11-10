@@ -16,5 +16,10 @@ namespace Entities.Dtos.User
         public string Email { get; set; } = string.Empty;
         public ContentViewDto Image { get; set; } = null!;
         public List<MaterialShortViewDto> Materials { get; set; } = new List<MaterialShortViewDto>();
+        
+        public bool IsWarned { get; set; } = false;
+        public DateTime? WarnedAt { get; set; } = null;
+        public bool IsBanned { get; set; } = false;
+        public DateTime? BannedAt { get; set; } = null;
     }
 }
