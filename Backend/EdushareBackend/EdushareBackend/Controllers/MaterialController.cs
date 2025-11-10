@@ -138,6 +138,12 @@ namespace EdushareBackend.Controllers
             return NoContent();
         }
 
+        [HttpPost("MaterialDownloaded")]
+        public async Task MaterialDownloaded([FromBody] string materialID)
+        {
+            await materialLogic.MaterialDownloaded(materialID);
+        }
+
 
 
 

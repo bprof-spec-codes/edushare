@@ -216,6 +216,16 @@ namespace Logic.Logic
             }
         }
 
+        public async Task MaterialDownloaded(string materialID)
+        {
+            var material = await materialRepo.GetAll()
+                .FirstOrDefaultAsync(m => m.Id == materialID);
+            if (material == null)
+                throw new Exception("Material not found");
+            material.DownloadCount += 1;
+            materialRepo.Update(material);
+        }
+
 
 
 
