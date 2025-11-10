@@ -148,6 +148,12 @@ namespace EdushareBackend.Controllers
             {
                 return BadRequest(new { message = "Incorrect Email" });
             }
+
+            // Check if user is banned
+            if (user.IsBanned)
+            {
+                return Unauthorized(new { message = "Your account has been banned. Please contact support." });
+            }
             else
             {
                 var result = await userManager.CheckPasswordAsync(user, dto.Password);
@@ -178,9 +184,6 @@ namespace EdushareBackend.Controllers
 
                 }
             }
-
-
-
         }
 
         [HttpPut("{id}")]
