@@ -311,5 +311,28 @@ namespace EdushareBackend.Controllers
             string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, pattern, RegexOptions.IgnoreCase);
         }
+
+        [HttpPost("Warn/{userId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> WarnUser(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            user.IsWarned = true;
+            user.WarnedAt = DateTime.UtcNow;
+
+            var result = await userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Failed to warn user" });
+            }
+                
+            return Ok(new { message = "User warned successfully" });
+        }
     }
 }
