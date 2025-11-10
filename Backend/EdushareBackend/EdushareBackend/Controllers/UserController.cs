@@ -324,14 +324,11 @@ namespace EdushareBackend.Controllers
 
             user.IsWarned = true;
             user.WarnedAt = DateTime.UtcNow;
-
             var result = await userManager.UpdateAsync(user);
-
             if (!result.Succeeded)
             {
                 return BadRequest(new { message = "Failed to warn user" });
             }
-                
             return Ok(new { message = "User warned successfully" });
         }
 
@@ -347,15 +344,38 @@ namespace EdushareBackend.Controllers
 
             user.IsWarned = false;
             user.WarnedAt = null;
-
             var result = await userManager.UpdateAsync(user);
-
             if (!result.Succeeded)
             {
                 return BadRequest(new { message = "Failed to remove warning" });
             }
-
             return Ok(new { message = "Warning removed successfully" });
+        }
+
+        [HttpPost("Ban/{userId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BanUser(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId == userId)
+            {
+                return BadRequest(new { message = "You cannot ban yourself" });
+            }
+
+            user.IsBanned = true;
+            user.BannedAt = DateTime.UtcNow;
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Failed to ban user" });
+            }
+            return Ok(new { message = "User banned successfully" });
         }
     }
 }
