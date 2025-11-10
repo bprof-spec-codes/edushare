@@ -377,5 +377,25 @@ namespace EdushareBackend.Controllers
             }
             return Ok(new { message = "User banned successfully" });
         }
+
+        [HttpPost("Unban/{userId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UnbanUser(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            user.IsBanned = false;
+            user.BannedAt = null;
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Failed to unban user" });
+            }
+            return Ok(new { message = "User unbanned successfully" });
+        }
     }
 }
