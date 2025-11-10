@@ -20,7 +20,7 @@ namespace EdushareBackend.Controllers
             this.UserManager = userManager;
         }
         [HttpPost]
-        // [Authorize]
+        [Authorize]
         public async Task AddMaterial(MaterialCreateUpdateDto dto)
         {
             var user = await UserManager.GetUserAsync(User);
@@ -136,6 +136,12 @@ namespace EdushareBackend.Controllers
             AppUser currentUser = await UserManager.GetUserAsync(User);
             await materialLogic.RemoveFavouriteMaterial(materialId, currentUser);
             return NoContent();
+        }
+
+        [HttpPost("MaterialDownloaded")]
+        public async Task MaterialDownloaded([FromBody] string materialID)
+        {
+            await materialLogic.MaterialDownloaded(materialID);
         }
 
 

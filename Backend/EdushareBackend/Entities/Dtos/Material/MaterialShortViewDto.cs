@@ -18,5 +18,6 @@ namespace Entities.Dtos.Material
         public Entities.Models.Subject Subject { get; set; }
         public AppUserMaterialShortViewDto Uploader { get; set; } = null!;
         public DateTime UploadDate { get; set; }
+        public int DownloadCount { get; set; } = 0;
     }
 }
