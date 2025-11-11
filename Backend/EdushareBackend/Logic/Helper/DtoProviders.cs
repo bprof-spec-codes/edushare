@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Entities.Dtos.Content;
 using Entities.Dtos.Material;
+using Entities.Dtos.Rating;
 using Entities.Dtos.User;
 using Entities.Helpers;
 using Entities.Models;
@@ -44,19 +45,19 @@ namespace Logic.Helper
                          {
                              Id = src.Uploader.Id,
                              FullName = src.Uploader.FirstName + " " + src.Uploader.LastName,
-                             Image =  new ContentViewDto(
-                                 
-                                 
+                             Image = new ContentViewDto(
+
+
                                      src.Uploader.Image.Id,
                                     src.Uploader.Image.FileName,
                                      Convert.ToBase64String(src.Uploader.Image.File)
                                  )
-                             }
+                         }
                          : null))
                      .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content != null
                          ? new ContentViewDto(
-                             
-                         
+
+
                              src.Content.Id,
                              src.Content.FileName,
                              Convert.ToBase64String(src.Content.File)
@@ -66,6 +67,11 @@ namespace Logic.Helper
                 cfg.CreateMap<ContentCreateUpdateDto, FileContent>();
                 cfg.CreateMap<AppUser, AppUserMaterialShortViewDto>();
                 cfg.CreateMap<FileContent, ContentViewDto>();
+                cfg.CreateMap<Rating, RatingViewDto>()
+                     .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
+
+                cfg.CreateMap<RatingCreateDto, Rating>();
+
             });
             Mapper = new Mapper(config);
         }
