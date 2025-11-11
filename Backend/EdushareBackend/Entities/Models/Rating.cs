@@ -24,7 +24,7 @@ namespace Entities.Models
         public string MaterialId { get; set; } = string.Empty;
         public virtual Material Material { get; set; } = null!;
         [Range(0, 5)]
-        public int Rate { get; set; } = 0;
+        public int Rate { get; set; }
         [StringLength(1000)]
         public string Comment { get; set; } = string.Empty;
 
