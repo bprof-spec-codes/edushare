@@ -16,8 +16,15 @@ export class ProfileViewComponent {
   loading = false
   error?: string
   ownProfile = false
+  isAdmin = false
+
   constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router, private authService: AuthService) { }
+  
   ngOnInit() {
+    // Check if current user is admin
+    const roles = this.authService.getRoles()
+    this.isAdmin = roles.includes('Admin')
+    
     const id = this.route.snapshot.paramMap.get('id')
 
     if (!id) {
