@@ -68,9 +68,12 @@ namespace Logic.Helper
                 cfg.CreateMap<AppUser, AppUserMaterialShortViewDto>();
                 cfg.CreateMap<FileContent, ContentViewDto>();
                 cfg.CreateMap<Rating, RatingViewDto>()
-                     .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
+                    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src =>
+                        src.User != null ? src.User.FirstName + " " + src.User.LastName : "N/A"));
+
 
                 cfg.CreateMap<RatingCreateDto, Rating>();
+
 
             });
             Mapper = new Mapper(config);

@@ -2,6 +2,7 @@
 using Entities.Dtos.Rating;
 using Entities.Models;
 using Logic.Helper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,7 @@ namespace Logic.Logic
         public IEnumerable<RatingViewDto> GetRatingsByMaterialId(string materialId)
         {
             return ratingRepo.GetAll()
+                .Include(r => r.User)
                 .Where(r => r.MaterialId == materialId)
                 .Select(r => dtoProviders.Mapper.Map<RatingViewDto>(r));
         }
