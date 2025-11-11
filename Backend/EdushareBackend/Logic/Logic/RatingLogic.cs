@@ -34,6 +34,8 @@ namespace Logic.Logic
             var rating = dtoProviders.Mapper.Map<Rating>(dto);
             rating.User = user;
             rating.Material = material;
+            rating.UserId = userId;
+            rating.MaterialId = dto.MaterialId;
             ratingRepo.Add(rating);
         }
         public IEnumerable<RatingViewDto> GetRatingsByMaterialId(string materialId)
@@ -43,5 +45,11 @@ namespace Logic.Logic
                 .Where(r => r.MaterialId == materialId)
                 .Select(r => dtoProviders.Mapper.Map<RatingViewDto>(r));
         }
+        public void DeleteRatingById(string id)
+        {
+           
+            ratingRepo.DeleteById(id);
+        }
+
     }
 }
