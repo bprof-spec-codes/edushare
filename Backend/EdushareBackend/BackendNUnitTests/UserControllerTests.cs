@@ -47,7 +47,8 @@ namespace BackendNUnitTests
                 _userManagerMock.Object,
                 _envMock.Object,
                 _roleManagerMock.Object,
-                _jwtSettingsMock.Object
+                _jwtSettingsMock.Object,
+                null //error van itt 
             );
         }
 

@@ -18,6 +18,7 @@ import { SearchUploaderDto } from '../../dtos/search-uploader-dto';
 })
 export class SearchbarComponent implements OnInit{
   @Output() isInSearch = new EventEmitter<boolean>
+  @Output() searchValue = new EventEmitter<string>
   
   subjects$ = new Observable<Subject[]>()
   semesters$ = new Observable<number[]>()
@@ -58,6 +59,7 @@ export class SearchbarComponent implements OnInit{
       this.materialService.searchMaterials(searchDto).subscribe({
         next: () => {
           this.isInSearch.emit(true)
+          this.searchValue.emit(title)
         },
         error: (err) => console.error("Hiba a keresésnél:", err)
       });

@@ -3,6 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/authentication.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FavMaterialService } from '../../../services/fav-material.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginComponent {
   error = '';
   loading = false;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router, private fav: FavMaterialService) {}
 
   onLogin() {
     this.error = '';
@@ -32,6 +33,7 @@ export class LoginComponent {
           return;
         }
         this.auth.saveToken(token);
+        this.fav.getAll().subscribe()
         this.router.navigate(['/homepage']);
       },
       error: (err) => {

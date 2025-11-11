@@ -66,8 +66,6 @@ export class MaterialService {
   }
 
   searchMaterials(searchDto: SearchDto): Observable<MaterialShortViewDto[]> {
-    console.log('Küldött body:', JSON.stringify(searchDto));
-
     return this.http.post<MaterialShortViewDto[]>(this.apiBaseUrl + "/searchMaterials", searchDto).pipe(
       tap(m => this.materialShortSubject.next(m))
     )

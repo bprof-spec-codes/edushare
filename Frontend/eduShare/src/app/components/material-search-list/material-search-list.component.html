@@ -1,6 +1,12 @@
 <div class="base-margin">
-    <h2 class="title">Searched materials:</h2>
-    <app-material-card 
-      [m]="materials">
-    </app-material-card>
+    <h2 class="title" *ngIf="searchNotNull()">Results for "{{search}}":</h2>
+    <h2 class="title" *ngIf="!searchNotNull()">Results:</h2>
+    <div class="no-result" *ngIf="materials.length === 0">No results found!</div>
+    <div class="card-list" *ngIf="materials.length !== 0">
+      <div *ngFor="let material of materials; trackBy: trackById">
+        <app-material-card 
+          [m]="material">
+        </app-material-card>
+      </div>
+    </div>
 </div>

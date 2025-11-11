@@ -54,6 +54,8 @@ namespace EdushareBackend
             builder.Services.AddTransient<DtoProviders>();
             builder.Services.AddTransient<MaterialLogic>();
             builder.Services.AddTransient<SubjectLogic>();
+            builder.Services.AddTransient<StatisticsLogic>();
+            builder.Services.AddTransient<RatingLogic>();
 
             builder.Services.AddIdentity<AppUser, IdentityRole>(
                 option =>

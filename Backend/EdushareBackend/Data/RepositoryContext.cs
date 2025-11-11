@@ -16,8 +16,10 @@ namespace Data
         public DbSet<Material> Materials { get; set; }
 
         public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
-        
+
+
         public RepositoryContext(DbContextOptions<RepositoryContext> ctx) : base(ctx)
         {
 

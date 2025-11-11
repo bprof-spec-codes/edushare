@@ -59,7 +59,23 @@ export class MaterialViewComponent implements OnInit {
     link.click()
   }
 
+  previewFile(): void {
+    if (!this.material?.content) return
 
+    const fileName = this.material.content.fileName;
+    const base64 = this.material.content.file;
+    const ext = fileName.split('.').pop()?.toLowerCase();
+    
+    if (ext === 'pdf') {
+      const byteCharacters = atob(base64);
+      const byteArray = Uint8Array.from(byteCharacters, char => char.charCodeAt(0));
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    }else {
+      alert('Preview is only available for PDF files.');
+    }
+  }
 
   updateMaterial(): void {
     if (!this.material) return

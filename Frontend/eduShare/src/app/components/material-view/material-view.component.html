@@ -5,7 +5,10 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3 row">
           <div class="col-6">
-            <div clas="isrecommended" *ngIf="material.isRecommended"><i class="bi bi-pin-angle-fill"></i></div>
+            <div clas="isrecommended" *ngIf="material.isRecommended">
+              <i class="bi bi-pin-angle-fill me-1"></i>
+              <span>Recommended</span>
+            </div>
             <h3 class="mb-0">{{ material.title }}</h3>
             <div class="text-muted fw-semibold">
               <i class="bi bi-book"></i> {{ material.subject.name || 'Placeholder' }}
@@ -71,11 +74,13 @@
               (click)="downloadFile(material.content.file, material.content.fileName)">
               Download
             </button>
-            <button class="btn w-25 d-flex align-items-center justify-content-center file-button">
+            <button class="btn w-25 d-flex align-items-center justify-content-center file-button"
+              (click)="previewFile()">
               Preview
             </button>
             <button class="btn w-25 d-flex align-items-center justify-content-center file-button" *ngIf="auth.isAdmin() || auth.isTeacher()" (click)="recommendedMaterial(material.id)">
-              <i class="bi bi-pin-angle-fill"></i> Recommended
+              <i class="bi bi-pin-angle-fill me-2"></i>
+              <span>Recommend</span>
             </button>
           </div>
         </div>

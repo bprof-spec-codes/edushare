@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MaterialService } from '../../services/material.service';
 import { Observable } from 'rxjs';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
@@ -11,6 +11,9 @@ import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 })
 export class MaterialSearchListComponent implements OnInit{
   materials: MaterialShortViewDto[] = []
+  @Input() search: string = ""
+
+  trackById = (_: number, m: MaterialShortViewDto) => m.id;
   
   constructor (private materialService: MaterialService) { }
 
@@ -18,5 +21,9 @@ export class MaterialSearchListComponent implements OnInit{
     this.materialService.materialsShort$.subscribe(res => {
       this.materials = res
     })
+  }
+
+  searchNotNull(): boolean {
+    return this.search !== ""
   }
 }
