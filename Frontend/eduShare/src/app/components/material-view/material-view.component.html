@@ -74,7 +74,8 @@
               (click)="downloadFile(material.content.file, material.content.fileName)">
               Download
             </button>
-            <button class="btn w-25 d-flex align-items-center justify-content-center file-button">
+            <button class="btn w-25 d-flex align-items-center justify-content-center file-button"
+              (click)="previewFile()">
               Preview
             </button>
             <button class="btn w-25 d-flex align-items-center justify-content-center file-button" *ngIf="auth.isAdmin() || auth.isTeacher()" (click)="recommendedMaterial(material.id)">
