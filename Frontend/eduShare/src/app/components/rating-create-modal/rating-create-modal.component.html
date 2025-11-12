@@ -40,11 +40,11 @@
                         <textarea id="comment" rows="4" class="form-control" formControlName="comment"
                             [readonly]="loading" placeholder="Write a few words about your experience..."></textarea>
                         <div class="form-text">
-                            Min. 2, max. 1000 characters.
+                            Max. 1000 characters.
                         </div>
                         <div class="invalid-feedback d-block"
                             *ngIf="createForm.get('comment')?.touched && createForm.get('comment')?.invalid">
-                            Please enter a comment between 2 and 1000 characters.
+                            Please enter a comment below 1000 characters.
                         </div>
                     </div>
 

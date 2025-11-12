@@ -26,8 +26,8 @@ export class RatingCreateModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm = this.fb.group({
-      rate: [0, [Validators.required, Validators.max(5), Validators.min(0)]],
-      comment: ['', [Validators.required, Validators.maxLength(1000), Validators.minLength(2)]]
+      rate: [1, [Validators.required, Validators.max(5), Validators.min(1)]],
+      comment: ['', [Validators.maxLength(1000)]]
     })
   }
 
@@ -35,7 +35,8 @@ export class RatingCreateModalComponent implements OnInit {
     if (this.createForm.valid) {
       const dto: RatingCreateDto = {
         materialId: this.materialid || '',
-        ...this.createForm.getRawValue()
+        rate: this.createForm.getRawValue().rate,
+        comment: this.createForm.getRawValue()?.comment.trim() || '',
       }
       this.save.emit(dto)
     } else {
