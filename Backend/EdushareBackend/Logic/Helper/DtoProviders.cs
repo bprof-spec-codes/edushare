@@ -38,7 +38,11 @@ namespace Logic.Helper
                             src.Uploader.Image.FileName,
                             Convert.ToBase64String(src.Uploader.Image.File)
                         )
-                    }));
+                    }))
+                    .ForMember(dest => dest.AverageRating,
+                        opt => opt.MapFrom(src => src.Ratings.Any() ? src.Ratings.Average(r => r.Rate) : 0))
+                    .ForMember(dest => dest.RatingCount,
+                        opt => opt.MapFrom(src => src.Ratings.Count));
                 cfg.CreateMap<Material, MaterialViewDto>()
                      .ForMember(dest => dest.Uploader, opt => opt.MapFrom(src => src.Uploader != null
                          ? new AppUserMaterialShortViewDto
@@ -52,6 +56,7 @@ namespace Logic.Helper
                                     src.Uploader.Image.FileName,
                                      Convert.ToBase64String(src.Uploader.Image.File)
                                  )
+                             
                          }
                          : null))
                      .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content != null
@@ -62,7 +67,12 @@ namespace Logic.Helper
                              src.Content.FileName,
                              Convert.ToBase64String(src.Content.File)
                          )
-                         : null));
+                         : null))
+                     .ForMember(dest => dest.AverageRating,
+                             opt => opt.MapFrom(src => src.Ratings.Any() ? src.Ratings.Average(r => r.Rate) : 0))
+                     .ForMember(dest => dest.RatingCount,
+                             opt => opt.MapFrom(src => src.Ratings.Count));
+
 
                 cfg.CreateMap<ContentCreateUpdateDto, FileContent>();
                 cfg.CreateMap<AppUser, AppUserMaterialShortViewDto>();
