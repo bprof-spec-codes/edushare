@@ -33,6 +33,7 @@ import { SearchbarComponent } from './components/searchbar/searchbar.component';
 import { MaterialSearchListComponent } from './components/material-search-list/material-search-list.component';
 import { MainlistComponent } from './components/mainlist/mainlist.component';
 import { RatingCreateModalComponent } from './components/rating-create-modal/rating-create-modal.component';
+import { RatingStarsComponent } from './components/rating-stars/rating-stars.component';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import { RatingCreateModalComponent } from './components/rating-create-modal/rat
     SearchbarComponent,
     MainlistComponent,
     RatingCreateModalComponent,
+    RatingStarsComponent,
   ],
   imports: [
     BrowserModule,

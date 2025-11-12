@@ -34,7 +34,6 @@ export class MaterialViewComponent implements OnInit {
     private router: Router,
     public auth: AuthService,
     private ratingService: RatingService,
-    private destroyRef: DestroyRef
   ) { }
 
   ngOnInit(): void {
