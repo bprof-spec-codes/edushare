@@ -32,6 +32,7 @@ import { FavMaterialsComponent } from './components/fav-materials/fav-materials.
 import { SearchbarComponent } from './components/searchbar/searchbar.component';
 import { MaterialSearchListComponent } from './components/material-search-list/material-search-list.component';
 import { MainlistComponent } from './components/mainlist/mainlist.component';
+import { RatingCreateModalComponent } from './components/rating-create-modal/rating-create-modal.component';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { MainlistComponent } from './components/mainlist/mainlist.component';
     FavMaterialsComponent,
     MaterialSearchListComponent,
     SearchbarComponent,
-    MainlistComponent
+    MainlistComponent,
+    RatingCreateModalComponent,
   ],
   imports: [
     BrowserModule,
