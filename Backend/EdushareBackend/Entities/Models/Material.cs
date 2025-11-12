@@ -37,6 +37,8 @@ namespace Entities.Models
 
         public bool IsExam { get; set; } = false;
 
+        public int DownloadCount { get; set; } = 0;
+
         public virtual List<AppUser> UsersWhoFavourited { get; set; } = new();
 
 

@@ -20,7 +20,7 @@ namespace EdushareBackend.Controllers
             this.UserManager = userManager;
         }
         [HttpPost]
-        // [Authorize]
+        [Authorize]
         public async Task AddMaterial(MaterialCreateUpdateDto dto)
         {
             var user = await UserManager.GetUserAsync(User);
@@ -34,12 +34,19 @@ namespace EdushareBackend.Controllers
         public void DeleteMaterialById(string id)
         {
             var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userid != materialLogic.GetMaterialById(id).Uploader.Id)
+            var userRole = User.IsInRole("Admin"); // vagy: User.IsInRole("Admin")
+
+            var uploaderId = materialLogic.GetMaterialById(id).Uploader.Id;
+
+            // ha nem admin ÉS nem a feltöltő → TILOS
+            if (!userRole && userid != uploaderId)
             {
-                throw new UnauthorizedAccessException("You are not allowed to do this");
+                throw new UnauthorizedAccessException("You are not allowed to delete this material");
             }
+
             materialLogic.DeleteMaterialById(id);
         }
+
 
         [HttpPut("{id}")]
         [Authorize]
@@ -136,6 +143,12 @@ namespace EdushareBackend.Controllers
             AppUser currentUser = await UserManager.GetUserAsync(User);
             await materialLogic.RemoveFavouriteMaterial(materialId, currentUser);
             return NoContent();
+        }
+
+        [HttpPost("MaterialDownloaded")]
+        public async Task MaterialDownloaded([FromBody] string materialID)
+        {
+            await materialLogic.MaterialDownloaded(materialID);
         }
 
 

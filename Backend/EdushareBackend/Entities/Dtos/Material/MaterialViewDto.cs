@@ -22,5 +22,6 @@ namespace Entities.Dtos.Material
         public DateTime UploadDate { get; set; } = DateTime.Now;
         public AppUserMaterialShortViewDto Uploader { get; set; } = null!;
         public ContentViewDto Content { get; set; } = null!;
+        public List<MaterialShortViewDto> RecommendedMaterials { get; set; } = null!;
     }
 }

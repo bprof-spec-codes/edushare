@@ -105,15 +105,48 @@ namespace Logic.Logic
         {
             var mat = materialRepo.GetAll()
                 .Include(m => m.Subject)
-             .Include(m => m.Content)
-             .Include(m => m.Uploader)
-                 .ThenInclude(u => u.Image)
-             .FirstOrDefault(m => m.Id == id);
-
+                .Include(m => m.Content)
+                .Include(m => m.Uploader)
+                    .ThenInclude(u => u.Image)
+                .FirstOrDefault(m => m.Id == id);
+            
             if (mat == null)
                 throw new Exception("Material not found");
+            
+            var relatedMaterials = materialRepo.GetAll()
+                .Include(m => m.Subject)
+                .Include(m => m.Uploader)
+                .ThenInclude(u => u.Image)
+                .Where(m => m.Subject.Id == mat.SubjectId && m.Id != mat.Id)
+                .OrderBy(m => Guid.NewGuid())
+                .Take(5)
+                .ToList();
 
-            return dtoProviders.Mapper.Map<MaterialViewDto>(mat);
+            if (relatedMaterials.Count < 5)
+            {
+                var otherSubjects = materialRepo.GetAll()
+                    .Include(m => m.Subject)
+                    .Include(m => m.Uploader)
+                    .ThenInclude(u => u.Image)
+                    .Where(m => m.SubjectId != mat.SubjectId && m.Id != mat.Id)
+                    .OrderBy(m => Guid.NewGuid())
+                    .Take(5 - relatedMaterials.Count)
+                    .ToList();
+
+                relatedMaterials.AddRange(otherSubjects);
+            }
+
+            List<MaterialShortViewDto> relatedDto = new List<MaterialShortViewDto>();
+
+            foreach (var m in relatedMaterials)
+            {
+                relatedDto.Add(dtoProviders.Mapper.Map<MaterialShortViewDto>(m));
+            }
+
+            var dto = dtoProviders.Mapper.Map<MaterialViewDto>(mat);
+            dto.RecommendedMaterials = relatedDto;
+            
+            return dto; 
         }
         public void SetRecommendationStatus(string id, bool isRecommended)
         {
@@ -214,6 +247,16 @@ namespace Logic.Logic
                 dbUser.FavouriteMaterials.Remove(materialToRemove);
                 await userManager.UpdateAsync(dbUser);
             }
+        }
+
+        public async Task MaterialDownloaded(string materialID)
+        {
+            var material = await materialRepo.GetAll()
+                .FirstOrDefaultAsync(m => m.Id == materialID);
+            if (material == null)
+                throw new Exception("Material not found");
+            material.DownloadCount += 1;
+            materialRepo.Update(material);
         }
 
 
