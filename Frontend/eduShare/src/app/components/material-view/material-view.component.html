@@ -108,5 +108,6 @@
   [open]="ratingCreateModalOpen"
   [loading]="ratingCreating"
   [error]="ratingCreateError"
-  (close)="closeRatingCreateModal()">
+  (close)="closeRatingCreateModal()"
+  (save)="handleRatingCreate($event)">
 </app-rating-create-modal>

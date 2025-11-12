@@ -5,6 +5,7 @@ import { MaterialViewDto } from '../../dtos/material-view-dto';
 import { AuthService } from '../../services/authentication.service';
 import { Observable } from 'rxjs';
 import { RatingService } from '../../services/rating.service';
+import { RatingCreateDto } from '../../dtos/rating-create-dto';
 
 @Component({
   selector: 'app-material-view',
@@ -124,5 +125,24 @@ export class MaterialViewComponent implements OnInit {
 
   closeRatingCreateModal(){
     this.ratingCreateModalOpen = false
+  }
+
+  handleRatingCreate(event: RatingCreateDto){
+    if(!this.material) return
+    this.ratingCreating = true
+    this.ratingCreateError = null
+    event.materialId = this.material.id
+    this.ratingService.createRating(event).subscribe({
+      next: (res)=>{
+        this.ratingCreating = false
+        this.ratingCreateModalOpen = false
+        console.log('Rating created:', res)
+      },
+      error: (err)=>{
+        console.error(err)
+        this.ratingCreateError = "Could not create rating."
+        this.ratingCreating = false
+      }
+    })
   }
 }
