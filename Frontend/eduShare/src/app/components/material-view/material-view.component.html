@@ -10,9 +10,9 @@
               <span>Recommended</span>
             </div>
             <div>
-              <button class="btn btn-link" (click)="openRatingCreateModal()">
-                <span class="me-1">5/{{ratingAverage$ | async}}</span>
-                <span class="text-muted">({{(ratings$ | async)?.length}})</span>
+              <button class="btn d-inline-flex align-items-left gap-1 ps-0 rating" (click)="openRatingCreateModal()">
+                <app-rating-stars [rating]="ratingAverage$ | async"></app-rating-stars>
+                <span class="text-muted" style="font-size: 0.9rem" count>({{(ratings$ | async)?.length}})</span>
               </button>
             </div>
 
