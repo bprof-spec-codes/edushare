@@ -1,14 +1,14 @@
-<div class="modal-backdrop fade" [class.show]="open" *ngIf="open"></div>
+<div class="modal-backdrop fade show" *ngIf="open"></div>
 
-<div class="modal fade" tabindex="-1" [class.show]="open" [style.display]="open ? 'block' : 'none'" role="dialog"
-    aria-modal="true" aria-labelledby="rateTitle" [attr.aria-hidden]="!open">
+<div class="modal fade" *ngIf="open" [class.show]="open" [style.display]="open ? 'block' : null" tabindex="-1"
+    role="dialog" aria-modal="true" aria-labelledby="rateTitle">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
             <div class="modal-header">
                 <h5 class="modal-title" id="rateTitle">Rate material</h5>
-                <button type="button" class="btn-close" aria-label="Close" (click)="onCancel()"
-                    [disabled]="loading"></button>
+                <button type="button" class="btn-close" aria-label="Close" (click)="onCancel()" [disabled]="loading">
+                </button>
             </div>
 
             <form [formGroup]="createForm" (ngSubmit)="submit()">
@@ -19,16 +19,12 @@
                     </div>
 
                     <div class="mb-3">
-
                         <div class="star-input" role="radiogroup" aria-label="Star rating" (mouseleave)="onStarLeave()">
-                            <button *ngFor="let s of stars" type="button" class="star-btn" role="radio"
-                                [attr.aria-label]="s + ' star'" [attr.aria-checked]="s === createForm.value.rate"
-                                [disabled]="loading" (mouseenter)="onStarEnter(s)" (focus)="onStarEnter(s)"
-                                (blur)="onStarLeave()" (click)="onStarClick(s)" [class.on]="isStarOn(s)">
+                            <button *ngFor="let s of stars" type="button" class="star-btn" [class.on]="isStarOn(s)"
+                                [disabled]="loading" (mouseenter)="onStarEnter(s)" (click)="onStarClick(s)">
                                 ★
                             </button>
                         </div>
-
                         <div class="invalid-feedback d-block"
                             *ngIf="createForm.get('rate')?.touched && createForm.get('rate')?.invalid">
                             Please enter a value between 1 and 5.
@@ -39,13 +35,7 @@
                         <label for="comment" class="form-label">Comment</label>
                         <textarea id="comment" rows="4" class="form-control" formControlName="comment"
                             [readonly]="loading" placeholder="Write a few words about your experience..."></textarea>
-                        <div class="form-text">
-                            Max. 1000 characters.
-                        </div>
-                        <div class="invalid-feedback d-block"
-                            *ngIf="createForm.get('comment')?.touched && createForm.get('comment')?.invalid">
-                            Please enter a comment below 1000 characters.
-                        </div>
+                        <div class="form-text">Max. 1000 characters.</div>
                     </div>
 
                 </div>

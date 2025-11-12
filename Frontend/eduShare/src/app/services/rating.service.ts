@@ -31,8 +31,7 @@ export class RatingService {
     return this.http.get<RatingViewDto[]>(`${environment.baseApiUrl}/api/Rating/material/${materialId}`).pipe(
       tap(res => {
         this._ratings$.next(res)
-        const total = res.reduce((sum, rating) => sum + rating.rate, 0)
-        this.averageRate()
+        //this.averageRate()
       })
     )
   }
@@ -42,7 +41,7 @@ export class RatingService {
       tap(newRating => {
         const current = this._ratings$.value
         this._ratings$.next([...current, newRating])
-        this.averageRate()
+        //this.averageRate()
       })
     )
   }
@@ -53,7 +52,7 @@ export class RatingService {
         const current = this._ratings$.value
         const next = current.filter(s => s.id !== ratingId)
         this._ratings$.next(next)
-        this.averageRate()
+        //this.averageRate()
       })
     )
   }

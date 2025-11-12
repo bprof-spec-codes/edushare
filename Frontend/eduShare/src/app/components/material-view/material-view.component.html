@@ -10,9 +10,9 @@
               <span>Recommended</span>
             </div>
             <div>
-              <button class="btn btn-link p-0" data-bs-toggle="modal"
-                data-bs-target="#rateModal" aria-label="Rate material" (click)="openRatingCreateModal()">
-                <span class="me-1">★★★★☆</span><span class="text-muted">(4.2)</span>
+              <button class="btn btn-link" (click)="openRatingCreateModal()">
+                <span class="me-1">★★★★☆</span>
+                <span class="text-muted">(4.2)</span>
               </button>
             </div>
 
@@ -103,11 +103,6 @@
   </div>
 </div>
 
-<app-rating-create-modal
-  [materialid]="material?.id"
-  [open]="ratingCreateModalOpen"
-  [loading]="ratingCreating"
-  [error]="ratingCreateError"
-  (close)="closeRatingCreateModal()"
-  (save)="handleRatingCreate($event)">
+<app-rating-create-modal [materialid]="material?.id" [open]="ratingCreateModalOpen" [loading]="ratingCreating"
+  [error]="ratingCreateError" (close)="closeRatingCreateModal()" (save)="handleRatingCreate($event)">
 </app-rating-create-modal>

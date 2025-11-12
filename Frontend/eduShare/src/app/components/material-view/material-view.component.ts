@@ -136,7 +136,6 @@ export class MaterialViewComponent implements OnInit {
       next: (res)=>{
         this.ratingCreating = false
         this.ratingCreateModalOpen = false
-        console.log('Rating created:', res)
       },
       error: (err)=>{
         console.error(err)

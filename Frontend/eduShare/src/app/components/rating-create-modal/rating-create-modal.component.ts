@@ -26,7 +26,7 @@ export class RatingCreateModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm = this.fb.group({
-      rate: [1, [Validators.required, Validators.max(5), Validators.min(1)]],
+      rate: [0, [Validators.required, Validators.max(5), Validators.min(1)]],
       comment: ['', [Validators.maxLength(1000)]]
     })
   }
@@ -45,6 +45,7 @@ export class RatingCreateModalComponent implements OnInit {
   }
 
   onCancel() {
+    (document.activeElement as HTMLElement | null)?.blur?.()
     this.close.emit()
   }
 
