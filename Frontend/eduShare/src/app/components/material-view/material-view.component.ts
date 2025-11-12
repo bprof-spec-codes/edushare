@@ -3,6 +3,8 @@ import { MaterialService } from '../../services/material.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialViewDto } from '../../dtos/material-view-dto';
 import { AuthService } from '../../services/authentication.service';
+import { Observable } from 'rxjs';
+import { RatingService } from '../../services/rating.service';
 
 @Component({
   selector: 'app-material-view',
@@ -17,7 +19,17 @@ export class MaterialViewComponent implements OnInit {
   showFullDescription = false
   currentUserId = ''
 
-  constructor(private route: ActivatedRoute, private materialService: MaterialService, private router: Router, public auth: AuthService) { }
+  ratingCreateModalOpen = false
+  ratingCreating = false
+  ratingCreateError: string | null = null
+
+  constructor(
+    private route: ActivatedRoute,
+    private materialService: MaterialService,
+    private router: Router,
+    public auth: AuthService,
+    private ratingService: RatingService
+  ) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')
@@ -41,12 +53,12 @@ export class MaterialViewComponent implements OnInit {
     }
   }
 
-  recommendedMaterial(id: string){
-  this.material!.isRecommended=!this.material?.isRecommended;
-  this.materialService.updateRecommended(id, this.material!.isRecommended).subscribe({
-    next: () => console.log('Sikeres mentés!'),
-    error: (err) => console.error('Hiba történt:', err)
-  });
+  recommendedMaterial(id: string) {
+    this.material!.isRecommended = !this.material?.isRecommended;
+    this.materialService.updateRecommended(id, this.material!.isRecommended).subscribe({
+      next: () => console.log('Sikeres mentés!'),
+      error: (err) => console.error('Hiba történt:', err)
+    });
     console.log(this.material!.isRecommended);
   }
 
@@ -65,14 +77,14 @@ export class MaterialViewComponent implements OnInit {
     const fileName = this.material.content.fileName;
     const base64 = this.material.content.file;
     const ext = fileName.split('.').pop()?.toLowerCase();
-    
+
     if (ext === 'pdf') {
       const byteCharacters = atob(base64);
       const byteArray = Uint8Array.from(byteCharacters, char => char.charCodeAt(0));
       const blob = new Blob([byteArray], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       window.open(url, '_blank');
-    }else {
+    } else {
       alert('Preview is only available for PDF files.');
     }
   }
@@ -103,5 +115,14 @@ export class MaterialViewComponent implements OnInit {
         alert('Nem sikerült törölni az tananyagot.')
       }
     })
+  }
+
+  openRatingCreateModal(){
+    this.ratingCreateModalOpen = true
+    this.ratingCreateError = null
+  }
+
+  closeRatingCreateModal(){
+    this.ratingCreateModalOpen = false
   }
 }

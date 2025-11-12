@@ -1,0 +1,36 @@
+@use '../../../styles/_variables' as *
+
+.btn-save
+    background-color: $card-font-puprle
+    color: white
+
+.btn-save:hover
+    background-color: $button-hover
+    transition-duration: 0.3s
+
+.modal-backdrop.show
+  opacity: .4
+
+.star-input
+  text-align: center
+
+.star-btn
+  border: 0
+  background: transparent
+  font-size: 3rem
+  line-height: 1
+  padding: 0 .2rem
+  cursor: pointer
+  opacity: .6
+  transition: transform .1s ease, opacity .1s ease, color .1s ease
+  color: #adb5bd
+  &:hover
+    transform: translateY(-1px)
+    opacity: .9
+  &:disabled
+    cursor: not-allowed
+    opacity: .4
+
+.star-btn.on
+  color: #f7c948
+  opacity: 1

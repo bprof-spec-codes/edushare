@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrl: './rating-create-modal.component.sass'
 })
 export class RatingCreateModalComponent implements OnInit {
-  @Input() materialid: string | null = ''
+  @Input() materialid: string | undefined
   @Input() open = false
   @Input() loading = false
   @Input() error: string | null = null
@@ -17,6 +17,9 @@ export class RatingCreateModalComponent implements OnInit {
   @Output() save = new EventEmitter<RatingCreateDto>()
   @Output() close = new EventEmitter<void>()
 
+
+  stars = [1, 2, 3, 4, 5]
+  hover = 0
   createForm!: FormGroup
 
   constructor(private fb: FormBuilder) { }
@@ -29,7 +32,7 @@ export class RatingCreateModalComponent implements OnInit {
   }
 
   submit() {
-    if (this.createForm.valid){
+    if (this.createForm.valid) {
       const dto: RatingCreateDto = {
         materialId: this.materialid || '',
         ...this.createForm.getRawValue()
@@ -38,5 +41,28 @@ export class RatingCreateModalComponent implements OnInit {
     } else {
       this.createForm.markAllAsTouched()
     }
+  }
+
+  onCancel() {
+    this.close.emit()
+  }
+
+  onStarEnter(s: number) {
+    if (this.loading) return
+    this.hover = s
+  }
+
+  onStarLeave() {
+    this.hover = 0
+  }
+
+  onStarClick(s: number) {
+    if (this.loading) return
+    this.createForm.get('rate')?.setValue(s)
+    this.createForm.get('rate')?.markAsTouched()
+  }
+
+  isStarOn(s: number): boolean {
+    return this.hover ? s <= this.hover : s <= (this.createForm.value.rate || 0)
   }
 }
