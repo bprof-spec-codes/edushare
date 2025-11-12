@@ -1,5 +1,5 @@
 export interface RatingViewDto {
-    materialId: string
+    id: string
     userId: string
     userName: string
     rate: number
