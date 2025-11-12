@@ -19,29 +19,25 @@ export class RatingService {
 
   constructor(private http: HttpClient) { }
 
-  private averageRate(): void {
-    if (this._ratings$.value.length > 0) {
-      const total = this._ratings$.value.reduce((sum, rating) => sum + rating.rate, 0)
-      const average = this._ratings$.value.length ? total / this._ratings$.value.length : 0
-      this._ratingAverage$.next(average)
-    }
+  private averageRate(list: RatingViewDto[]): void {
+    const total = list.reduce((sum, r) => sum + r.rate, 0)
+    const avg = list.length ? total / list.length : 0
+    this._ratingAverage$.next(+avg.toFixed(1))
   }
 
   getRatingsByMaterial(materialId: string): Observable<RatingViewDto[]> {
     return this.http.get<RatingViewDto[]>(`${environment.baseApiUrl}/api/Rating/material/${materialId}`).pipe(
       tap(res => {
         this._ratings$.next(res)
-        //this.averageRate()
+        this.averageRate(res)
       })
     )
   }
 
   createRating(rating: RatingCreateDto): Observable<RatingViewDto> {
     return this.http.post<RatingViewDto>(`${environment.baseApiUrl}/api/Rating`, rating).pipe(
-      tap(newRating => {
-        const current = this._ratings$.value
-        this._ratings$.next([...current, newRating])
-        //this.averageRate()
+      tap(() => {
+        this.getRatingsByMaterial(rating.materialId).subscribe()
       })
     )
   }
@@ -52,7 +48,7 @@ export class RatingService {
         const current = this._ratings$.value
         const next = current.filter(s => s.id !== ratingId)
         this._ratings$.next(next)
-        //this.averageRate()
+        this.averageRate(next)
       })
     )
   }

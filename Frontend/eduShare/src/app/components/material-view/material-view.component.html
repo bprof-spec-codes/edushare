@@ -11,8 +11,8 @@
             </div>
             <div>
               <button class="btn btn-link" (click)="openRatingCreateModal()">
-                <span class="me-1">★★★★☆</span>
-                <span class="text-muted">(4.2)</span>
+                <span class="me-1">5/{{ratingAverage$ | async}}</span>
+                <span class="text-muted">({{(ratings$ | async)?.length}})</span>
               </button>
             </div>
 

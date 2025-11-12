@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit } from '@angular/core';
 import { MaterialService } from '../../services/material.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialViewDto } from '../../dtos/material-view-dto';
@@ -6,6 +6,8 @@ import { AuthService } from '../../services/authentication.service';
 import { Observable } from 'rxjs';
 import { RatingService } from '../../services/rating.service';
 import { RatingCreateDto } from '../../dtos/rating-create-dto';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RatingViewDto } from '../../dtos/rating-view-dto';
 
 @Component({
   selector: 'app-material-view',
@@ -23,13 +25,16 @@ export class MaterialViewComponent implements OnInit {
   ratingCreateModalOpen = false
   ratingCreating = false
   ratingCreateError: string | null = null
+  public ratings$: Observable<RatingViewDto[]> = new Observable<RatingViewDto[]>()
+  public ratingAverage$: Observable<number> = new Observable<number>()
 
   constructor(
     private route: ActivatedRoute,
     private materialService: MaterialService,
     private router: Router,
     public auth: AuthService,
-    private ratingService: RatingService
+    private ratingService: RatingService,
+    private destroyRef: DestroyRef
   ) { }
 
   ngOnInit(): void {
@@ -52,6 +57,9 @@ export class MaterialViewComponent implements OnInit {
         }
       })
     }
+
+    this.ratingsLoad(id)
+
   }
 
   recommendedMaterial(id: string) {
@@ -118,26 +126,41 @@ export class MaterialViewComponent implements OnInit {
     })
   }
 
-  openRatingCreateModal(){
+  ratingsLoad(id: string) {
+    this.ratingService.getRatingsByMaterial(id).subscribe({
+      next: () => {
+        this.ratings$ = this.ratingService.ratings$
+        this.ratingAverage$ = this.ratingService.ratingAverage$
+        this.loading = false
+      },
+      error: (err) => {
+        this.loading = false
+        console.error(err)
+        alert('Could not load ratings.')
+      }
+    })
+  }
+
+  openRatingCreateModal() {
     this.ratingCreateModalOpen = true
     this.ratingCreateError = null
   }
 
-  closeRatingCreateModal(){
+  closeRatingCreateModal() {
     this.ratingCreateModalOpen = false
   }
 
-  handleRatingCreate(event: RatingCreateDto){
-    if(!this.material) return
+  handleRatingCreate(event: RatingCreateDto) {
+    if (!this.material) return
     this.ratingCreating = true
     this.ratingCreateError = null
     event.materialId = this.material.id
     this.ratingService.createRating(event).subscribe({
-      next: (res)=>{
+      next: () => {
         this.ratingCreating = false
         this.ratingCreateModalOpen = false
       },
-      error: (err)=>{
+      error: (err) => {
         console.error(err)
         this.ratingCreateError = "Could not create rating."
         this.ratingCreating = false

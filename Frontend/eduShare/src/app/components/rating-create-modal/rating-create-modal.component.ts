@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, input, OnInit, Output, output } from '@angular/core';
+import { Component, EventEmitter, Input, input, OnChanges, OnInit, Output, output } from '@angular/core';
 import { RatingCreateDto } from '../../dtos/rating-create-dto';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './rating-create-modal.component.html',
   styleUrl: './rating-create-modal.component.sass'
 })
-export class RatingCreateModalComponent implements OnInit {
+export class RatingCreateModalComponent implements OnInit, OnChanges {
   @Input() materialid: string | undefined
   @Input() open = false
   @Input() loading = false
@@ -29,6 +29,16 @@ export class RatingCreateModalComponent implements OnInit {
       rate: [0, [Validators.required, Validators.max(5), Validators.min(1)]],
       comment: ['', [Validators.maxLength(1000)]]
     })
+  }
+
+  ngOnChanges(): void {
+    if (this.open) {
+      this.createForm.reset({
+        rate: 0,
+        comment: ''
+      })
+      this.hover = 0
+    }
   }
 
   submit() {
