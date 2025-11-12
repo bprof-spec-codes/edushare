@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251111144221_Comment")]
-    partial class Comment
+    [Migration("20251112162604_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -371,6 +371,9 @@ namespace Data.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<DateTime?>("BannedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -379,10 +382,19 @@ namespace Data.Migrations
                     b.Property<string>("ImageId")
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("IsBanned")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsWarned")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("WarnedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasIndex("ImageId");
 

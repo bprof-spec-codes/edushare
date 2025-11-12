@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class isExam : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -81,6 +81,10 @@ namespace Data.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     ImageId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    IsWarned = table.Column<bool>(type: "bit", nullable: true),
+                    WarnedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsBanned = table.Column<bool>(type: "bit", nullable: true),
+                    BannedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -203,7 +207,8 @@ namespace Data.Migrations
                     UploaderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ContentId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     IsRecommended = table.Column<bool>(type: "bit", nullable: false),
-                    IsExam = table.Column<bool>(type: "bit", nullable: false)
+                    IsExam = table.Column<bool>(type: "bit", nullable: false),
+                    DownloadCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -245,6 +250,33 @@ namespace Data.Migrations
                     table.ForeignKey(
                         name: "FK_AppUserFavouriteMaterials_Materials_FavouriteMaterialsId",
                         column: x => x.FavouriteMaterialsId,
+                        principalTable: "Materials",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ratings",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    MaterialId = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Rate = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ratings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ratings_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Ratings_Materials_MaterialId",
+                        column: x => x.MaterialId,
                         principalTable: "Materials",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -313,6 +345,16 @@ namespace Data.Migrations
                 name: "IX_Materials_UploaderId",
                 table: "Materials",
                 column: "UploaderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ratings_MaterialId",
+                table: "Ratings",
+                column: "MaterialId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ratings_UserId",
+                table: "Ratings",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -337,10 +379,13 @@ namespace Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Materials");
+                name: "Ratings");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Materials");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
