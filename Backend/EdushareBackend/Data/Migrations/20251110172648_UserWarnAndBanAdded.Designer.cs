@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20251110172648_UserWarnAndBanAdded")]
+    partial class UserWarnAndBanAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,9 +74,6 @@ namespace Data.Migrations
                         .HasMaxLength(1500)
                         .HasColumnType("nvarchar(1500)");
 
-                    b.Property<int>("DownloadCount")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsExam")
                         .HasColumnType("bit");
 
@@ -105,37 +105,6 @@ namespace Data.Migrations
                     b.HasIndex("UploaderId");
 
                     b.ToTable("Materials");
-                });
-
-            modelBuilder.Entity("Entities.Models.Rating", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("MaterialId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("Rate")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MaterialId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("Entities.Models.Subject", b =>
@@ -434,25 +403,6 @@ namespace Data.Migrations
                     b.Navigation("Subject");
 
                     b.Navigation("Uploader");
-                });
-
-            modelBuilder.Entity("Entities.Models.Rating", b =>
-                {
-                    b.HasOne("Entities.Models.Material", "Material")
-                        .WithMany()
-                        .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Models.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Material");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

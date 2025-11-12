@@ -30,6 +30,9 @@ namespace Entities.Models
         {
             FavouriteMaterials = new List<Material>();
         }
-
+        public bool IsWarned { get; set; } = false;
+        public DateTime? WarnedAt { get; set; }
+        public bool IsBanned { get; set; } = false;
+        public DateTime? BannedAt { get; set; }
     }
 }

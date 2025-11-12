@@ -1,4 +1,4 @@
-﻿using Entities.Dtos.Content;
+using Entities.Dtos.Content;
 using Entities.Helpers;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -16,5 +16,7 @@ namespace Entities.Dtos.User
         public string FullName { get; set; } = string.Empty;
         public ContentViewDto Image { get; set; } = null!;
         public int MaterialCount { get; set; } = 0;
+        public bool IsWarned { get; set; } = false;
+        public bool IsBanned { get; set; } = false;
     }
 }
