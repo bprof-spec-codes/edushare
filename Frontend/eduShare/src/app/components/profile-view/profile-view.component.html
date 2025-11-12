@@ -16,6 +16,29 @@
       <i class="bi bi-pencil-square"></i>
     </button>
   </div>
+
+  <!-- User notification -->
+  <div *ngIf="ownProfile && profile" class="mb-4">
+    <!-- Warning alert -->
+    <div *ngIf="profile.isWarned" class="alert alert-warning d-flex align-items-center" role="alert">
+      <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+      <div>
+        <h5 class="alert-heading mb-1">Your account has been warned</h5>
+        <p class="mb-0">
+          You received a warning for inappropriate behavior<span *ngIf="profile.warnedAt"> on {{ profile.warnedAt | date:'medium' }}</span>.</p>
+      </div>
+    </div>
+    <!-- Ban alert -->
+    <div *ngIf="profile.isBanned" class="alert alert-danger d-flex align-items-center" role="alert">
+      <i class="bi bi-slash-circle-fill fs-4 me-3"></i>
+      <div>
+        <h5 class="alert-heading mb-1">Your account has been banned</h5>
+        <p class="mb-0">
+          Your account was banned<span *ngIf="profile.bannedAt"> on {{ profile.bannedAt | date:'medium' }}</span>.</p>
+      </div>
+    </div>
+  </div>
+
   <hr>
 
   <!-- Admin panel for user warn, ban -->
