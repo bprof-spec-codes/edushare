@@ -62,7 +62,12 @@ namespace Logic.Logic
         }
         public IEnumerable<MaterialShortViewDto> GetAllMaterials()
         {
-            return materialRepo.GetAll().Include(u => u.Subject).Include(u => u.Uploader).ThenInclude(u => u.Image).Select(x => dtoProviders.Mapper.Map<MaterialShortViewDto>(x));
+            return materialRepo.GetAll()
+                .Include(u => u.Subject)
+                .Include(u => u.Uploader)
+                .ThenInclude(u => u.Image)
+                .Include(u => u.Ratings)
+                .Select(x => dtoProviders.Mapper.Map<MaterialShortViewDto>(x));
 
         }
         public void DeleteMaterialById(string id)
@@ -108,6 +113,7 @@ namespace Logic.Logic
                 .Include(m => m.Content)
                 .Include(m => m.Uploader)
                     .ThenInclude(u => u.Image)
+                    .Include(m => m.Ratings)
                 .FirstOrDefault(m => m.Id == id);
             
             if (mat == null)
