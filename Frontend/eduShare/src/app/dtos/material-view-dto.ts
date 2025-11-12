@@ -8,7 +8,11 @@ export interface MaterialViewDto {
     subject: Subject
     description: string
     isRecommended:boolean
+    isExam: boolean
+    averageRating: number
+    ratingCount: number
     uploadDate: string
     uploader: UploaderDto
     content: FileContent
+    downloadCount: number
 }
