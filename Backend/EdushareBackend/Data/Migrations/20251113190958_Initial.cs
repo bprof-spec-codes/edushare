@@ -263,7 +263,8 @@ namespace Data.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     MaterialId = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Rate = table.Column<int>(type: "int", nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false)
+                    Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    uploadDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

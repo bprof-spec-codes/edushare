@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251112193814_Initial")]
+    [Migration("20251113190958_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -131,6 +131,9 @@ namespace Data.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("uploadDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

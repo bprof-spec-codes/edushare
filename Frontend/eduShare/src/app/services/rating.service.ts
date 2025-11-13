@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { RatingViewDto } from '../dtos/rating-view-dto';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
@@ -27,9 +27,14 @@ export class RatingService {
 
   getRatingsByMaterial(materialId: string): Observable<RatingViewDto[]> {
     return this.http.get<RatingViewDto[]>(`${environment.baseApiUrl}/api/Rating/material/${materialId}`).pipe(
-      tap(res => {
-        this._ratings$.next(res)
-        this.averageRate(res)
+      map(res =>
+        [...res].sort((a, b) =>
+          new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime()
+        )
+      ),
+      tap(sorted => {
+        this._ratings$.next(sorted);
+        this.averageRate(sorted);
       })
     )
   }

@@ -34,7 +34,7 @@ namespace Logic.Helper
                         )
                     }))
                     .ForMember(dest => dest.AverageRating,
-                        opt => opt.MapFrom(src => src.Ratings.Any() ? src.Ratings.Average(r => r.Rate) : 0))
+                        opt => opt.MapFrom(src => src.Ratings.Any() ? Math.Round(src.Ratings.Average(r => r.Rate), 1) : 0))
                     .ForMember(dest => dest.RatingCount,
                         opt => opt.MapFrom(src => src.Ratings.Count));
                 cfg.CreateMap<Material, MaterialViewDto>()
