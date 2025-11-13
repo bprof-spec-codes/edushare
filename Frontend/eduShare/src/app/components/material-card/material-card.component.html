@@ -4,10 +4,10 @@
         </div>
         
         <br>
-        <div class="title" *ngIf="m.uploader.image.file">{{m.title}}</div>
+        <div [class]="titleClass()" *ngIf="m.uploader.image.file">{{m.title}}</div>
         <div class="datas">
-            <div *ngIf="m.isExam">
-                <i class="examIcon bi bi-exclamation-diamond me-2"></i><span class="isexam">Exam material</span>
+            <div *ngIf="m.isExam" class="examClass">
+                <i class="examIcon bi bi-exclamation-diamond me-2"></i><div class="isexam">Exam material</div>
             </div>
             <div class="icon-data">
                 <i class="bi bi-book book"></i>
