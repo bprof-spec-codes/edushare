@@ -9,9 +9,14 @@
               <i class="bi bi-pin-angle-fill me-1"></i>
               <span>Recommended</span>
             </div>
+            
             <h3 class="mb-0">{{ material.title }}</h3>
             <div class="text-muted fw-semibold">
               <i class="bi bi-book"></i> {{ material.subject.name || 'Placeholder' }}
+            </div>
+            <div class="text-muted fw-semibold" *ngIf="material.isExam">
+              <i class="bi bi-exclamation-diamond-fill me-2"></i>
+              <span>Exam</span>
             </div>
           </div>
 
@@ -81,6 +86,10 @@
             <button class="btn w-25 d-flex align-items-center justify-content-center file-button" *ngIf="auth.isAdmin() || auth.isTeacher()" (click)="recommendedMaterial(material.id)">
               <i class="bi bi-pin-angle-fill me-2"></i>
               <span>Recommend</span>
+            </button>
+            <button class="btn w-25 d-flex align-items-center justify-content-center file-button" *ngIf="auth.isAdmin() || auth.isTeacher()" (click)="examMaterial(material.id)">
+              <i class="bi bi-exclamation-diamond-fill me-2"></i>
+              <span>Exam</span>
             </button>
           </div>
         </div>

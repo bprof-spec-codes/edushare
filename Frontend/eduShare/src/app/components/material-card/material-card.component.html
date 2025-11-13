@@ -2,13 +2,19 @@
     <div class="card-background">
         <div class="isrecommended" *ngIf="m.isRecommended"><i class="bi bi-pin-angle-fill fs-3  position-absolute "></i>
         </div>
+        
         <br>
-        <div class="title" *ngIf="m.uploader.image.file">{{m.title}}</div>
+        <div [class]="titleClass()" *ngIf="m.uploader.image.file">{{m.title}}</div>
         <div class="datas">
+            <div *ngIf="m.isExam" class="examClass">
+                <i class="examIcon bi bi-exclamation-diamond me-2"></i><div class="isexam">Exam material</div>
+            </div>
             <div class="icon-data">
                 <i class="bi bi-book book"></i>
                 <div class="subject">{{m.subject.name}}</div>
+                
             </div>
+            
             <div class="icon-data">
                 <img *ngIf="m.uploader.image.file" [src]="m.uploader.image.file.startsWith('http')
                             ? m.uploader.image.file

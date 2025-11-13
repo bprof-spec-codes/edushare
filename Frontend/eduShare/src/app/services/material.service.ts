@@ -64,6 +64,17 @@ export class MaterialService {
       })
     );
   }
+  updateExam(id: string, isExam: boolean): Observable<void> {
+    return this.http.patch<void>(`${this.apiBaseUrl}/${id}/exam`, isExam).pipe(
+      tap(() => {
+        const current = this.materialShortSubject.getValue();
+        const updated = current.map(m =>
+          m.id === id ? { ...m, isExam } : m
+        );
+        this.materialShortSubject.next(updated);
+      })
+    );
+  }
 
   searchMaterials(searchDto: SearchDto): Observable<MaterialShortViewDto[]> {
     return this.http.post<MaterialShortViewDto[]>(this.apiBaseUrl + "/searchMaterials", searchDto).pipe(
