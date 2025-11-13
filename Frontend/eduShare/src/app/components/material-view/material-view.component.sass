@@ -1,15 +1,15 @@
 @use '../../../styles/_variables' as *
 
 .container-fluid
-    padding: 30px 5% 20px 5%
-    font-family: 'Nunito'
+  padding: 30px 5% 20px 5%
+  font-family: 'Nunito'
 
 .file-button
-    background-color: $edu-purple
-    color: white
+  background-color: $edu-purple
+  color: white
 
 .text-body
-    text-align: justify
+  text-align: justify
 
 .btn-link
   color: var(--bs-primary)
@@ -26,14 +26,27 @@
   flex-wrap: nowrap
   overflow-x: auto
   gap: 1rem
+  align-items: stretch
   padding-bottom: 0.5rem
 
-.rating-scroll-container::-webkit-scrollbar
-  height: 8px
+  scrollbar-width: thin
+  scrollbar-color: transparent transparent
 
-.rating-scroll-container::-webkit-scrollbar-track
-  background: #f1f1f1
+  &::-webkit-scrollbar
+    height: 8px
 
-.rating-scroll-container::-webkit-scrollbar-thumb
-  background: #c5c5c5
-  border-radius: 4px
+  &::-webkit-scrollbar-track
+    background: transparent
+
+  &::-webkit-scrollbar-thumb
+    background: transparent
+    border-radius: 4px
+
+  &:hover
+    scrollbar-color: rgba(1,1,1, 0.1) white
+
+  &:hover::-webkit-scrollbar-track
+    background: #f1f1f1
+
+  &:hover::-webkit-scrollbar-thumb
+    background: #c5c5c5
