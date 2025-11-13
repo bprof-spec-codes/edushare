@@ -1,4 +1,7 @@
 <div class="rating-stars" [attr.aria-label]="ariaLabel">
+  <ng-container>
+    <span class="rating-number me-1">{{ rating?.toFixed(1)?.toString()?.replace('.',',') }}</span>
+  </ng-container>
   <ng-container *ngFor="let _ of [].constructor(fullStars)">
     <span class="material-icons star">star</span>
   </ng-container>
