@@ -37,6 +37,7 @@ export class NavbarComponent implements OnChanges, OnInit {
       error: (err) => {
         console.error(err)
         alert('Nem sikerült betölteni a profilt.')
+        this.auth.logout()
       }
     })
     this.isTeacher = this.auth.getRoles().some(r => r === 'Teacher' || r === 'Admin')
