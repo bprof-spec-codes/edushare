@@ -102,6 +102,7 @@ namespace EdushareBackend
             {
                 opt.Filters.Add<ExceptionFilter>();
                 opt.Filters.Add<ValidationFilterAttribute>();
+                opt.Filters.Add<BanCheckAttribute>();
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
