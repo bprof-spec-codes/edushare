@@ -1,16 +1,21 @@
 <div class="card rating-card">
-  <div class="card-body">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <h6 class="card-title mb-0">{{ userName }}</h6>
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="d-flex justify-content-start align-items-center gap-1">
+                <img *ngIf="(ratingUserMap$ | async)?.[rating.userId]?.image?.file" [src]="(ratingUserMap$ | async)?.[rating.userId]?.image?.file?.startsWith('http')
+                       ? (ratingUserMap$ | async)?.[rating.userId]?.image?.file
+                       : 'data:image/*;base64,' + (ratingUserMap$ | async)?.[rating.userId]?.image?.file" alt="pfp"
+                    class="rounded-circle" width="25" height="25" />
+                <h6 class="card-title mb-0">{{rating.userName}}</h6>
+            </div>
+            <span class="badge bg-primary">
+                {{ rating.rate }}/5
+            </span>
+        </div>
 
-      <span class="badge bg-primary">
-        {{ rating }}/5
-      </span>
+        <p class="mb-0 text-muted" *ngIf="rating.comment">"{{ rating.comment }}"</p>
+        <p class="mb-0 text-muted fst-italic" *ngIf="!rating.comment">
+            Nincs szöveges komment.
+        </p>
     </div>
-
-    <p class="mb-0 text-muted" *ngIf="comment">"{{ comment }}"</p>
-    <p class="mb-0 text-muted fst-italic" *ngIf="!comment">
-      Nincs szöveges komment.
-    </p>
-  </div>
 </div>
