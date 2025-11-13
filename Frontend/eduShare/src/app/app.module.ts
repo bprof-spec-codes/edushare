@@ -35,6 +35,7 @@ import { MainlistComponent } from './components/mainlist/mainlist.component';
 import { RatingCreateModalComponent } from './components/rating-create-modal/rating-create-modal.component';
 import { RatingStarsComponent } from './components/rating-stars/rating-stars.component';
 import { RatingCardComponent } from './components/rating-card/rating-card.component';
+import { RatingCommentModalComponent } from './components/rating-comment-modal/rating-comment-modal.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { RatingCardComponent } from './components/rating-card/rating-card.compon
     RatingCreateModalComponent,
     RatingStarsComponent,
     RatingCardComponent,
+    RatingCommentModalComponent,
   ],
   imports: [
     BrowserModule,

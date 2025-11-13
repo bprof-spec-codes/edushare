@@ -16,6 +16,9 @@ export class RatingCardComponent implements OnInit {
   public userList$: Observable<ProfilListViewDto[]> = new Observable<ProfilListViewDto[]>()
   public ratingUserMap$: Observable<Record<string, ProfilListViewDto>> = new Observable<Record<string, ProfilListViewDto>>()
 
+  maxCommentLength = 120
+  commentModalOpen = false
+
   constructor(private profileService: ProfileService) { }
 
   ngOnInit(): void {
@@ -24,6 +27,18 @@ export class RatingCardComponent implements OnInit {
     this.ratingUserMap$ = this.userList$.pipe(
       map(users => Object.fromEntries(users.map(user => [user.id, user])))
     )
+  }
+
+  get isLongComment(): boolean {
+    return (this.rating.comment?.length ?? 0) > this.maxCommentLength
+  }
+
+  openCommentModal(): void {
+    this.commentModalOpen = true
+  }
+  
+  closeCommentModal(): void {
+    this.commentModalOpen = false
   }
 
 }
