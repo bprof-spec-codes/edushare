@@ -93,6 +93,16 @@
           </div>
         </div>
 
+        <div class="row">
+          <div class="col-12">
+            <div class="rating-scroll-container" #ratingScroll (wheel)="onHorizontalScroll($event)">
+              <app-rating-card *ngFor="let rating of ratings$ | async" [userName]="rating.userName"
+                [rating]="rating.rate" [comment]="rating.comment">
+              </app-rating-card>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 

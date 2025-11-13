@@ -166,4 +166,14 @@ export class MaterialViewComponent implements OnInit {
       }
     })
   }
+
+  onHorizontalScroll(event: WheelEvent) {
+    const target = event.currentTarget as HTMLElement | null;
+    if (!target) return
+
+    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+      event.preventDefault()
+      target.scrollLeft += event.deltaY
+    }
+  }
 }
