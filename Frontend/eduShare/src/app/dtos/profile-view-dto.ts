@@ -8,4 +8,8 @@ export interface ProfileViewDto {
     email:string
     image:ImageDto
     materials:MaterialShortViewDto[]
+    isWarned?: boolean
+    isBanned?: boolean
+    warnedAt?: string
+    bannedAt?: string
 }
