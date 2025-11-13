@@ -96,7 +96,8 @@
         <div class="row">
           <div class="col-12">
             <div class="rating-scroll-container" #ratingScroll (wheel)="onHorizontalScroll($event)">
-              <app-rating-card *ngFor="let rating of ratings$ | async" [rating]="rating">
+              <app-rating-card *ngFor="let rating of ratings$ | async" [rating]="rating"
+                (showFullComment)="openCommentModal(rating.userName,rating.comment)">
               </app-rating-card>
             </div>
           </div>
@@ -115,3 +116,7 @@
 <app-rating-create-modal [materialid]="material?.id" [open]="ratingCreateModalOpen" [loading]="ratingCreating"
   [error]="ratingCreateError" (close)="closeRatingCreateModal()" (save)="handleRatingCreate($event)">
 </app-rating-create-modal>
+
+<app-rating-comment-modal [open]="commentModalOpen" [comment]="selectedComment" [userName]="selectedUserName"
+  (close)="closeCommentModal()">
+</app-rating-comment-modal>

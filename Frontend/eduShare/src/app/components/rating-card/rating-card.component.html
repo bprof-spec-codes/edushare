@@ -1,4 +1,4 @@
-<div class="card rating-card p-3">
+<div class="card rating-card p-3 mt-4">
     <div class="card-title">
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex justify-content-start align-items-center gap-1">
@@ -23,7 +23,21 @@
     </div>
     <div class="card-body">
 
-        <p class="mb-0 text-muted" *ngIf="rating.comment">"{{ rating.comment }}"</p>
+        <div *ngIf="rating.comment">
+            <p class="mb-0 text-muted">
+                <ng-container *ngIf="isLongComment; else fullComment">
+                    "{{ rating.comment | slice:0:maxCommentLength }}
+                    <button *ngIf="isLongComment" class="btn btn-link p-0 m-0 inline-more-btn" (click)="onShowMore()">
+                        ...
+                    </button>
+                    "
+                </ng-container>
+
+                <ng-template #fullComment>
+                    "{{ rating.comment }}"
+                </ng-template>
+            </p>
+        </div>
         <p class="mb-0 text-muted fst-italic" *ngIf="!rating.comment">
             No comment provided.
         </p>

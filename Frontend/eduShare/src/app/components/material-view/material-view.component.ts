@@ -28,6 +28,10 @@ export class MaterialViewComponent implements OnInit {
   public ratings$: Observable<RatingViewDto[]> = new Observable<RatingViewDto[]>()
   public ratingAverage$: Observable<number> = new Observable<number>()
 
+  selectedComment: string = ''
+  selectedUserName: string = ''
+  commentModalOpen = false
+
   constructor(
     private route: ActivatedRoute,
     private materialService: MaterialService,
@@ -176,4 +180,15 @@ export class MaterialViewComponent implements OnInit {
       target.scrollLeft += event.deltaY
     }
   }
+
+  openCommentModal(userName: string, comment: string) {
+    this.selectedUserName = userName
+    this.selectedComment = comment
+    this.commentModalOpen = true
+  }
+
+  closeCommentModal() {
+    this.commentModalOpen = false
+  }
+
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ProfileService } from '../../services/profile.service';
 import { map, Observable } from 'rxjs';
 import { ProfileViewDto } from '../../dtos/profile-view-dto';
@@ -16,7 +16,8 @@ export class RatingCardComponent implements OnInit {
   public userList$: Observable<ProfilListViewDto[]> = new Observable<ProfilListViewDto[]>()
   public ratingUserMap$: Observable<Record<string, ProfilListViewDto>> = new Observable<Record<string, ProfilListViewDto>>()
 
-  maxCommentLength = 120
+  @Output() showFullComment = new EventEmitter<void>()
+  maxCommentLength = 51
   commentModalOpen = false
 
   constructor(private profileService: ProfileService) { }
@@ -33,12 +34,8 @@ export class RatingCardComponent implements OnInit {
     return (this.rating.comment?.length ?? 0) > this.maxCommentLength
   }
 
-  openCommentModal(): void {
-    this.commentModalOpen = true
-  }
-  
-  closeCommentModal(): void {
-    this.commentModalOpen = false
+  onShowMore() {
+    this.showFullComment.emit();
   }
 
 }
