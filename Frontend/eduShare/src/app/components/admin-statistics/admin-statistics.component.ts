@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StatisticsService } from '../../services/statistics.service';
 import { AdminStatisticsDto } from '../../dtos/admin-statistics-dto';
 import { Router } from '@angular/router';
+import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 
 @Component({
   selector: 'app-admin-statistics',
@@ -41,4 +42,13 @@ export class AdminStatisticsComponent implements OnInit {
     });
   }
 
+  viewMaterial(materialId: string): void {
+    this.router.navigate(['/materials', materialId, 'view']);
+  }
+
+  getMaterialImageSrc(material: MaterialShortViewDto): string {
+    const file = material.uploader?.image?.file;
+    if (!file) return 'assets/default-material.png';
+    return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
+  }
 }
