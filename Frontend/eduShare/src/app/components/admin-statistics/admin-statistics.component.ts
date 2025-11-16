@@ -3,6 +3,7 @@ import { StatisticsService } from '../../services/statistics.service';
 import { AdminStatisticsDto } from '../../dtos/admin-statistics-dto';
 import { Router } from '@angular/router';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
+import { ProfilListViewDto } from '../../dtos/profil-list-view-dto';
 
 @Component({
   selector: 'app-admin-statistics',
@@ -49,6 +50,16 @@ export class AdminStatisticsComponent implements OnInit {
   getMaterialImageSrc(material: MaterialShortViewDto): string {
     const file = material.uploader?.image?.file;
     if (!file) return 'assets/default-material.png';
+    return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
+  }
+
+  viewProfile(userId: string): void {
+    this.router.navigate(['/profile-view', userId]);
+  }
+
+  getProfileImageSrc(user: ProfilListViewDto): string {
+    const file = user.image?.file;
+    if (!file) return 'assets/default-avatar.png';
     return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
   }
 }
