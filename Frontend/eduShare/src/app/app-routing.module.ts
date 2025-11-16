@@ -20,6 +20,7 @@ import { FavMaterialsComponent } from './components/fav-materials/fav-materials.
 import { MaterialSearchListComponent } from './components/material-search-list/material-search-list.component';
 import { MainlistComponent } from './components/mainlist/mainlist.component';
 import { BanCheckGuard } from './guards/ban-check.guard';
+import { AdminStatisticsComponent } from './components/admin-statistics/admin-statistics.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -45,7 +46,8 @@ const routes: Routes = [
       { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard, BanCheckGuard] },
       { path: 'subjects', component: SubjectListComponent, canActivate: [roleGuard, BanCheckGuard], data: { roles: ['Teacher', 'Admin'] } },
       { path: 'material-search', component: MaterialSearchListComponent, canActivate: [BanCheckGuard]},
-      { path: 'fav-materials', component: FavMaterialsComponent, canActivate: [AuthGuard, BanCheckGuard] }
+      { path: 'fav-materials', component: FavMaterialsComponent, canActivate: [AuthGuard, BanCheckGuard] },
+      { path: 'statistics', component: AdminStatisticsComponent, canActivate: [roleGuard, BanCheckGuard], data: { roles: ['Admin'] } }
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
