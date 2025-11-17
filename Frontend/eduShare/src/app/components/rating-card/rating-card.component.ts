@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 })
 export class RatingCardComponent implements OnInit {
   @Input() rating!: RatingViewDto
+  @Input() currentUserId: string = ''
   public userList$: Observable<ProfilListViewDto[]> = new Observable<ProfilListViewDto[]>()
   public ratingUserMap$: Observable<Record<string, ProfilListViewDto>> = new Observable<Record<string, ProfilListViewDto>>()
 

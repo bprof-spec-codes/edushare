@@ -99,7 +99,7 @@
           <div class="col-12">
             <div class="rating-scroll-container comments-wrapper" [class.open]="((ratings$ | async)?.length ?? 0)>0"
               #ratingScroll (wheel)="onHorizontalScroll($event)">
-              <app-rating-card *ngFor="let rating of ratings$ | async" [rating]="rating" (deleteRating)="handleRatingDelete($event)"
+              <app-rating-card *ngFor="let rating of ratings$ | async" [rating]="rating" [currentUserId]="currentUserId" (deleteRating)="handleRatingDelete($event)"
                 (showFullComment)="openCommentModal(rating.userName,rating.comment)">
               </app-rating-card>
             </div>

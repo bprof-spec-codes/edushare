@@ -16,23 +16,25 @@
                 </div>
             </div>
             <div>
-                <span class="text-muted me-0 pe-0" style="font-size: 0.9rem"
+                <span class="text-muted" [class.me-3]="currentUserId!=rating.userId" style="font-size: 0.9rem"
                     [innerHTML]="formatRatingDate(rating.uploadDate)">
                 </span>
             </div>
 
-            <button class="btn btn-link text-dark p-0" type="button" id="optionsMenu" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <i class="bi bi-three-dots-vertical fs-5 ps-0 ms-0"></i>
-            </button>
+            <div *ngIf="currentUserId==rating.userId">
+                <button class="btn btn-link text-dark p-0" type="button" id="optionsMenu" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical fs-5 ps-0 ms-0"></i>
+                </button>
 
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="optionsMenu">
-                <li>
-                    <button class="dropdown-item text-danger" (click)="deleteRating.emit(rating.id)">
-                        <i class="bi bi-trash me-2"></i> Törlés
-                    </button>
-                </li>
-            </ul>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="optionsMenu">
+                    <li>
+                        <button class="dropdown-item text-danger" (click)="deleteRating.emit(rating.id)">
+                            <i class="bi bi-trash me-2"></i> Törlés
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="card-body">

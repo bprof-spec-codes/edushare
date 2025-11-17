@@ -148,6 +148,10 @@ export class MaterialViewComponent implements OnInit {
   }
 
   openRatingCreateModal() {
+    if (!this.auth.isLoggedIn()) {
+      this.router.navigate(['/login'])
+      return
+    }
     this.ratingCreateModalOpen = true
     this.ratingCreateError = null
   }
