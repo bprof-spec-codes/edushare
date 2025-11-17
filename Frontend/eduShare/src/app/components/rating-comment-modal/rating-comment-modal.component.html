@@ -1,0 +1,25 @@
+<div *ngIf="open" class="modal fade show d-block" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">{{ userName }}'s comment</h5>
+                <button type="button" class="btn-close" (click)="onClose()"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>{{ comment }}</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="onClose()">
+                    Close
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div *ngIf="open" class="modal-backdrop fade show" (click)="onClose()">
+</div>

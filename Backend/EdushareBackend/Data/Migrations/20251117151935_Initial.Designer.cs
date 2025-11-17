@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251111144221_Comment")]
-    partial class Comment
+    [Migration("20251117151935_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -131,6 +131,9 @@ namespace Data.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("uploadDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -371,6 +374,9 @@ namespace Data.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<DateTime?>("BannedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -379,10 +385,19 @@ namespace Data.Migrations
                     b.Property<string>("ImageId")
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("IsBanned")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsWarned")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("WarnedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasIndex("ImageId");
 
@@ -430,7 +445,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Entities.Models.Rating", b =>
                 {
                     b.HasOne("Entities.Models.Material", "Material")
-                        .WithMany()
+                        .WithMany("Ratings")
                         .HasForeignKey("MaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -504,6 +519,11 @@ namespace Data.Migrations
                         .HasForeignKey("ImageId");
 
                     b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Entities.Models.Material", b =>
+                {
+                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("Entities.Models.AppUser", b =>

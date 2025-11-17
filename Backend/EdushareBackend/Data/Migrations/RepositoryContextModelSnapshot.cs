@@ -129,6 +129,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("uploadDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("MaterialId");
@@ -439,7 +442,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Entities.Models.Rating", b =>
                 {
                     b.HasOne("Entities.Models.Material", "Material")
-                        .WithMany()
+                        .WithMany("Ratings")
                         .HasForeignKey("MaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -513,6 +516,11 @@ namespace Data.Migrations
                         .HasForeignKey("ImageId");
 
                     b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Entities.Models.Material", b =>
+                {
+                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("Entities.Models.AppUser", b =>
