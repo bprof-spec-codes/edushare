@@ -70,4 +70,10 @@ export class MaterialService {
       tap(m => this.materialShortSubject.next(m))
     )
   }
+
+  materialDownloaded(id: string): Observable<void> {
+    return this.http.post<void>(`${this.apiBaseUrl}/MaterialDownloaded`, JSON.stringify(id), {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
 }

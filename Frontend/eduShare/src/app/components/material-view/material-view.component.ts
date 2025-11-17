@@ -76,12 +76,14 @@ export class MaterialViewComponent implements OnInit {
   }
 
   downloadFile(base64: string | undefined, fileName: string | undefined): void {
-    if (!base64 || !fileName) return
+    if (!base64 || !fileName || !this.material?.id) return
 
     const link = document.createElement('a')
     link.href = `data:application/octet-stream;base64,${base64}`
     link.download = fileName
     link.click()
+
+    this.materialService.materialDownloaded(this.material.id).subscribe()
   }
 
   previewFile(): void {

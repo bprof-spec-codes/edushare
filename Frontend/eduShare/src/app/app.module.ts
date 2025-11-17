@@ -32,6 +32,7 @@ import { FavMaterialsComponent } from './components/fav-materials/fav-materials.
 import { SearchbarComponent } from './components/searchbar/searchbar.component';
 import { MaterialSearchListComponent } from './components/material-search-list/material-search-list.component';
 import { MainlistComponent } from './components/mainlist/mainlist.component';
+import { AdminStatisticsComponent } from './components/admin-statistics/admin-statistics.component';
 import { RatingCreateModalComponent } from './components/rating-create-modal/rating-create-modal.component';
 import { RatingStarsComponent } from './components/rating-stars/rating-stars.component';
 import { RatingCardComponent } from './components/rating-card/rating-card.component';
@@ -61,11 +62,12 @@ import { RatingCommentModalComponent } from './components/rating-comment-modal/r
     FavMaterialsComponent,
     MaterialSearchListComponent,
     SearchbarComponent,
-    MainlistComponent,
     RatingCreateModalComponent,
     RatingStarsComponent,
     RatingCardComponent,
     RatingCommentModalComponent,
+    MainlistComponent,
+    AdminStatisticsComponent
   ],
   imports: [
     BrowserModule,

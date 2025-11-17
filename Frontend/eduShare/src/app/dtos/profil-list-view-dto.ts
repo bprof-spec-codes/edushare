@@ -7,4 +7,5 @@ export interface ProfilListViewDto {
     image:ImageDto
     isWarned?: boolean
     isBanned?: boolean
+    materialCount?: number
 }
