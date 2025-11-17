@@ -11,6 +11,7 @@
             </div>
             <div>
               <button class="btn d-inline-flex align-items-left gap-1 ps-0 rating" (click)="openRatingCreateModal()">
+                <span>{{ ratingAverage$ | async | number:'1.1-1' }}</span>
                 <app-rating-stars [rating]="ratingAverage$ | async"></app-rating-stars>
                 <span class="text-muted" style="font-size: 0.9rem" count>({{(ratings$ | async)?.length}})</span>
               </button>
