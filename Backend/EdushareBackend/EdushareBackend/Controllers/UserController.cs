@@ -51,6 +51,8 @@ namespace EdushareBackend.Controllers
                 Id = u.Id,
                 Email = u.Email,
                 FullName = u.FirstName + " " + u.LastName,
+                IsWarned = u.IsWarned,
+                IsBanned = u.IsBanned,
                 Image = new ContentViewDto(
                     u.Image.Id,
                     u.Image.FileName,
@@ -75,6 +77,10 @@ namespace EdushareBackend.Controllers
                 Id = user.Id,
                 FullName = $"{user.FirstName} {user.LastName}",
                 Email = user.Email,
+                IsWarned = user.IsWarned,
+                IsBanned = user.IsBanned,
+                WarnedAt = user.WarnedAt,
+                BannedAt = user.BannedAt,
                 Image = new ContentViewDto(
                     user.Image.Id,
                     user.Image.FileName,
@@ -100,7 +106,7 @@ namespace EdushareBackend.Controllers
 
                     },
                     UploadDate = m.UploadDate,
-                    
+
                     //todo Content
                 }).ToList() ?? new List<MaterialShortViewDto>() //ha a materilas null akkor üres lista
             };

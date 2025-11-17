@@ -16,8 +16,15 @@ export class ProfileViewComponent {
   loading = false
   error?: string
   ownProfile = false
+  isAdmin = false
+
   constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router, private authService: AuthService) { }
+  
   ngOnInit() {
+    // Check if current user is admin
+    const roles = this.authService.getRoles()
+    this.isAdmin = roles.includes('Admin')
+
     const id = this.route.snapshot.paramMap.get('id')
 
     if (!id) {
@@ -26,23 +33,27 @@ export class ProfileViewComponent {
     }
 
     if (id) {
-      this.loading = true
-      this.profileService.getById(id).subscribe({
-        next: (data) => {
-          this.profile = data
-          console.log(this.profile)
-          this.loading = false
-        },
-        error: (err) => {
-          console.error(err)
-          alert('Cannot load the profile.')
-          this.loading = false
-        }
-      })
+      this.loadProfile(id)
       if (id === this.authService.getUserId()) {
         this.ownProfile = true
       }
     }
+  }
+
+  loadProfile(id: string) {
+    this.loading = true
+    this.profileService.getById(id).subscribe({
+      next: (data) => {
+        this.profile = data
+        console.log(this.profile)
+        this.loading = false
+      },
+      error: (err) => {
+        console.error(err)
+        alert('Cannot load the profile.')
+        this.loading = false
+      }
+    })
   }
 
   trackById = (_: number, m: MaterialShortViewDto) => m.id;
@@ -61,4 +72,71 @@ export class ProfileViewComponent {
     return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
   }
 
+  warnUser(): void {
+    if (!this.profile) return
+
+    if (confirm(`Are you sure you want to warn ${this.profile.fullName}?`)) {
+      this.profileService.warnUser(this.profile.id).subscribe({
+        next: () => {
+          alert('User warned successfully!')
+          this.loadProfile(this.profile!.id)
+        },
+        error: (err) => {
+          console.error(err)
+          alert('Failed to warn user: ' + (err.error?.message || 'Unknown error'))
+        }
+      })
+    }
+  }
+
+  removeWarning(): void {
+    if (!this.profile) return
+
+    if (confirm(`Are you sure you want to remove the warning from ${this.profile.fullName}?`)) {
+      this.profileService.removeWarning(this.profile.id).subscribe({
+        next: () => {
+          alert('Warning removed successfully!')
+          this.loadProfile(this.profile!.id)
+        },
+        error: (err) => {
+          console.error(err)
+          alert('Failed to remove warning: ' + (err.error?.message || 'Unknown error'))
+        }
+      })
+    }
+  }
+
+  banUser(): void {
+    if (!this.profile) return
+
+    if (confirm(`Are you sure you want to BAN ${this.profile.fullName}? This will prevent them from logging in.`)) {
+      this.profileService.banUser(this.profile.id).subscribe({
+        next: () => {
+          alert('User banned successfully!')
+          this.loadProfile(this.profile!.id)
+        },
+        error: (err) => {
+          console.error(err)
+          alert('Failed to ban user: ' + (err.error?.message || 'Unknown error'))
+        }
+      })
+    }
+  }
+
+  unbanUser(): void {
+    if (!this.profile) return
+
+    if (confirm(`Are you sure you want to unban ${this.profile.fullName}?`)) {
+      this.profileService.unbanUser(this.profile.id).subscribe({
+        next: () => {
+          alert('User unbanned successfully!')
+          this.loadProfile(this.profile!.id)
+        },
+        error: (err) => {
+          console.error(err)
+          alert('Failed to unban user: ' + (err.error?.message || 'Unknown error'))
+        }
+      })
+    }
+  }
 }

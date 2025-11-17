@@ -5,4 +5,6 @@ export interface ProfilListViewDto {
     fullName:string
     email:string
     image:ImageDto
+    isWarned?: boolean
+    isBanned?: boolean
 }
