@@ -24,7 +24,7 @@
     <div class="card-body">
 
         <div *ngIf="rating.comment">
-            <p class="mb-0 text-muted">
+            <p class="mb-0 text-muted comment-text">
                 <ng-container *ngIf="isLongComment; else fullComment">
                     "{{ rating.comment | slice:0:maxCommentLength }}
                     <button *ngIf="isLongComment" class="btn btn-link p-0 m-0 inline-more-btn" (click)="onShowMore()">

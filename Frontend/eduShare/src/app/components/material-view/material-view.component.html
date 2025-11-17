@@ -1,5 +1,5 @@
-<div class="container-fluid d-flex align-items-center justify-content-center">
-  <div class="row w-100 align-items-center justify-content-center">
+<div class="container-fluid py-5 mt-5">
+  <div class="row w-100 justify-content-center align-items-start">
     <div class="col-md-7 d-flex justify-content-center">
       <div class="container mt-4" *ngIf="material">
 
@@ -95,7 +95,8 @@
 
         <div class="row">
           <div class="col-12">
-            <div class="rating-scroll-container" #ratingScroll (wheel)="onHorizontalScroll($event)">
+            <div class="rating-scroll-container comments-wrapper" [class.open]="((ratings$ | async)?.length ?? 0)>0"
+              #ratingScroll (wheel)="onHorizontalScroll($event)">
               <app-rating-card *ngFor="let rating of ratings$ | async" [rating]="rating"
                 (showFullComment)="openCommentModal(rating.userName,rating.comment)">
               </app-rating-card>
