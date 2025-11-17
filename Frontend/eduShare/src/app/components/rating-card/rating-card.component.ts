@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ProfileService } from '../../services/profile.service';
 import { map, Observable } from 'rxjs';
-import { ProfileViewDto } from '../../dtos/profile-view-dto';
 import { ProfilListViewDto } from '../../dtos/profil-list-view-dto';
 import { RatingViewDto } from '../../dtos/rating-view-dto';
+import { RatingDatePipe } from '../../pipes/rating-date.pipe';
 
 @Component({
   selector: 'app-rating-card',
   standalone: false,
   templateUrl: './rating-card.component.html',
-  styleUrl: './rating-card.component.sass'
+  styleUrls: ['./rating-card.component.sass']
 })
 export class RatingCardComponent implements OnInit {
   @Input() rating!: RatingViewDto
@@ -37,5 +37,4 @@ export class RatingCardComponent implements OnInit {
   onShowMore() {
     this.showFullComment.emit();
   }
-
 }

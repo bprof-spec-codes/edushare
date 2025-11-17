@@ -36,6 +36,7 @@ import { RatingCreateModalComponent } from './components/rating-create-modal/rat
 import { RatingStarsComponent } from './components/rating-stars/rating-stars.component';
 import { RatingCardComponent } from './components/rating-card/rating-card.component';
 import { RatingCommentModalComponent } from './components/rating-comment-modal/rating-comment-modal.component';
+import { RatingDatePipe } from './pipes/rating-date.pipe';
 
 
 @NgModule({
@@ -66,6 +67,7 @@ import { RatingCommentModalComponent } from './components/rating-comment-modal/r
     RatingStarsComponent,
     RatingCardComponent,
     RatingCommentModalComponent,
+    RatingDatePipe,
   ],
   imports: [
     BrowserModule,
@@ -77,6 +79,7 @@ import { RatingCommentModalComponent } from './components/rating-comment-modal/r
     DatePipe,
     RegisterComponent,
     LoginComponent,
+    RatingDatePipe
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
