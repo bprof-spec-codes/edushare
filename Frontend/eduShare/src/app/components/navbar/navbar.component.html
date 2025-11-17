@@ -23,6 +23,9 @@
         <li class="nav-item me-2">
           <a class="nav-link" routerLink="/profile-list"><strong>Profiles</strong></a>
         </li>
+        <li class="nav-item me-2" *ngIf="isAdmin">
+          <a class="nav-link" routerLink="/statistics"><strong>Statistics</strong></a>
+        </li>
 
         <li class="nav-item dropdown" *ngIf="isLoggedIn">
           <button class="btn p-0 avatar-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"

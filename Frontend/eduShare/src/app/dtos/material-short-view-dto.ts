@@ -9,4 +9,8 @@ export interface MaterialShortViewDto {
     subject: Subject
     uploader: UploaderDto
     uploadDate: string
+    isExam: boolean
+    averageRating: number
+    ratingCount: number
+    downloadCount: number
 }

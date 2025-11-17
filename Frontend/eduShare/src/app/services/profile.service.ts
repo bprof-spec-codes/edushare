@@ -57,4 +57,20 @@ export class ProfileService {
   revokeRole(id:string): Observable<void> {
     return this.http.get<void>(`${this.apiBaseUrl}/RevokeRole/${id}`)
   }
+
+  warnUser(id: string): Observable<void> {
+    return this.http.post<void>(`${this.apiBaseUrl}/Warn/${id}`, {})
+  }
+
+  removeWarning(id: string): Observable<void> {
+    return this.http.post<void>(`${this.apiBaseUrl}/RemoveWarning/${id}`, {})
+  }
+
+  banUser(id: string): Observable<void> {
+    return this.http.post<void>(`${this.apiBaseUrl}/Ban/${id}`, {})
+  }
+
+  unbanUser(id: string): Observable<void> {
+    return this.http.post<void>(`${this.apiBaseUrl}/Unban/${id}`, {})
+  }
 }

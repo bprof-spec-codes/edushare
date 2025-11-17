@@ -54,6 +54,7 @@ namespace Logic.Logic
                 .Select(u => new Entities.Dtos.User.AppUserShortViewDto
                 {
                     Id = u.Id,
+                    Email = u.Email,
                     FullName = u.FirstName + " " + u.LastName,
                     Image = new Entities.Dtos.Content.ContentViewDto
                     {

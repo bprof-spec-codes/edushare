@@ -4,6 +4,7 @@ import { AuthService } from '../../../services/authentication.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FavMaterialService } from '../../../services/fav-material.service';
+import { BanMonitorService } from '../../../services/ban-monitor.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent {
   error = '';
   loading = false;
 
-  constructor(private auth: AuthService, private router: Router, private fav: FavMaterialService) {}
+  constructor(private auth: AuthService, private router: Router, private fav: FavMaterialService, private banMonitor: BanMonitorService) {}
 
   onLogin() {
     this.error = '';
@@ -33,7 +34,8 @@ export class LoginComponent {
           return;
         }
         this.auth.saveToken(token);
-        this.fav.getAll().subscribe()
+        this.fav.getAll().subscribe();
+        this.banMonitor.startMonitoring();
         this.router.navigate(['/homepage']);
       },
       error: (err) => {
