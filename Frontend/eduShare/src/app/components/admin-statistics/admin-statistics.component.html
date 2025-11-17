@@ -112,7 +112,7 @@
     <div class="card-body">
       <div
         *ngIf="
-          !statistics.mostActiveUsers || statistics.mostActiveUsers.length === 0
+          !statistics?.mostActiveUsers || (statistics?.mostActiveUsers?.length ?? 0) === 0
         "
         class="text-center text-muted py-4"
       >
@@ -122,7 +122,7 @@
 
       <div
         *ngIf="
-          statistics.mostActiveUsers && statistics.mostActiveUsers.length > 0
+          statistics?.mostActiveUsers && (statistics?.mostActiveUsers?.length ?? 0) > 0
         "
       >
         <div class="table-responsive">
@@ -138,7 +138,7 @@
             </thead>
             <tbody>
               <tr
-                *ngFor="let user of statistics.mostActiveUsers; let i = index"
+                *ngFor="let user of statistics?.mostActiveUsers; let i = index"
               >
                 <th scope="row">{{ i + 1 }}</th>
                 <td>
