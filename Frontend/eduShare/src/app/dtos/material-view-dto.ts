@@ -8,7 +8,7 @@ export interface MaterialViewDto {
     title: string
     subject: Subject
     description: string
-    isRecommended: boolean
+    isRecommended:boolean
     uploadDate: string
     uploader: UploaderDto
     content: FileContent
