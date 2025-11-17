@@ -3,6 +3,7 @@ import { ProfileService } from '../../services/profile.service';
 import { map, Observable } from 'rxjs';
 import { ProfilListViewDto } from '../../dtos/profil-list-view-dto';
 import { RatingViewDto } from '../../dtos/rating-view-dto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-rating-card',
@@ -19,7 +20,7 @@ export class RatingCardComponent implements OnInit {
   maxCommentLength = 51
   commentModalOpen = false
 
-  constructor(private profileService: ProfileService) { }
+  constructor(private profileService: ProfileService, private router: Router) { }
 
   ngOnInit(): void {
     this.profileService.loadAll().subscribe()
@@ -57,6 +58,10 @@ export class RatingCardComponent implements OnInit {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit'
-    }) + '.';
+    }) + '.'
+  }
+
+  openProfile(userId: string) {
+    this.router.navigate(['/profile-view', userId])
   }
 }

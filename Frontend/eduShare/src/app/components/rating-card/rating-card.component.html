@@ -11,7 +11,7 @@
                     <span>
                         <app-rating-stars [rating]="rating.rate"></app-rating-stars>
                     </span>
-                    <h6 class="card-title mb-0">{{rating.userName}}</h6>
+                    <h6 class="btn card-title mb-0 p-0 user-name" (click)="openProfile(rating.userId)">{{rating.userName}}</h6>
                 </div>
             </div>
             <div>
