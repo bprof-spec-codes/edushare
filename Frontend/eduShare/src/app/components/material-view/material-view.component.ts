@@ -49,6 +49,14 @@ export class MaterialViewComponent implements OnInit {
   });
     console.log(this.material!.isRecommended);
   }
+  examMaterial(id: string){
+  this.material!.isExam=!this.material?.isExam;
+  this.materialService.updateExam(id, this.material!.isExam).subscribe({
+    next: () => console.log('Sikeres mentés!'),
+    error: (err) => console.error('Hiba történt:', err)
+  });
+    console.log(this.material!.isExam);
+  }
 
   downloadFile(base64: string | undefined, fileName: string | undefined): void {
     if (!base64 || !fileName || !this.material?.id) return

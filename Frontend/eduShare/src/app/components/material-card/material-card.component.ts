@@ -55,4 +55,11 @@ export class MaterialCardComponent implements OnChanges, OnInit {
   openProfile(id: string) {
     this.router.navigate(['/profile-view', id])
   }
+
+  titleClass(): string {
+    if(this.m.isExam) {
+      return "isExam"
+    }
+    return "isNotExam"
+  }
 }
