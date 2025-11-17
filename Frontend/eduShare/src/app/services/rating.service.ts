@@ -47,7 +47,7 @@ export class RatingService {
     )
   }
 
-  deleterating(ratingId: string): Observable<void> {
+  deleteRating(ratingId: string): Observable<void> {
     return this.http.delete<void>(`${environment.baseApiUrl}/api/Rating/${ratingId}`).pipe(
       tap(() => {
         const current = this._ratings$.value

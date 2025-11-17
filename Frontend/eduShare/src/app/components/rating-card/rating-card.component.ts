@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, output, Output } from '@angular/core';
 import { ProfileService } from '../../services/profile.service';
 import { map, Observable } from 'rxjs';
 import { ProfilListViewDto } from '../../dtos/profil-list-view-dto';
@@ -17,6 +17,7 @@ export class RatingCardComponent implements OnInit {
   public ratingUserMap$: Observable<Record<string, ProfilListViewDto>> = new Observable<Record<string, ProfilListViewDto>>()
 
   @Output() showFullComment = new EventEmitter<void>()
+  @Output() deleteRating = new EventEmitter<string>()
   maxCommentLength = 51
   commentModalOpen = false
 
@@ -44,8 +45,8 @@ export class RatingCardComponent implements OnInit {
     const date = new Date(value)
     const now = new Date()
 
-    const diffMs = now.getTime() - date.getTime()
-    const isUnder24h = diffMs < 24 * 60 * 60 * 1000
+    const diffMs = now.getTime() - date.getTime();
+    const isUnder24h = diffMs < 24 * 60 * 60 * 1000;
 
     if (isUnder24h) {
       return date.toLocaleTimeString('hu-HU', {
@@ -54,14 +55,22 @@ export class RatingCardComponent implements OnInit {
       })
     }
 
-    return date.toLocaleDateString('hu-HU', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }) + '.'
+    const year = date.getFullYear()
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const day = date.getDate().toString().padStart(2, '0')
+
+    return `
+    <div style="text-align:center; line-height:1.1;">
+      <div>${year}.</div>
+      <div>${month}.${day}.</div>
+    </div>
+  `
   }
 
   openProfile(userId: string) {
     this.router.navigate(['/profile-view', userId])
+  }
+
+  deleterRating(ratingId: string) {
   }
 }

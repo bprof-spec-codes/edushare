@@ -22,6 +22,7 @@ export class MaterialViewComponent implements OnInit {
   showFullDescription = false
   currentUserId = ''
 
+  ratingDeleteId: string | null = null
   ratingCreateModalOpen = false
   ratingCreating = false
   ratingCreateError: string | null = null
@@ -167,6 +168,15 @@ export class MaterialViewComponent implements OnInit {
         console.error(err)
         this.ratingCreateError = "Could not create rating."
         this.ratingCreating = false
+      }
+    })
+  }
+
+  handleRatingDelete(event: string) {
+    this.ratingService.deleteRating(event).subscribe({
+      next: () => { },
+      error: (err) => {
+        console.error(err)
       }
     })
   }
