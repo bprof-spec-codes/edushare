@@ -32,7 +32,7 @@ jobs:
         name: Deploy on server (atomic symlink switch + systemd restart)
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: peldaszerver.hu
+          host: edushareoe.hu
           username: root
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASS }}
