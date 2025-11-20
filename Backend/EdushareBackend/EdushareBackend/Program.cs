@@ -54,6 +54,8 @@ namespace EdushareBackend
             builder.Services.AddTransient<DtoProviders>();
             builder.Services.AddTransient<MaterialLogic>();
             builder.Services.AddTransient<SubjectLogic>();
+            builder.Services.AddTransient<StatisticsLogic>();
+            builder.Services.AddTransient<RatingLogic>();
 
             builder.Services.AddIdentity<AppUser, IdentityRole>(
                 option =>
@@ -100,6 +102,7 @@ namespace EdushareBackend
             {
                 opt.Filters.Add<ExceptionFilter>();
                 opt.Filters.Add<ValidationFilterAttribute>();
+                opt.Filters.Add<BanCheckAttribute>();
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

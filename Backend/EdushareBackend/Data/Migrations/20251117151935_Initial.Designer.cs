@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251106103642_initial")]
-    partial class initial
+    [Migration("20251117151935_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,6 +74,12 @@ namespace Data.Migrations
                         .HasMaxLength(1500)
                         .HasColumnType("nvarchar(1500)");
 
+                    b.Property<int>("DownloadCount")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsExam")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsRecommended")
                         .HasColumnType("bit");
 
@@ -102,6 +108,40 @@ namespace Data.Migrations
                     b.HasIndex("UploaderId");
 
                     b.ToTable("Materials");
+                });
+
+            modelBuilder.Entity("Entities.Models.Rating", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("MaterialId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Rate")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("uploadDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaterialId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("Entities.Models.Subject", b =>
@@ -334,6 +374,9 @@ namespace Data.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<DateTime?>("BannedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -342,10 +385,19 @@ namespace Data.Migrations
                     b.Property<string>("ImageId")
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("IsBanned")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsWarned")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("WarnedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasIndex("ImageId");
 
@@ -388,6 +440,25 @@ namespace Data.Migrations
                     b.Navigation("Subject");
 
                     b.Navigation("Uploader");
+                });
+
+            modelBuilder.Entity("Entities.Models.Rating", b =>
+                {
+                    b.HasOne("Entities.Models.Material", "Material")
+                        .WithMany("Ratings")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Material");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -448,6 +519,11 @@ namespace Data.Migrations
                         .HasForeignKey("ImageId");
 
                     b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("Entities.Models.Material", b =>
+                {
+                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("Entities.Models.AppUser", b =>

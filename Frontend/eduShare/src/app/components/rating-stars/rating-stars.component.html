@@ -1,0 +1,12 @@
+<div class="rating-stars" [attr.aria-label]="ariaLabel">
+  <ng-container *ngFor="let _ of [].constructor(fullStars)">
+    <span class="material-icons star">star</span>
+  </ng-container>
+
+  <span *ngIf="hasHalfStar" class="material-icons star">star_half</span>
+
+  <ng-container *ngFor="let _ of [].constructor(emptyStars)">
+    <span class="material-icons star empty">star_outline</span>
+  </ng-container>
+  <ng-content select="[count]"></ng-content>
+</div>

@@ -51,6 +51,8 @@ namespace EdushareBackend.Controllers
                 Id = u.Id,
                 Email = u.Email,
                 FullName = u.FirstName + " " + u.LastName,
+                IsWarned = u.IsWarned,
+                IsBanned = u.IsBanned,
                 Image = new ContentViewDto(
                     u.Image.Id,
                     u.Image.FileName,
@@ -75,6 +77,10 @@ namespace EdushareBackend.Controllers
                 Id = user.Id,
                 FullName = $"{user.FirstName} {user.LastName}",
                 Email = user.Email,
+                IsWarned = user.IsWarned,
+                IsBanned = user.IsBanned,
+                WarnedAt = user.WarnedAt,
+                BannedAt = user.BannedAt,
                 Image = new ContentViewDto(
                     user.Image.Id,
                     user.Image.FileName,
@@ -100,7 +106,7 @@ namespace EdushareBackend.Controllers
 
                     },
                     UploadDate = m.UploadDate,
-                    
+
                     //todo Content
                 }).ToList() ?? new List<MaterialShortViewDto>() //ha a materilas null akkor üres lista
             };
@@ -148,6 +154,12 @@ namespace EdushareBackend.Controllers
             {
                 return BadRequest(new { message = "Incorrect Email" });
             }
+
+            // Check if user is banned
+            if (user.IsBanned)
+            {
+                return Unauthorized(new { message = "Your account has been banned. Please contact support." });
+            }
             else
             {
                 var result = await userManager.CheckPasswordAsync(user, dto.Password);
@@ -178,9 +190,6 @@ namespace EdushareBackend.Controllers
 
                 }
             }
-
-
-
         }
 
         [HttpPut("{id}")]
@@ -310,6 +319,92 @@ namespace EdushareBackend.Controllers
         {
             string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, pattern, RegexOptions.IgnoreCase);
+        }
+
+        [HttpPost("Warn/{userId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> WarnUser(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            user.IsWarned = true;
+            user.WarnedAt = DateTime.UtcNow;
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Failed to warn user" });
+            }
+            return Ok(new { message = "User warned successfully" });
+        }
+
+        [HttpPost("RemoveWarning/{userId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RemoveWarning(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            user.IsWarned = false;
+            user.WarnedAt = null;
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Failed to remove warning" });
+            }
+            return Ok(new { message = "Warning removed successfully" });
+        }
+
+        [HttpPost("Ban/{userId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BanUser(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId == userId)
+            {
+                return BadRequest(new { message = "You cannot ban yourself" });
+            }
+
+            user.IsBanned = true;
+            user.BannedAt = DateTime.UtcNow;
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Failed to ban user" });
+            }
+            return Ok(new { message = "User banned successfully" });
+        }
+
+        [HttpPost("Unban/{userId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UnbanUser(string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            user.IsBanned = false;
+            user.BannedAt = null;
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Failed to unban user" });
+            }
+            return Ok(new { message = "User unbanned successfully" });
         }
     }
 }

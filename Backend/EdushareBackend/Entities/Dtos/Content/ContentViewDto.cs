@@ -18,5 +18,10 @@ namespace Entities.Dtos.Content
         public string Id { get; set; }
         public string FileName { get; set; }
         public string File { get; set; }
+
+        public ContentViewDto()
+        {
+            
+        }
     }
 }

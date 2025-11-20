@@ -10,7 +10,16 @@
             <div class="profile-row">
                 <div class="picture-container">
                     <img *ngIf="profile.image.file" [src]="profile.image.file.startsWith('http') ? profile.image.file : 'data:image/*;base64,' + profile.image.file" [alt]="profile.fullName" class="profile-pic" width="50" height="50" />
-                    <div class="fullname">{{profile.fullName}}</div>
+                    <div class="fullname">
+                        {{profile.fullName}}
+                        <!-- Profile status -->
+                        <span *ngIf="profile.isWarned" class="badge bg-warning text-dark ms-2" title="User has been warned">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                        </span>
+                        <span *ngIf="profile.isBanned" class="badge bg-danger ms-2" title="User is banned">
+                            <i class="bi bi-slash-circle-fill"></i>
+                        </span>
+                    </div>
                 </div>  
                 <div class="email">{{profile.email}}</div>
                 <div class="button-container">

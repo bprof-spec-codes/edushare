@@ -47,7 +47,8 @@ namespace BackendNUnitTests
                 _userManagerMock.Object,
                 _envMock.Object,
                 _roleManagerMock.Object,
-                _jwtSettingsMock.Object
+                _jwtSettingsMock.Object,
+                null //error van itt 
             );
         }
 
@@ -338,5 +339,304 @@ namespace BackendNUnitTests
             var ex = Assert.ThrowsAsync<ArgumentException>(async () => await _controller.RevokeRole("1"));
             Assert.That(ex.Message, Does.Contain("You cannot remove the last remaining Admin user"));
         }
+
+        // ---------- WARN USER TESTS ----------
+
+        [Test]
+        public async Task WarnUser_Should_ReturnNotFound_WhenUserDoesNotExist()
+        {
+            // Arrange
+            _userManagerMock.Setup(u => u.FindByIdAsync("nonexistent"))
+                .ReturnsAsync((AppUser)null);
+
+            // Act
+            var result = await _controller.WarnUser("nonexistent");
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
+            var notFound = result as NotFoundObjectResult;
+            Assert.That(notFound!.Value!.ToString(), Does.Contain("User not found"));
+        }
+
+        [Test]
+        public async Task WarnUser_Should_SetWarningFields_WhenUserExists()
+        {
+            // Arrange
+            var user = new AppUser
+            {
+                Id = "1",
+                Email = "user@example.com",
+                IsWarned = false,
+                WarnedAt = null
+            };
+
+            _userManagerMock.Setup(u => u.FindByIdAsync("1"))
+                .ReturnsAsync(user);
+
+            _userManagerMock.Setup(u => u.UpdateAsync(It.IsAny<AppUser>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            // Act
+            var result = await _controller.WarnUser("1");
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+            Assert.That(user.IsWarned, Is.True);
+            Assert.That(user.WarnedAt, Is.Not.Null);
+            _userManagerMock.Verify(u => u.UpdateAsync(user), Times.Once);
+        }
+
+        [Test]
+        public async Task WarnUser_Should_ReturnBadRequest_WhenUpdateFails()
+        {
+            // Arrange
+            var user = new AppUser { Id = "1", Email = "user@example.com" };
+
+            _userManagerMock.Setup(u => u.FindByIdAsync("1"))
+                .ReturnsAsync(user);
+
+            _userManagerMock.Setup(u => u.UpdateAsync(It.IsAny<AppUser>()))
+                .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Update failed" }));
+
+            // Act
+            var result = await _controller.WarnUser("1");
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+        }
+
+        // ---------- REMOVE WARNING TESTS ----------
+
+        [Test]
+        public async Task RemoveWarning_Should_ReturnNotFound_WhenUserDoesNotExist()
+        {
+            // Arrange
+            _userManagerMock.Setup(u => u.FindByIdAsync("nonexistent"))
+                .ReturnsAsync((AppUser)null);
+
+            // Act
+            var result = await _controller.RemoveWarning("nonexistent");
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
+        }
+
+        [Test]
+        public async Task RemoveWarning_Should_ClearWarningFields_WhenUserExists()
+        {
+            // Arrange
+            var user = new AppUser
+            {
+                Id = "1",
+                Email = "user@example.com",
+                IsWarned = true,
+                WarnedAt = DateTime.UtcNow
+            };
+
+            _userManagerMock.Setup(u => u.FindByIdAsync("1"))
+                .ReturnsAsync(user);
+
+            _userManagerMock.Setup(u => u.UpdateAsync(It.IsAny<AppUser>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            // Act
+            var result = await _controller.RemoveWarning("1");
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+            Assert.That(user.IsWarned, Is.False);
+            Assert.That(user.WarnedAt, Is.Null);
+            _userManagerMock.Verify(u => u.UpdateAsync(user), Times.Once);
+        }
+
+        // ---------- BAN USER TESTS ----------
+
+        [Test]
+        public async Task BanUser_Should_ReturnNotFound_WhenUserDoesNotExist()
+        {
+            // Arrange
+            _userManagerMock.Setup(u => u.FindByIdAsync("nonexistent"))
+                .ReturnsAsync((AppUser)null);
+
+            // Act
+            var result = await _controller.BanUser("nonexistent");
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
+        }
+
+        [Test]
+        public async Task BanUser_Should_ReturnBadRequest_WhenBanningSelf()
+        {
+            // Arrange
+            var userId = "1";
+            var user = new AppUser { Id = userId, Email = "admin@example.com" };
+
+            _userManagerMock.Setup(u => u.FindByIdAsync(userId))
+                .ReturnsAsync(user);
+
+            // Mock ClaimsPrincipal
+            var claims = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId)
+            }, "mock"));
+
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = claims }
+            };
+
+            // Act
+            var result = await _controller.BanUser(userId);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+            var badRequest = result as BadRequestObjectResult;
+            Assert.That(badRequest!.Value!.ToString(), Does.Contain("You cannot ban yourself"));
+        }
+
+        [Test]
+        public async Task BanUser_Should_SetBanFields_WhenUserExists()
+        {
+            // Arrange
+            var currentUserId = "admin-id";
+            var targetUserId = "user-id";
+            var user = new AppUser
+            {
+                Id = targetUserId,
+                Email = "user@example.com",
+                IsBanned = false,
+                BannedAt = null
+            };
+
+            _userManagerMock.Setup(u => u.FindByIdAsync(targetUserId))
+                .ReturnsAsync(user);
+
+            _userManagerMock.Setup(u => u.UpdateAsync(It.IsAny<AppUser>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            // Mock ClaimsPrincipal for different user
+            var claims = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, currentUserId)
+            }, "mock"));
+
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = claims }
+            };
+
+            // Act
+            var result = await _controller.BanUser(targetUserId);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+            Assert.That(user.IsBanned, Is.True);
+            Assert.That(user.BannedAt, Is.Not.Null);
+            _userManagerMock.Verify(u => u.UpdateAsync(user), Times.Once);
+        }
+
+        // ---------- UNBAN USER TESTS ----------
+
+        [Test]
+        public async Task UnbanUser_Should_ReturnNotFound_WhenUserDoesNotExist()
+        {
+            // Arrange
+            _userManagerMock.Setup(u => u.FindByIdAsync("nonexistent"))
+                .ReturnsAsync((AppUser)null);
+
+            // Act
+            var result = await _controller.UnbanUser("nonexistent");
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
+        }
+
+        [Test]
+        public async Task UnbanUser_Should_ClearBanFields_WhenUserExists()
+        {
+            // Arrange
+            var user = new AppUser
+            {
+                Id = "1",
+                Email = "user@example.com",
+                IsBanned = true,
+                BannedAt = DateTime.UtcNow
+            };
+
+            _userManagerMock.Setup(u => u.FindByIdAsync("1"))
+                .ReturnsAsync(user);
+
+            _userManagerMock.Setup(u => u.UpdateAsync(It.IsAny<AppUser>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            // Act
+            var result = await _controller.UnbanUser("1");
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+            Assert.That(user.IsBanned, Is.False);
+            Assert.That(user.BannedAt, Is.Null);
+            _userManagerMock.Verify(u => u.UpdateAsync(user), Times.Once);
+        }
+
+        [Test]
+        public async Task UnbanUser_Should_ReturnBadRequest_WhenUpdateFails()
+        {
+            // Arrange
+            var user = new AppUser
+            {
+                Id = "1",
+                Email = "user@example.com",
+                IsBanned = true
+            };
+
+            _userManagerMock.Setup(u => u.FindByIdAsync("1"))
+                .ReturnsAsync(user);
+
+            _userManagerMock.Setup(u => u.UpdateAsync(It.IsAny<AppUser>()))
+                .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Update failed" }));
+
+            // Act
+            var result = await _controller.UnbanUser("1");
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
+        }
+
+        // ---------- LOGIN WITH BANNED USER TEST ----------
+
+        [Test]
+        public async Task Login_Should_ReturnUnauthorized_WhenUserIsBanned()
+        {
+            // Arrange
+            var bannedUser = new AppUser
+            {
+                Id = "1",
+                Email = "banned@example.com",
+                UserName = "banned",
+                IsBanned = true,
+                BannedAt = DateTime.UtcNow
+            };
+
+            _userManagerMock.Setup(u => u.FindByEmailAsync(bannedUser.Email))
+                .ReturnsAsync(bannedUser);
+
+            var dto = new AppUserLoginDto
+            {
+                Email = bannedUser.Email,
+                Password = "password123"
+            };
+
+            // Act
+            var result = await _controller.Login(dto);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<UnauthorizedObjectResult>());
+            var unauthorized = result as UnauthorizedObjectResult;
+            Assert.That(unauthorized!.Value!.ToString(), Does.Contain("banned"));
+        }
+
+        
     }
 }

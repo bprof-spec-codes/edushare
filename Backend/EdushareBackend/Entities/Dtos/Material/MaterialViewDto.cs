@@ -18,8 +18,13 @@ namespace Entities.Dtos.Material
         public Entities.Models.Subject Subject { get; set; } = null!;
         public string Description { get; set; } = string.Empty;
         public bool IsRecommended { get; set; } = false;
+        public bool IsExam { get; set; } = false;
+        public double AverageRating { get; set; } = 0.0;
+        public int RatingCount { get; set; } = 0;
         public DateTime UploadDate { get; set; } = DateTime.Now;
         public AppUserMaterialShortViewDto Uploader { get; set; } = null!;
         public ContentViewDto Content { get; set; } = null!;
+        public List<MaterialShortViewDto> RecommendedMaterials { get; set; } = null!;
+
     }
 }

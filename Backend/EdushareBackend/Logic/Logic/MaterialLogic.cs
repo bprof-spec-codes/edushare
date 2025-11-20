@@ -62,7 +62,12 @@ namespace Logic.Logic
         }
         public IEnumerable<MaterialShortViewDto> GetAllMaterials()
         {
-            return materialRepo.GetAll().Include(u => u.Subject).Include(u => u.Uploader).ThenInclude(u => u.Image).Select(x => dtoProviders.Mapper.Map<MaterialShortViewDto>(x));
+            return materialRepo.GetAll()
+                .Include(u => u.Subject)
+                .Include(u => u.Uploader)
+                .ThenInclude(u => u.Image)
+                .Include(u => u.Ratings)
+                .Select(x => dtoProviders.Mapper.Map<MaterialShortViewDto>(x));
 
         }
         public void DeleteMaterialById(string id)
@@ -105,15 +110,49 @@ namespace Logic.Logic
         {
             var mat = materialRepo.GetAll()
                 .Include(m => m.Subject)
-             .Include(m => m.Content)
-             .Include(m => m.Uploader)
-                 .ThenInclude(u => u.Image)
-             .FirstOrDefault(m => m.Id == id);
-
+                .Include(m => m.Content)
+                .Include(m => m.Uploader)
+                    .ThenInclude(u => u.Image)
+                    .Include(m => m.Ratings)
+                .FirstOrDefault(m => m.Id == id);
+            
             if (mat == null)
                 throw new Exception("Material not found");
+            
+            var relatedMaterials = materialRepo.GetAll()
+                .Include(m => m.Subject)
+                .Include(m => m.Uploader)
+                .ThenInclude(u => u.Image)
+                .Where(m => m.Subject.Id == mat.SubjectId && m.Id != mat.Id)
+                .OrderBy(m => Guid.NewGuid())
+                .Take(5)
+                .ToList();
 
-            return dtoProviders.Mapper.Map<MaterialViewDto>(mat);
+            if (relatedMaterials.Count < 5)
+            {
+                var otherSubjects = materialRepo.GetAll()
+                    .Include(m => m.Subject)
+                    .Include(m => m.Uploader)
+                    .ThenInclude(u => u.Image)
+                    .Where(m => m.SubjectId != mat.SubjectId && m.Id != mat.Id)
+                    .OrderBy(m => Guid.NewGuid())
+                    .Take(5 - relatedMaterials.Count)
+                    .ToList();
+
+                relatedMaterials.AddRange(otherSubjects);
+            }
+
+            List<MaterialShortViewDto> relatedDto = new List<MaterialShortViewDto>();
+
+            foreach (var m in relatedMaterials)
+            {
+                relatedDto.Add(dtoProviders.Mapper.Map<MaterialShortViewDto>(m));
+            }
+
+            var dto = dtoProviders.Mapper.Map<MaterialViewDto>(mat);
+            dto.RecommendedMaterials = relatedDto;
+            
+            return dto; 
         }
         public void SetRecommendationStatus(string id, bool isRecommended)
         {
@@ -124,6 +163,14 @@ namespace Logic.Logic
             materialRepo.Update(material);
         }
 
+        public void SetExamStatus(string id, bool isExam)
+        {
+            var material = materialRepo.FindById(id);
+            if (material == null)
+                throw new Exception("Material not found");
+            material.IsExam = isExam;
+            materialRepo.Update(material);
+        }
 
         public async Task<IEnumerable<MaterialShortViewDto>> GetFilteredMaterialsAsync(MaterialFilterDto filter)
         {
@@ -175,9 +222,9 @@ namespace Logic.Logic
         public async Task<IEnumerable<MaterialShortViewDto>> GetFavouriteMaterials(AppUser user)
         {
             var dbUser = await appuserRepo.GetAll()
-                .Include(u => u.FavouriteMaterials)
+                .Include(u => u.FavouriteMaterials)!
                     .ThenInclude(m => m.Subject)
-                .Include(u => u.FavouriteMaterials)
+                .Include(u => u.FavouriteMaterials)!
                     .ThenInclude(m => m.Uploader)
                         .ThenInclude(u => u.Image)
                 .FirstOrDefaultAsync(u => u.Id == user.Id);
@@ -206,6 +253,16 @@ namespace Logic.Logic
                 dbUser.FavouriteMaterials.Remove(materialToRemove);
                 await userManager.UpdateAsync(dbUser);
             }
+        }
+
+        public async Task MaterialDownloaded(string materialID)
+        {
+            var material = await materialRepo.GetAll()
+                .FirstOrDefaultAsync(m => m.Id == materialID);
+            if (material == null)
+                throw new Exception("Material not found");
+            material.DownloadCount += 1;
+            materialRepo.Update(material);
         }
 
 

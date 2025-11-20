@@ -19,6 +19,8 @@ import { roleGuard } from './guards/role.guard';
 import { FavMaterialsComponent } from './components/fav-materials/fav-materials.component';
 import { MaterialSearchListComponent } from './components/material-search-list/material-search-list.component';
 import { MainlistComponent } from './components/mainlist/mainlist.component';
+import { BanCheckGuard } from './guards/ban-check.guard';
+import { AdminStatisticsComponent } from './components/admin-statistics/admin-statistics.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -34,17 +36,18 @@ const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: 'homepage', component: HomepageComponent },
-      { path: 'materials', component: MainlistComponent },
-      { path: 'materials/create', component: MaterialCreateComponent, canActivate: [AuthGuard] },
-      { path: 'materials/:id/update', component: MaterialUpdateComponent, canActivate: [AuthGuard] },
-      { path: 'materials/:id/view', component: MaterialViewComponent },
-      { path: 'profile-list', component: ProfileListComponent },
-      { path: 'profile-view/:id', component: ProfileViewComponent },
-      { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard] },
-      { path: 'subjects', component: SubjectListComponent, canActivate: [roleGuard], data: { roles: ['Teacher', 'Admin'] } },
-      { path: 'material-search', component: MaterialSearchListComponent},
-      { path: 'fav-materials', component: FavMaterialsComponent, canActivate: [AuthGuard] }
+      { path: 'homepage', component: HomepageComponent, canActivate: [BanCheckGuard] },
+      { path: 'materials', component: MainlistComponent, canActivate: [BanCheckGuard] },
+      { path: 'materials/create', component: MaterialCreateComponent, canActivate: [AuthGuard, BanCheckGuard] },
+      { path: 'materials/:id/update', component: MaterialUpdateComponent, canActivate: [AuthGuard, BanCheckGuard] },
+      { path: 'materials/:id/view', component: MaterialViewComponent, canActivate: [BanCheckGuard] },
+      { path: 'profile-list', component: ProfileListComponent, canActivate: [BanCheckGuard] },
+      { path: 'profile-view/:id', component: ProfileViewComponent, canActivate: [BanCheckGuard] },
+      { path: 'profile-update/:id', component: ProfileUpdateComponent, canActivate: [AuthGuard, BanCheckGuard] },
+      { path: 'subjects', component: SubjectListComponent, canActivate: [roleGuard, BanCheckGuard], data: { roles: ['Teacher', 'Admin'] } },
+      { path: 'material-search', component: MaterialSearchListComponent, canActivate: [BanCheckGuard]},
+      { path: 'fav-materials', component: FavMaterialsComponent, canActivate: [AuthGuard, BanCheckGuard] },
+      { path: 'statistics', component: AdminStatisticsComponent, canActivate: [roleGuard, BanCheckGuard], data: { roles: ['Admin'] } }
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }

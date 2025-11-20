@@ -35,6 +35,11 @@ namespace Entities.Models
 
         public bool IsRecommended { get; set; } = false;
 
+        public bool IsExam { get; set; } = false;
+
+        public int DownloadCount { get; set; } = 0;
+        public virtual List<Rating> Ratings { get; set; } = new();
+
         public virtual List<AppUser> UsersWhoFavourited { get; set; } = new();
 
 

@@ -4,7 +4,7 @@ import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ProfileViewDto } from '../dtos/profile-view-dto';
 import { UpdateProfileDto } from '../dtos/update-profile-dto';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { SearchUploaderDto } from '../dtos/search-uploader-dto';
 
 @Injectable({
@@ -56,5 +56,21 @@ export class ProfileService {
 
   revokeRole(id:string): Observable<void> {
     return this.http.get<void>(`${this.apiBaseUrl}/RevokeRole/${id}`)
+  }
+
+  warnUser(id: string): Observable<void> {
+    return this.http.post<void>(`${this.apiBaseUrl}/Warn/${id}`, {})
+  }
+
+  removeWarning(id: string): Observable<void> {
+    return this.http.post<void>(`${this.apiBaseUrl}/RemoveWarning/${id}`, {})
+  }
+
+  banUser(id: string): Observable<void> {
+    return this.http.post<void>(`${this.apiBaseUrl}/Ban/${id}`, {})
+  }
+
+  unbanUser(id: string): Observable<void> {
+    return this.http.post<void>(`${this.apiBaseUrl}/Unban/${id}`, {})
   }
 }

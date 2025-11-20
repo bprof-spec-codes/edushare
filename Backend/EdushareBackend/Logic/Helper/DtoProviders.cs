@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
 using Entities.Dtos.Content;
 using Entities.Dtos.Material;
+using Entities.Dtos.Rating;
 using Entities.Dtos.User;
 using Entities.Helpers;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Logic.Helper
 {
@@ -37,35 +32,53 @@ namespace Logic.Helper
                             src.Uploader.Image.FileName,
                             Convert.ToBase64String(src.Uploader.Image.File)
                         )
-                    }));
+                    }))
+                    .ForMember(dest => dest.AverageRating,
+                        opt => opt.MapFrom(src => src.Ratings.Any() ? Math.Round(src.Ratings.Average(r => r.Rate), 1) : 0))
+                    .ForMember(dest => dest.RatingCount,
+                        opt => opt.MapFrom(src => src.Ratings.Count));
                 cfg.CreateMap<Material, MaterialViewDto>()
                      .ForMember(dest => dest.Uploader, opt => opt.MapFrom(src => src.Uploader != null
                          ? new AppUserMaterialShortViewDto
                          {
                              Id = src.Uploader.Id,
                              FullName = src.Uploader.FirstName + " " + src.Uploader.LastName,
-                             Image =  new ContentViewDto(
-                                 
-                                 
+                             Image = new ContentViewDto(
+
+
                                      src.Uploader.Image.Id,
                                     src.Uploader.Image.FileName,
                                      Convert.ToBase64String(src.Uploader.Image.File)
                                  )
-                             }
+
+                         }
                          : null))
                      .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content != null
                          ? new ContentViewDto(
-                             
-                         
+
+
                              src.Content.Id,
                              src.Content.FileName,
                              Convert.ToBase64String(src.Content.File)
                          )
-                         : null));
+                         : null))
+                     .ForMember(dest => dest.AverageRating,
+                             opt => opt.MapFrom(src => src.Ratings.Any() ? Math.Round(src.Ratings.Average(r => r.Rate), 1) : 0))
+                     .ForMember(dest => dest.RatingCount,
+                             opt => opt.MapFrom(src => src.Ratings.Count));
+
 
                 cfg.CreateMap<ContentCreateUpdateDto, FileContent>();
                 cfg.CreateMap<AppUser, AppUserMaterialShortViewDto>();
                 cfg.CreateMap<FileContent, ContentViewDto>();
+                cfg.CreateMap<Rating, RatingViewDto>()
+                    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src =>
+                        src.User != null ? src.User.FirstName + " " + src.User.LastName : "N/A"));
+
+
+                cfg.CreateMap<RatingCreateDto, Rating>();
+
+
             });
             Mapper = new Mapper(config);
         }

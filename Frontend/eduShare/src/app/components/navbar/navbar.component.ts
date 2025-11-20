@@ -17,6 +17,7 @@ export class NavbarComponent implements OnChanges, OnInit {
   profile: ProfileViewDto | null = null
   id: string = ''
   isTeacher: boolean = false
+  isAdmin: boolean = false
 
   constructor(private auth: AuthService,
     private profileService: ProfileService,
@@ -37,9 +38,11 @@ export class NavbarComponent implements OnChanges, OnInit {
       error: (err) => {
         console.error(err)
         alert('Nem sikerült betölteni a profilt.')
+        this.auth.logout()
       }
     })
     this.isTeacher = this.auth.getRoles().some(r => r === 'Teacher' || r === 'Admin')
+    this.isAdmin = this.auth.getRoles().some(r => r === 'Admin')
   }
 
   getProfileImageSrc(): string {

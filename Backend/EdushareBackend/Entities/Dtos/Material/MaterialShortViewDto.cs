@@ -14,8 +14,12 @@ namespace Entities.Dtos.Material
         public string Id { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public bool IsRecommended { get; set; } = false;
+        public bool IsExam { get; set; } = false;
+        public double AverageRating { get; set; } = 0.0;
+        public int RatingCount { get; set; } = 0;
         public Entities.Models.Subject Subject { get; set; }
         public AppUserMaterialShortViewDto Uploader { get; set; } = null!;
         public DateTime UploadDate { get; set; }
+        public int DownloadCount { get; set; } = 0;
     }
 }

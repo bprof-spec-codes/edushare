@@ -16,7 +16,84 @@
       <i class="bi bi-pencil-square"></i>
     </button>
   </div>
+
+  <!-- User notification -->
+  <div *ngIf="ownProfile && profile" class="mb-4">
+    <!-- Warning alert -->
+    <div *ngIf="profile.isWarned" class="alert alert-warning d-flex align-items-center" role="alert">
+      <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+      <div>
+        <h5 class="alert-heading mb-1">Your account has been warned</h5>
+        <p class="mb-0">
+          You received a warning for inappropriate behavior<span *ngIf="profile.warnedAt"> on {{ profile.warnedAt | date:'medium' }}</span>.</p>
+      </div>
+    </div>
+    <!-- Ban alert -->
+    <div *ngIf="profile.isBanned" class="alert alert-danger d-flex align-items-center" role="alert">
+      <i class="bi bi-slash-circle-fill fs-4 me-3"></i>
+      <div>
+        <h5 class="alert-heading mb-1">Your account has been banned</h5>
+        <p class="mb-0">
+          Your account was banned<span *ngIf="profile.bannedAt"> on {{ profile.bannedAt | date:'medium' }}</span>.</p>
+      </div>
+    </div>
+  </div>
+
   <hr>
+
+  <!-- Admin panel for user warn, ban -->
+  <div *ngIf="isAdmin && !ownProfile && profile" class="card mb-4 shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0"><i class="bi bi-shield-fill-check me-2"></i>Admin Controls</h5>
+    </div>
+    <div class="card-body">
+      <!-- User Status -->
+      <div class="mb-3">
+        <h6 class="fw-bold">User Status:</h6>
+        <div class="d-flex gap-2 flex-wrap">
+          <span *ngIf="profile.isWarned" class="badge bg-warning text-dark fs-6">
+            <i class="bi bi-exclamation-triangle-fill me-1"></i>Warned
+            <span *ngIf="profile.warnedAt"> on {{ profile.warnedAt | date:'short' }}</span>
+          </span>
+          <span *ngIf="profile.isBanned" class="badge bg-danger fs-6">
+            <i class="bi bi-slash-circle-fill me-1"></i>Banned
+            <span *ngIf="profile.bannedAt"> on {{ profile.bannedAt | date:'short' }}</span>
+          </span>
+          <span *ngIf="!profile.isWarned && !profile.isBanned" class="badge bg-success fs-6">
+            <i class="bi bi-check-circle-fill me-1"></i>Good
+          </span>
+        </div>
+      </div>
+      <!-- Warn user -->
+      <div class="d-flex gap-2 flex-wrap">
+        <button *ngIf="!profile.isWarned" 
+                type="button" 
+                class="btn btn-warning"
+                (click)="warnUser()">
+          <i class="bi bi-exclamation-triangle me-1"></i>Warn User
+        </button>
+        <button *ngIf="profile.isWarned" 
+                type="button" 
+                class="btn btn-outline-warning"
+                (click)="removeWarning()">
+          <i class="bi bi-x-circle me-1"></i>Remove Warning
+        </button>
+        <!-- Ban User -->
+        <button *ngIf="!profile.isBanned" 
+                type="button" 
+                class="btn btn-danger"
+                (click)="banUser()">
+          <i class="bi bi-slash-circle me-1"></i>Ban User
+        </button>
+        <button *ngIf="profile.isBanned" 
+                type="button" 
+                class="btn btn-outline-success"
+                (click)="unbanUser()">
+          <i class="bi bi-check-circle me-1"></i>Unban User
+        </button>
+      </div>
+    </div>
+  </div>
 
   <h2>Uploaded materials by {{profile?.fullName}}: </h2>
   <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
