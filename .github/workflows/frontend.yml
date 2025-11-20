@@ -22,7 +22,7 @@ jobs:
         run: npm ci
         working-directory: ./Frontend/eduShare
 
-      - name: Replace backend URL in environment.prod.ts
+      - name: Replace backend URL in environment.ts
         run: |
           sed -i "s|baseApiUrl: .*|baseApiUrl: '${BACKEND_URL}'|" ./Frontend/eduShare/src/environments/environment.prod.ts
 
