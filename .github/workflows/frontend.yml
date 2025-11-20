@@ -20,6 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: ./Frontend/eduShare
 
       - name: Replace backend URL in environment.prod.ts
         run: |
