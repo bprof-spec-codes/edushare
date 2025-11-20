@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { RatingViewDto } from '../dtos/rating-view-dto';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { RatingCreateDto } from '../dtos/rating-create-dto';
 
 @Injectable({

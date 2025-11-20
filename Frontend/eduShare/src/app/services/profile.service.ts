@@ -4,7 +4,7 @@ import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ProfileViewDto } from '../dtos/profile-view-dto';
 import { UpdateProfileDto } from '../dtos/update-profile-dto';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { SearchUploaderDto } from '../dtos/search-uploader-dto';
 
 @Injectable({
