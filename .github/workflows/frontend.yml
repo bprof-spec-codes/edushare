@@ -44,3 +44,13 @@ jobs:
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/edushare-frontend:latest
           build-args: |
             CONFIG=production
+
+      - name: Deploy on server (atomic symlink switch + systemd restart)
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: edushareoe.hu
+          username: root
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASS }}
+          script: |
+            ./frontend_refresh.sh
