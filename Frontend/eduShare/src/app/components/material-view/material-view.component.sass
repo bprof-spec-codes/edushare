@@ -1,15 +1,15 @@
 @use '../../../styles/_variables' as *
 
 .container-fluid
-    padding: 30px 5% 20px 5%
-    font-family: 'Nunito'
+  padding: 30px 5% 20px 5%
+  font-family: 'Nunito'
 
 .file-button
-    background-color: $edu-purple
-    color: white
+  background-color: $edu-purple
+  color: white
 
 .text-body
-    text-align: justify
+  text-align: justify
 
 .btn-link
   color: var(--bs-primary)
@@ -20,3 +20,45 @@
 
 .btn-link:hover
   text-decoration: underline
+
+.add-rating
+  font-size: 1rem
+  color: $edu-purple
+  margin-left: 0.3rem
+  transition: color 0.3s, transform 0.2s
+
+  &:hover
+    color: $button-hover
+    transform: scale(1.1)
+    cursor: pointer
+
+.rating-scroll-container
+  display: flex
+  flex-wrap: nowrap
+  overflow-x: auto
+  gap: 1rem
+  align-items: stretch
+  padding-bottom: 0.5rem
+
+  scrollbar-width: thin
+  scrollbar-color: transparent transparent
+
+  &::-webkit-scrollbar
+    height: 8px
+
+  &::-webkit-scrollbar-track
+    background: transparent
+
+  &::-webkit-scrollbar-thumb
+    background: transparent
+    border-radius: 4px
+
+  &:hover
+    scrollbar-color: rgba($edu-purple, 0.2) white
+
+  &:hover::-webkit-scrollbar-track
+    background: #f1f1f1
+
+  &:hover::-webkit-scrollbar-thumb
+    background: #c5c5c5
+

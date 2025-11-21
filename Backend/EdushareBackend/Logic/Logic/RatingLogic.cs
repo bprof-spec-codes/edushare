@@ -3,17 +3,12 @@ using Entities.Dtos.Rating;
 using Entities.Models;
 using Logic.Helper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Logic.Logic
 {
     public class RatingLogic
     {
-        private readonly Repository<Rating> ratingRepo; 
+        private readonly Repository<Rating> ratingRepo;
         private readonly Repository<AppUser> userRepo;
         private readonly Repository<Material> materialRepo;
         private readonly DtoProviders dtoProviders;
@@ -24,7 +19,7 @@ namespace Logic.Logic
             this.materialRepo = materialRepo;
             this.dtoProviders = dtoProviders;
         }
-        public void AddRating(RatingCreateDto dto,string userId)
+        public void AddRating(RatingCreateDto dto, string userId)
         {
             var user = userRepo.FindById(userId);
             var material = materialRepo.FindById(dto.MaterialId);
@@ -36,6 +31,7 @@ namespace Logic.Logic
             rating.Material = material;
             rating.UserId = userId;
             rating.MaterialId = dto.MaterialId;
+            rating.uploadDate = DateTime.Now;
             ratingRepo.Add(rating);
         }
         public IEnumerable<RatingViewDto> GetRatingsByMaterialId(string materialId)
@@ -47,7 +43,7 @@ namespace Logic.Logic
         }
         public void DeleteRatingById(string id)
         {
-           
+
             ratingRepo.DeleteById(id);
         }
 

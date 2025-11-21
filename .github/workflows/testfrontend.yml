@@ -1,0 +1,57 @@
+on:
+  push:
+    branches:
+      - "develop"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      BACKEND_URL: https://test.api.edushareoe.hu  # CI/CD környezeti URL
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./Frontend/eduShare
+
+      - name: Replace backend URL in environment.ts
+        run: |
+          sed -i "s|baseApiUrl: .*|baseApiUrl: '${BACKEND_URL}'|" ./Frontend/eduShare/src/environments/environment.ts
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./Frontend/eduShare
+          file: ./Frontend/eduShare/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/testedushare-frontend:latest
+          build-args: |
+            CONFIG=production
+
+      -
+        name: Deploy on server (atomic symlink switch + systemd restart)
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: edushareoe.hu
+          username: root
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASS }}
+          script: |
+            ./testfrontend_refresh.sh
