@@ -44,7 +44,9 @@ namespace Logic.Logic
                         },
                     },
                     UploadDate = m.UploadDate,
-                    DownloadCount = m.DownloadCount
+                    DownloadCount = m.DownloadCount,
+                    AverageRating = m.Ratings.Count > 0 ? m.Ratings.Average(r => r.Rate) : 0.0,
+                    RatingCount = m.Ratings.Count
                 })
                 .ToList();
 
