@@ -21,6 +21,7 @@ namespace Entities.Dtos.Material
         public bool IsExam { get; set; } = false;
         public double AverageRating { get; set; } = 0.0;
         public int RatingCount { get; set; } = 0;
+        public int DownloadCount { get; set; } = 0;
         public DateTime UploadDate { get; set; } = DateTime.Now;
         public AppUserMaterialShortViewDto Uploader { get; set; } = null!;
         public ContentViewDto Content { get; set; } = null!;

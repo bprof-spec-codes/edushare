@@ -14,7 +14,9 @@
                 <span>{{ ratingAverage$ | async | number:'1.1-1' }}</span>
                 <app-rating-stars [rating]="ratingAverage$ | async"></app-rating-stars>
                 <span class="text-muted" style="font-size: 0.9rem" count>({{(ratings$ | async)?.length}})</span>
-                <i class="bi bi-plus-circle add-rating" (click)="openRatingCreateModal()"></i>  
+                <i class="bi bi-plus-circle add-rating" (click)="openRatingCreateModal()"></i>
+                <i class="bi bi-download ms-4"></i> 
+                <span>{{ material.downloadCount || 0 }} downloads</span>  
               </div>
             </div>
 
