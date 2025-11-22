@@ -215,4 +215,7 @@ export class MaterialViewComponent implements OnInit {
     this.commentModalOpen = false
   }
 
+  openSubjectMaterials(subjectId: string) {
+    this.router.navigate(['/materials'], { queryParams: { subject: subjectId } });
+  }
 }
