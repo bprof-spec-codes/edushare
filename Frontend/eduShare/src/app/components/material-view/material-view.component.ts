@@ -21,6 +21,8 @@ export class MaterialViewComponent implements OnInit {
   error?: string
   showFullDescription = false
   currentUserId = ''
+  recommendedMaterials: any[] = [];
+
 
   ratingDeleteId: string | null = null
   ratingCreateModalOpen = false
@@ -47,17 +49,20 @@ export class MaterialViewComponent implements OnInit {
       alert('Érvénytelen azonosító.')
       return
     }
+
     this.currentUserId = this.auth.getUserId() || ''
     this.loading = true
     if (id) {
       this.materialService.getById(id).subscribe({
         next: (data) => {
           this.material = data
+          this.recommendedMaterials = data.recommendedMaterials || [];
+
           console.log(this.material)
         },
         error: (err) => {
-          console.error(err)
-          alert('Nem sikerült betölteni az anyagot.')
+          console.error('Hiba történt a tananyag vagy az ajánlott anyagok betöltésekor:', err);
+          alert('Nem sikerült betölteni az adatokat.');
         }
       })
     }
