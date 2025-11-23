@@ -22,7 +22,8 @@
 
             <h3 class="mb-0">{{ material.title }}</h3>
             <div class="text-muted fw-semibold">
-              <i class="bi bi-book"></i> {{ material.subject.name || 'Placeholder' }}
+              <i class="bi bi-book me-1"></i>
+              <button class="subject" (click)="openSubjectMaterials(material.subject.id)"> {{ material.subject.name || 'Placeholder' }} </button> 
             </div>
             <div class="text-muted fw-semibold" *ngIf="material.isExam">
               <i class="bi bi-exclamation-diamond-fill me-2"></i>

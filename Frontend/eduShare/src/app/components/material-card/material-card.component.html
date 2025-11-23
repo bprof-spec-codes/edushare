@@ -11,8 +11,7 @@
             </div>
             <div class="icon-data">
                 <i class="bi bi-book book"></i>
-                <div class="subject">{{m.subject.name}}</div>
-                
+                <button class="subject" (click)="openSubjectMaterials(m.subject.id)">{{m.subject.name}}</button>
             </div>
             
             <div class="icon-data">

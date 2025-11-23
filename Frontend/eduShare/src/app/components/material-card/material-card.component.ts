@@ -62,4 +62,8 @@ export class MaterialCardComponent implements OnChanges, OnInit {
     }
     return "isNotExam"
   }
+
+  openSubjectMaterials(subjectId: string) {
+    this.router.navigate(['/materials'], { queryParams: { subject: subjectId } });
+  }
 }

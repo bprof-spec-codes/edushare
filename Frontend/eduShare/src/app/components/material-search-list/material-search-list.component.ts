@@ -20,6 +20,7 @@ export class MaterialSearchListComponent implements OnInit{
   ngOnInit(): void {
     this.materialService.materialsShort$.subscribe(res => {
       this.materials = res
+      console.log(this.materials)
     })
   }
 
