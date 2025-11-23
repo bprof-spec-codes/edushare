@@ -9,5 +9,4 @@ import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 })
 export class RecommendedMaterialsComponent {
 
-  @Input() materials: MaterialShortViewDto[] = [];
 }
