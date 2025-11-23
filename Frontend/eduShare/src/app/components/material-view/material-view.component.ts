@@ -43,32 +43,37 @@ export class MaterialViewComponent implements OnInit {
     private ratingService: RatingService,
   ) { }
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id')
-    if (!id) {
-      alert('Érvénytelen azonosító.')
-      return
-    }
+   ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
 
-    this.currentUserId = this.auth.getUserId() || ''
-    this.loading = true
-    if (id) {
-      this.materialService.getById(id).subscribe({
-        next: (data) => {
-          this.material = data
-          this.recommendedMaterials = data.recommendedMaterials || [];
+      if (!id) {
+        alert('Érvénytelen azonosító.');
+        return;
+      }
 
-          console.log(this.material)
-        },
-        error: (err) => {
-          console.error('Hiba történt a tananyag vagy az ajánlott anyagok betöltésekor:', err);
-          alert('Nem sikerült betölteni az adatokat.');
-        }
-      })
-    }
+      this.loadMaterial(id);
+    });
+  }
 
-    this.ratingsLoad(id)
+  loadMaterial(id: string) {
+    this.currentUserId = this.auth.getUserId() || '';
+    this.loading = true;
 
+    this.materialService.getById(id).subscribe({
+      next: (data) => {
+        this.material = data;
+        this.recommendedMaterials = data.recommendedMaterials || [];
+
+        console.log('Loaded material:', data);
+
+        this.ratingsLoad(id);
+      },
+      error: (err) => {
+        console.error('Hiba a tananyag betöltésekor:', err);
+        alert('Nem sikerült betölteni az adatokat.');
+      }
+    });
   }
 
   recommendedMaterial(id: string) {

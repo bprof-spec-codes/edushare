@@ -38,6 +38,7 @@ import { RatingStarsComponent } from './components/rating-stars/rating-stars.com
 import { RatingCardComponent } from './components/rating-card/rating-card.component';
 import { RatingCommentModalComponent } from './components/rating-comment-modal/rating-comment-modal.component';
 import { RecommendedMaterialsComponent } from './components/recommended-materials/recommended-materials.component';
+import { MiniMaterialCardComponent } from './components/mini-material-card/mini-material-card.component';
 
 
 @NgModule({
@@ -69,7 +70,8 @@ import { RecommendedMaterialsComponent } from './components/recommended-material
     RatingCommentModalComponent,
     MainlistComponent,
     AdminStatisticsComponent,
-    RecommendedMaterialsComponent
+    RecommendedMaterialsComponent,
+    MiniMaterialCardComponent
   ],
   imports: [
     BrowserModule,
