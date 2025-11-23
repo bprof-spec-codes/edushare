@@ -8,5 +8,8 @@ import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
   styleUrl: './recommended-materials.component.sass'
 })
 export class RecommendedMaterialsComponent {
+  
+    @Input() materials: MaterialShortViewDto[] = [];
+
 
 }
