@@ -118,7 +118,7 @@
           </div>
         </div>
 
-        <div class="mt-2" *ngIf="recommendedMaterials.length > 0">
+        <div class="mt-2" *ngIf="recommendedMaterials.length > 0" #ratingScroll (wheel)="onHorizontalScroll($event)">
           <app-recommended-materials 
             [materials]="recommendedMaterials">
           </app-recommended-materials>
