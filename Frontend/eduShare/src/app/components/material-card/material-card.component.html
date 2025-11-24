@@ -4,6 +4,20 @@
         </div>
         
         <br>
+        <div class=" options-menu dropdown ms-3" *ngIf="authService.isAdmin()">
+            <button class="btn btn-link text-dark p-0" type="button" id="optionsMenu" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <i class="bi bi-three-dots-vertical fs-5"></i>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="optionsMenu">
+              <li>
+                <button class="dropdown-item text-danger" (click)="deleteMaterial()">
+                  <i class="bi bi-trash me-2"></i> Törlés
+                </button>
+              </li>
+            </ul>
+        </div>
         <div [class]="titleClass()" *ngIf="m.uploader.image.file">{{m.title}}</div>
         <div class="datas">
             <div *ngIf="m.isExam" class="examClass">
