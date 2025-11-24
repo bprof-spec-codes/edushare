@@ -106,6 +106,7 @@
           </div>
         </div>
 
+
         <div class="row">
           <div class="col-12">
             <div class="rating-scroll-container comments-wrapper" [class.open]="((ratings$ | async)?.length ?? 0)>0"
@@ -115,6 +116,12 @@
               </app-rating-card>
             </div>
           </div>
+        </div>
+
+        <div class="mt-2" *ngIf="recommendedMaterials.length > 0">
+          <app-recommended-materials 
+            [materials]="recommendedMaterials">
+          </app-recommended-materials>
         </div>
 
       </div>

@@ -1,0 +1,102 @@
+@use '../../../styles/_variables' as *
+
+
+/* --- HORIZONTÁLIS SCROLL --- */
+.horizontal-scroll
+  display: flex
+  gap: 1.25rem
+  overflow-x: auto
+  overflow-y: hidden
+  padding-bottom: 0.5rem
+  scroll-snap-type: x mandatory
+  -webkit-overflow-scrolling: touch
+
+
+.card-wrapper
+  flex: 0 0 auto
+  width: 160px        // <<< MINI KÁRTYA MÉRET
+  scroll-snap-align: start
+
+
+/* --- MINI CARD OVERRIDES (CSAK ITT!) --- */
+:host ::ng-deep app-material-card .card-background
+  width: 160px !important
+  min-width: 160px !important
+  padding: 10px !important     // kisebb padding
+  border-radius: 6px
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2)
+
+
+:host ::ng-deep app-material-card .isNotExam,
+:host ::ng-deep app-material-card .isExam
+  font-size: 18px !important        // kisebb cím
+  height: 50px !important
+  margin-bottom: 20px !important
+  -webkit-line-clamp: 2
+
+
+:host ::ng-deep app-material-card .icon-data
+  gap: 5px !important
+  height: 22px !important
+
+:host ::ng-deep app-material-card .book,
+:host ::ng-deep app-material-card .clock,
+:host ::ng-deep app-material-card .examIcon
+  font-size: 16px !important        // kisebb ikonok
+
+
+:host ::ng-deep app-material-card .subject,
+:host ::ng-deep app-material-card .btn-profile
+  max-width: 110px !important
+  font-size: 14px !important
+
+
+:host ::ng-deep app-material-card .open-button
+  width: 75% !important
+  height: 30px !important
+  font-size: 14px !important
+  margin-bottom: 5px !important
+
+
+:host ::ng-deep app-material-card .icon-bookmark
+  width: 24px !important
+  height: 24px !important
+
+
+:host ::ng-deep app-material-card .datas
+  margin-left: 8px !important
+  margin-right: 8px !important
+
+:host ::ng-deep app-material-card .date
+  font-size: 12px !important
+
+.recommended-scroll-container
+  display: flex
+  flex-wrap: nowrap
+  overflow-x: auto
+  gap: 1rem
+  align-items: stretch
+  padding-bottom: 0.5rem
+
+  scrollbar-width: thin
+  scrollbar-color: transparent transparent
+
+  &::-webkit-scrollbar
+    height: 8px
+
+  &::-webkit-scrollbar-track
+    background: transparent
+
+  &::-webkit-scrollbar-thumb
+    background: transparent
+    border-radius: 4px
+
+  &:hover
+    scrollbar-color: rgba($edu-purple, 0.2) white
+
+  &:hover::-webkit-scrollbar-track
+    background: #f1f1f1
+
+  &:hover::-webkit-scrollbar-thumb
+    background: #c5c5c5
+

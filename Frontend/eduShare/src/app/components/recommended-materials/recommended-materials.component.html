@@ -1,0 +1,9 @@
+<div class="container mt-4">
+  <h4 class="mb-3">Recommended Materials</h4>
+
+  <div class="recommended-scroll-container">
+    <div class="card-wrapper" *ngFor="let m of materials" (wheel)="onHorizontalScroll($event)">
+      <app-mini-material-card [m]="m"></app-mini-material-card>
+    </div>
+  </div>
+</div>

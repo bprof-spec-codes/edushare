@@ -37,6 +37,8 @@ import { RatingCreateModalComponent } from './components/rating-create-modal/rat
 import { RatingStarsComponent } from './components/rating-stars/rating-stars.component';
 import { RatingCardComponent } from './components/rating-card/rating-card.component';
 import { RatingCommentModalComponent } from './components/rating-comment-modal/rating-comment-modal.component';
+import { RecommendedMaterialsComponent } from './components/recommended-materials/recommended-materials.component';
+import { MiniMaterialCardComponent } from './components/mini-material-card/mini-material-card.component';
 
 
 @NgModule({
@@ -67,7 +69,9 @@ import { RatingCommentModalComponent } from './components/rating-comment-modal/r
     RatingCardComponent,
     RatingCommentModalComponent,
     MainlistComponent,
-    AdminStatisticsComponent
+    AdminStatisticsComponent,
+    RecommendedMaterialsComponent,
+    MiniMaterialCardComponent
   ],
   imports: [
     BrowserModule,
