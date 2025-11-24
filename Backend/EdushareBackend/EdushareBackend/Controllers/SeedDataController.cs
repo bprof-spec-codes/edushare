@@ -8,6 +8,7 @@ using Entities.Dtos.User;
 using Entities.Helpers;
 using Entities.Models;
 using Logic.Logic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,6 +45,7 @@ namespace EdushareBackend.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> LoadSeedData()
         {
             ctx.Database.EnsureDeleted();
