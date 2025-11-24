@@ -56,6 +56,8 @@ export class MaterialViewComponent implements OnInit {
     });
   }
 
+  
+
   loadMaterial(id: string) {
     this.currentUserId = this.auth.getUserId() || '';
     this.loading = true;

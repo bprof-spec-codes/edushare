@@ -11,5 +11,15 @@ export class RecommendedMaterialsComponent {
   
     @Input() materials: MaterialShortViewDto[] = [];
 
+    onHorizontalScroll(event: WheelEvent) {
+      const container = event.currentTarget as HTMLElement;
+
+      if (event.deltaY !== 0) {
+        event.preventDefault();
+        container.scrollLeft += event.deltaY;
+      }
+    }
+
+
 
 }
