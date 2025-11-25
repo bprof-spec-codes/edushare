@@ -5,7 +5,7 @@ import { Material } from '../models/material';
 import { MaterialCreateDto } from '../dtos/material-create-dto';
 import { MaterialShortViewDto } from '../dtos/material-short-view-dto';
 import { MaterialViewDto } from '../dtos/material-view-dto';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { SearchDto } from '../dtos/search-dto';
 
 @Injectable({
@@ -64,10 +64,27 @@ export class MaterialService {
       })
     );
   }
+  updateExam(id: string, isExam: boolean): Observable<void> {
+    return this.http.patch<void>(`${this.apiBaseUrl}/${id}/exam`, isExam).pipe(
+      tap(() => {
+        const current = this.materialShortSubject.getValue();
+        const updated = current.map(m =>
+          m.id === id ? { ...m, isExam } : m
+        );
+        this.materialShortSubject.next(updated);
+      })
+    );
+  }
 
   searchMaterials(searchDto: SearchDto): Observable<MaterialShortViewDto[]> {
     return this.http.post<MaterialShortViewDto[]>(this.apiBaseUrl + "/searchMaterials", searchDto).pipe(
       tap(m => this.materialShortSubject.next(m))
     )
+  }
+
+  materialDownloaded(id: string): Observable<void> {
+    return this.http.post<void>(`${this.apiBaseUrl}/MaterialDownloaded`, JSON.stringify(id), {
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }

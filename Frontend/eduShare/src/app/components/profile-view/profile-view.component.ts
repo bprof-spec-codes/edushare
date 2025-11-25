@@ -25,19 +25,17 @@ export class ProfileViewComponent {
     const roles = this.authService.getRoles()
     this.isAdmin = roles.includes('Admin')
 
-    const id = this.route.snapshot.paramMap.get('id')
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id')
 
-    if (!id) {
-      alert('Invalid id.')
-      return
-    }
-
-    if (id) {
-      this.loadProfile(id)
-      if (id === this.authService.getUserId()) {
-        this.ownProfile = true
+      if (!id) {
+        alert('Invalid id.')
+        return
       }
-    }
+
+      this.loadProfile(id)
+      this.ownProfile = id === this.authService.getUserId()
+    })
   }
 
   loadProfile(id: string) {

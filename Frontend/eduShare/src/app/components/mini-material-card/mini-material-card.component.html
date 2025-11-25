@@ -1,0 +1,18 @@
+<div class="mini-card" (click)="onOpen()">
+
+  <div class="title">{{ m.title }}</div>
+
+  <div class="subject-row">
+    <i class="bi bi-book"></i>
+    <span>{{ m.subject.name }}</span>
+  </div>
+
+  <div class="uploader-row">
+    <i class="bi bi-clock clock"></i>
+    <span>{{m.uploadDate | date:'yyyy.MM.dd'}}</span>
+  </div>
+
+  <div class="badge exam" *ngIf="m.isExam">Exam</div>
+  <div class="badge rec" *ngIf="m.isRecommended">Recommended</div>
+
+</div>

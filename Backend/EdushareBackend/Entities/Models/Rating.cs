@@ -1,11 +1,5 @@
 ﻿using Entities.Helpers;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Entities.Models
 {
@@ -17,8 +11,8 @@ namespace Entities.Models
         }
         [Key]
         [StringLength(50)]
-        public string Id { get; set; } =string.Empty;
-        
+        public string Id { get; set; } = string.Empty;
+
         public string UserId { get; set; } = string.Empty;
         public virtual AppUser User { get; set; } = null!;
         public string MaterialId { get; set; } = string.Empty;
@@ -27,6 +21,7 @@ namespace Entities.Models
         public int Rate { get; set; }
         [StringLength(1000)]
         public string Comment { get; set; } = string.Empty;
+        public DateTime uploadDate { get; set; }
 
     }
 }

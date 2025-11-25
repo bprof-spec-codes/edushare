@@ -1,0 +1,59 @@
+<div class="modal-backdrop fade show" *ngIf="open"></div>
+
+<div class="modal fade" *ngIf="open" [class.show]="open" [style.display]="open ? 'block' : null" tabindex="-1"
+    role="dialog" aria-modal="true" aria-labelledby="rateTitle">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="rateTitle">Rate material</h5>
+                <button type="button" class="btn-close" aria-label="Close" (click)="onCancel()" [disabled]="loading">
+                </button>
+            </div>
+
+            <form [formGroup]="createForm" (ngSubmit)="submit()">
+                <div class="modal-body">
+
+                    <div *ngIf="error" class="alert alert-danger mb-3">
+                        {{ error }}
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="star-input" role="radiogroup" aria-label="Star rating" (mouseleave)="onStarLeave()">
+                            <button *ngFor="let s of stars" type="button" class="star-btn" [class.on]="isStarOn(s)"
+                                [disabled]="loading" (mouseenter)="onStarEnter(s)" (click)="onStarClick(s)">
+                                ★
+                            </button>
+                        </div>
+                        <div class="invalid-feedback d-block"
+                            *ngIf="createForm.get('rate')?.touched && createForm.get('rate')?.invalid">
+                            Please enter a value between 1 and 5.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Comment</label>
+                        <textarea id="comment" rows="4" class="form-control" formControlName="comment"
+                            [readonly]="loading" placeholder="Write a few words about your experience..."></textarea>
+                        <div class="form-text">Max. 1000 characters.</div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" (click)="onCancel()" [disabled]="loading">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-save" [disabled]="createForm.invalid || loading">
+                        <span *ngIf="!loading"><i class="bi bi-check-lg me-1"></i>Save</span>
+                        <span *ngIf="loading" class="d-inline-flex align-items-center gap-2">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Saving...
+                        </span>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

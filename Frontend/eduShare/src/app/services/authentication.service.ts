@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { JwtPayload } from '../models/jwt-payload';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { FavMaterialService } from './fav-material.service';
 
 interface LoginResult {
@@ -86,7 +86,6 @@ export class AuthService {
         }
       }
     }
-    console.log(roles)
     return roles
   }
 

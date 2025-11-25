@@ -6,6 +6,8 @@ import { ProfileService } from '../../services/profile.service';
 import { FavMaterialService } from '../../services/fav-material.service';
 import { BehaviorSubject, combineLatest, finalize, map, materialize, Observable, of } from 'rxjs';
 import { AuthService } from '../../services/authentication.service';
+import { MaterialViewDto } from '../../dtos/material-view-dto';
+import { MaterialService } from '../../services/material.service';
 
 @Component({
   selector: 'app-material-card',
@@ -20,8 +22,10 @@ export class MaterialCardComponent implements OnChanges, OnInit {
   isFav$!: Observable<boolean>
   busy = false
   isLoggedIn: boolean = false
+  material: MaterialViewDto | null = null
+  error?: string
 
-  constructor(private router: Router, private profileService: ProfileService, private favService: FavMaterialService, private authService: AuthService) {
+  constructor(private router: Router, private profileService: ProfileService, private favService: FavMaterialService, private materialService: MaterialService, public authService: AuthService) {
   }
 
   ngOnInit() {
@@ -55,4 +59,29 @@ export class MaterialCardComponent implements OnChanges, OnInit {
   openProfile(id: string) {
     this.router.navigate(['/profile-view', id])
   }
+
+  titleClass(): string {
+    if(this.m.isExam) {
+      return "isExam"
+    }
+    return "isNotExam"
+  }
+
+  openSubjectMaterials(subjectId: string) {
+    this.router.navigate(['/materials'], { queryParams: { subject: subjectId } });
+  }
+  deleteMaterial(): void {
+      if (!this.material) return
+      if (!confirm('Biztosan törölni szeretnéd az anyagot?')) return
+      this.materialService.delete(this.material.id).subscribe({
+        next: () => {
+          console.log('A tananyag sikeresen törölve lett.')
+          this.router.navigate(['/materials'])
+        },
+        error: (err) => {
+          console.error(err)
+          alert('Nem sikerült törölni az tananyagot.')
+        }
+      })
+    }
 }

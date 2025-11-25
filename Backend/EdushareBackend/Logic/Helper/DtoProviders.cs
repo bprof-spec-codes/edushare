@@ -6,12 +6,6 @@ using Entities.Dtos.User;
 using Entities.Helpers;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Logic.Helper
 {
@@ -40,7 +34,7 @@ namespace Logic.Helper
                         )
                     }))
                     .ForMember(dest => dest.AverageRating,
-                        opt => opt.MapFrom(src => src.Ratings.Any() ? src.Ratings.Average(r => r.Rate) : 0))
+                        opt => opt.MapFrom(src => src.Ratings.Any() ? Math.Round(src.Ratings.Average(r => r.Rate), 1) : 0))
                     .ForMember(dest => dest.RatingCount,
                         opt => opt.MapFrom(src => src.Ratings.Count));
                 cfg.CreateMap<Material, MaterialViewDto>()
@@ -56,7 +50,7 @@ namespace Logic.Helper
                                     src.Uploader.Image.FileName,
                                      Convert.ToBase64String(src.Uploader.Image.File)
                                  )
-                             
+
                          }
                          : null))
                      .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content != null
@@ -69,7 +63,7 @@ namespace Logic.Helper
                          )
                          : null))
                      .ForMember(dest => dest.AverageRating,
-                             opt => opt.MapFrom(src => src.Ratings.Any() ? src.Ratings.Average(r => r.Rate) : 0))
+                             opt => opt.MapFrom(src => src.Ratings.Any() ? Math.Round(src.Ratings.Average(r => r.Rate), 1) : 0))
                      .ForMember(dest => dest.RatingCount,
                              opt => opt.MapFrom(src => src.Ratings.Count));
 

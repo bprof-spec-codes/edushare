@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Subject } from '../models/subject';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { SubjectCreateDto } from '../dtos/subject-create-dto';
 
 @Injectable({
@@ -27,10 +27,7 @@ export class SubjectService {
 
   createSubject(subject: SubjectCreateDto): Observable<void> {
     return this.http.post<void>(`${environment.baseApiUrl}/api/Subject`, subject).pipe(
-      tap(() => {
-        const current = this._subjects$.value
-        this._subjects$.next([...current, subject as Subject])
-      })
+      tap(() => this.getAllSubjects().subscribe())
     )
   }
 

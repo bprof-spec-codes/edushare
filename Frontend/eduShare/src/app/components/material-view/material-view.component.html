@@ -1,17 +1,33 @@
-<div class="container-fluid d-flex align-items-center justify-content-center">
-  <div class="row w-100 align-items-center justify-content-center">
+<div class="container-fluid py-5 mt-5">
+  <div class="row w-100 justify-content-center align-items-start">
     <div class="col-md-7 d-flex justify-content-center">
       <div class="container mt-4" *ngIf="material">
 
         <div class="d-flex justify-content-between align-items-center mb-3 row">
           <div class="col-6">
-            <div clas="isrecommended" *ngIf="material.isRecommended">
+            <div *ngIf="material.isRecommended">
               <i class="bi bi-pin-angle-fill me-1"></i>
               <span>Recommended</span>
             </div>
+            <div>
+              <div class="d-inline-flex align-items-left gap-1 ps-0 rating">
+                <span>{{ ratingAverage$ | async | number:'1.1-1' }}</span>
+                <app-rating-stars [rating]="ratingAverage$ | async"></app-rating-stars>
+                <span class="text-muted" style="font-size: 0.9rem" count>({{(ratings$ | async)?.length}})</span>
+                <i class="bi bi-plus-circle add-rating" (click)="openRatingCreateModal()"></i>
+                <i class="bi bi-download ms-4"></i> 
+                <span>{{ material.downloadCount || 0 }} downloads</span>  
+              </div>
+            </div>
+
             <h3 class="mb-0">{{ material.title }}</h3>
             <div class="text-muted fw-semibold">
-              <i class="bi bi-book"></i> {{ material.subject.name || 'Placeholder' }}
+              <i class="bi bi-book me-1"></i>
+              <button class="subject" (click)="openSubjectMaterials(material.subject.id)"> {{ material.subject.name || 'Placeholder' }} </button> 
+            </div>
+            <div class="text-muted fw-semibold" *ngIf="material.isExam">
+              <i class="bi bi-exclamation-diamond-fill me-2"></i>
+              <span>Exam</span>
             </div>
           </div>
 
@@ -30,7 +46,7 @@
                        ? material.uploader.image.file
                        : 'data:image/*;base64,' + material.uploader.image.file"
               alt="{{ material.uploader.fullName || 'Feltöltő' }}" class="rounded-circle" width="42" height="42" />
-            <div class="dropdown ms-3" *ngIf="currentUserId === material.uploader.id">
+            <div class="dropdown ms-3" *ngIf="currentUserId === material.uploader.id || auth.isAdmin()">
               <button class="btn btn-link text-dark p-0" type="button" id="optionsMenu" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <i class="bi bi-three-dots-vertical fs-5"></i>
@@ -38,7 +54,7 @@
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="optionsMenu">
                 <li>
-                  <button class="dropdown-item" (click)="updateMaterial()">
+                  <button class="dropdown-item" *ngIf="currentUserId === material.uploader.id" (click)="updateMaterial()">
                     <i class="bi bi-pencil-square me-2"></i> Módosítás
                   </button>
                 </li>
@@ -78,11 +94,34 @@
               (click)="previewFile()">
               Preview
             </button>
-            <button class="btn w-25 d-flex align-items-center justify-content-center file-button" *ngIf="auth.isAdmin() || auth.isTeacher()" (click)="recommendedMaterial(material.id)">
+            <button class="btn w-25 d-flex align-items-center justify-content-center file-button"
+              *ngIf="auth.isAdmin() || auth.isTeacher()" (click)="recommendedMaterial(material.id)">
               <i class="bi bi-pin-angle-fill me-2"></i>
               <span>Recommend</span>
             </button>
+            <button class="btn w-25 d-flex align-items-center justify-content-center file-button" *ngIf="auth.isAdmin() || auth.isTeacher()" (click)="examMaterial(material.id)">
+              <i class="bi bi-exclamation-diamond-fill me-2"></i>
+              <span>Exam</span>
+            </button>
           </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-12">
+            <div class="rating-scroll-container comments-wrapper" [class.open]="((ratings$ | async)?.length ?? 0)>0"
+              #ratingScroll (wheel)="onHorizontalScroll($event)">
+              <app-rating-card *ngFor="let rating of ratings$ | async" [rating]="rating" [currentUserId]="currentUserId" (deleteRating)="handleRatingDelete($event)"
+                (showFullComment)="openCommentModal(rating.userName,rating.comment)">
+              </app-rating-card>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-2" *ngIf="recommendedMaterials.length > 0" #ratingScroll (wheel)="onHorizontalScroll($event)">
+          <app-recommended-materials 
+            [materials]="recommendedMaterials">
+          </app-recommended-materials>
         </div>
 
       </div>
@@ -94,3 +133,11 @@
     </div>
   </div>
 </div>
+
+<app-rating-create-modal [materialid]="material?.id" [open]="ratingCreateModalOpen" [loading]="ratingCreating"
+  [error]="ratingCreateError" (close)="closeRatingCreateModal()" (save)="handleRatingCreate($event)">
+</app-rating-create-modal>
+
+<app-rating-comment-modal [open]="commentModalOpen" [comment]="selectedComment" [userName]="selectedUserName"
+  (close)="closeCommentModal()">
+</app-rating-comment-modal>
