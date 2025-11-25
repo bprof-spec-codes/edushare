@@ -132,7 +132,7 @@ Runs at: `http://localhost:4200/`
 | Subject Management (Teacher) | Manage subjects |
 | Admin Dashboard (Admin) | Moderation & statistics |
 
--> Screenshots and guideline available in docs.
+> Screenshots and guideline available in docs.
 
 ---
 
