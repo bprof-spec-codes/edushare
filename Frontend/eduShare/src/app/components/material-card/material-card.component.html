@@ -33,8 +33,9 @@
                             ? m.uploader.image.file
                             : 'data:image/*;base64,' + m.uploader.image.file" [alt]="m.uploader.fullName"
                     class="profile-pic" width="21" height="21" />
-                <div class="btn-profile-container"><button class="btn-profile"
-                        (click)="openProfile(m.uploader.id)">{{m.uploader.fullName}}</button></div>
+                <div class="btn-profile-container">
+                    <button class="btn-profile" (click)="openProfile(m.uploader.id)">{{m.uploader.fullName}}</button>
+                </div>
             </div>
             <div class="icon-data">
                 <i class="bi bi-clock clock"></i>
