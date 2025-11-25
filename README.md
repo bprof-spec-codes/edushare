@@ -13,6 +13,7 @@
 | Nagy Zsombor                 | Architect | [nzsombor04](http://github.com/nzsombor04) |
 | Bátori András                | Frontend developer | [batoriandras](http://github.com/batoriandras) |
 | Hanusz Bettina Alexandra     | Frontend developer | [hanuszbettina](http://github.com/hanuszbettina) |
+| Tolnai Levente               | Frontend developer | [levitolnai](https://github.com/levitolnai) |
 | Zádori Áron                  | Backend developer | [zadoriaron](http://github.com/zadoriaron) |
 | Keserű Gergely Márton        | Backend developer | [kesamarci](http://github.com/kesamarci) |
 
@@ -20,7 +21,7 @@
 
 ## <img width="25" alt="eduhog" src="https://github.com/user-attachments/assets/67e81705-b99a-495f-91a4-97c4b1a90c1d" /> Availability
 
-The site is available for everyone at  https://edushareoe.hu
+The site is available for everyone at [EDUSHARE](https://edushareoe.hu)
 
 ---
 
