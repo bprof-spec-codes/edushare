@@ -43,6 +43,14 @@ export class ProfileViewComponent {
     this.profileService.getById(id).subscribe({
       next: (data) => {
         this.profile = data
+
+        if (this.profile.warnedAt) {
+          this.profile.warnedAt = this.profile.warnedAt + 'Z'
+        }
+        if (this.profile.bannedAt) {
+          this.profile.bannedAt = this.profile.bannedAt + 'Z'
+        }
+        
         console.log(this.profile)
         this.loading = false
       },
