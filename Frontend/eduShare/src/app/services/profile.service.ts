@@ -19,8 +19,17 @@ export class ProfileService {
   private _uploaders$ = new BehaviorSubject<SearchUploaderDto[]>([])
   public uploaders$ = this._uploaders$.asObservable()
 
+  private _currentProfile$ = new BehaviorSubject<ProfileViewDto>(new ProfileViewDto);
+  public currentProfile$ = this._currentProfile$.asObservable();
+
   constructor(private http: HttpClient) 
   { }
+
+  getCurrentProfile(id: string): Observable<ProfileViewDto> {
+    return this.http.get<ProfileViewDto>(`${this.apiBaseUrl}/${id}`).pipe(
+      tap(profile => this._currentProfile$.next(profile))
+    );
+  }
 
   loadAll(): Observable<ProfilListViewDto[]> {
     return this.http.get<ProfilListViewDto[]>(this.apiBaseUrl).pipe(
@@ -38,12 +47,10 @@ export class ProfileService {
       return this.http.get<ProfileViewDto>(`${this.apiBaseUrl}/${id}`);
     }
       
-  update(id: string, profile: UpdateProfileDto): Observable<void> {
-    return this.http.put<void>(`${this.apiBaseUrl}/${id}`, profile).pipe(
-      switchMap(() => this.http.get<ProfileViewDto[]>(this.apiBaseUrl)),
-      tap(updated => this.profileShortSubject.next(updated)),
-      map(() => void 0)
-    )
+  update(id: string, profile: UpdateProfileDto) {
+    return this.http.put(`${this.apiBaseUrl}/${id}`, profile).pipe(
+      tap(() => this.getCurrentProfile(id).subscribe())
+    );
   }
 
   grantAdmin(id:string): Observable<void> {
