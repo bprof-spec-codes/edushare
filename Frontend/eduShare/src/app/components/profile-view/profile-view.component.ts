@@ -4,6 +4,7 @@ import { ProfileService } from '../../services/profile.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 import { AuthService } from '../../services/authentication.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-profile-view',
@@ -18,7 +19,13 @@ export class ProfileViewComponent {
   ownProfile = false
   isAdmin = false
 
-  constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router, private authService: AuthService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private profileService: ProfileService,
+    private router: Router,
+    private authService: AuthService,
+    private toast: ToastService
+  ) { }
   
   ngOnInit() {
     // Check if current user is admin
@@ -29,7 +36,7 @@ export class ProfileViewComponent {
       const id = params.get('id')
 
       if (!id) {
-        alert('Invalid id.')
+        this.toast.show('Invalid id.');
         return
       }
 
@@ -56,7 +63,7 @@ export class ProfileViewComponent {
       },
       error: (err) => {
         console.error(err)
-        alert('Cannot load the profile.')
+        this.toast.show('Cannot load the profile.');
         this.loading = false
       }
     })
@@ -84,12 +91,12 @@ export class ProfileViewComponent {
     if (confirm(`Are you sure you want to warn ${this.profile.fullName}?`)) {
       this.profileService.warnUser(this.profile.id).subscribe({
         next: () => {
-          alert('User warned successfully!')
+          this.toast.show('User warned successfully!');
           this.loadProfile(this.profile!.id)
         },
         error: (err) => {
           console.error(err)
-          alert('Failed to warn user: ' + (err.error?.message || 'Unknown error'))
+          this.toast.show('Failed to warn user: ' + (err.error?.message || 'Unknown error'));
         }
       })
     }
@@ -101,12 +108,12 @@ export class ProfileViewComponent {
     if (confirm(`Are you sure you want to remove the warning from ${this.profile.fullName}?`)) {
       this.profileService.removeWarning(this.profile.id).subscribe({
         next: () => {
-          alert('Warning removed successfully!')
+          this.toast.show('Warning removed successfully!');
           this.loadProfile(this.profile!.id)
         },
         error: (err) => {
           console.error(err)
-          alert('Failed to remove warning: ' + (err.error?.message || 'Unknown error'))
+          this.toast.show('Failed to remove warning: ' + (err.error?.message || 'Unknown error'));
         }
       })
     }
@@ -118,12 +125,12 @@ export class ProfileViewComponent {
     if (confirm(`Are you sure you want to BAN ${this.profile.fullName}? This will prevent them from logging in.`)) {
       this.profileService.banUser(this.profile.id).subscribe({
         next: () => {
-          alert('User banned successfully!')
+          this.toast.show('User banned successfully!');
           this.loadProfile(this.profile!.id)
         },
         error: (err) => {
           console.error(err)
-          alert('Failed to ban user: ' + (err.error?.message || 'Unknown error'))
+          this.toast.show('Failed to ban user: ' + (err.error?.message || 'Unknown error'));
         }
       })
     }
@@ -135,12 +142,12 @@ export class ProfileViewComponent {
     if (confirm(`Are you sure you want to unban ${this.profile.fullName}?`)) {
       this.profileService.unbanUser(this.profile.id).subscribe({
         next: () => {
-          alert('User unbanned successfully!')
+          this.toast.show('User unbanned successfully!');
           this.loadProfile(this.profile!.id)
         },
         error: (err) => {
           console.error(err)
-          alert('Failed to unban user: ' + (err.error?.message || 'Unknown error'))
+          this.toast.show('Failed to unban user: ' + (err.error?.message || 'Unknown error'));
         }
       })
     }
