@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 import { AuthService } from '../../services/authentication.service';
 import { ToastService } from '../../services/toast.service';
+import { ConfirmService } from '../../services/confirm.service';
 
 @Component({
   selector: 'app-profile-view',
@@ -24,7 +25,8 @@ export class ProfileViewComponent {
     private profileService: ProfileService,
     private router: Router,
     private authService: AuthService,
-    private toast: ToastService
+    private toast: ToastService,
+    private confirmService: ConfirmService
   ) { }
   
   ngOnInit() {
@@ -85,10 +87,11 @@ export class ProfileViewComponent {
     return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
   }
 
-  warnUser(): void {
+  async warnUser(): Promise<void> {
     if (!this.profile) return
 
-    if (confirm(`Are you sure you want to warn ${this.profile.fullName}?`)) {
+    const confirmed = await this.confirmService.confirm(`Are you sure you want to warn ${this.profile.fullName}?`)
+    if (confirmed) {
       this.profileService.warnUser(this.profile.id).subscribe({
         next: () => {
           this.toast.show('User warned successfully!');
@@ -102,10 +105,11 @@ export class ProfileViewComponent {
     }
   }
 
-  removeWarning(): void {
+  async removeWarning(): Promise<void> {
     if (!this.profile) return
 
-    if (confirm(`Are you sure you want to remove the warning from ${this.profile.fullName}?`)) {
+    const confirmed = await this.confirmService.confirm(`Are you sure you want to remove the warning from ${this.profile.fullName}?`)
+    if (confirmed) {
       this.profileService.removeWarning(this.profile.id).subscribe({
         next: () => {
           this.toast.show('Warning removed successfully!');
@@ -119,10 +123,11 @@ export class ProfileViewComponent {
     }
   }
 
-  banUser(): void {
+  async banUser(): Promise<void> {
     if (!this.profile) return
 
-    if (confirm(`Are you sure you want to BAN ${this.profile.fullName}? This will prevent them from logging in.`)) {
+    const confirmed = await this.confirmService.confirm(`Are you sure you want to BAN ${this.profile.fullName}? This will prevent them from logging in.`)
+    if (confirmed) {
       this.profileService.banUser(this.profile.id).subscribe({
         next: () => {
           this.toast.show('User banned successfully!');
@@ -136,10 +141,11 @@ export class ProfileViewComponent {
     }
   }
 
-  unbanUser(): void {
+  async unbanUser(): Promise<void> {
     if (!this.profile) return
 
-    if (confirm(`Are you sure you want to unban ${this.profile.fullName}?`)) {
+    const confirmed = await this.confirmService.confirm(`Are you sure you want to unban ${this.profile.fullName}?`)
+    if (confirmed) {
       this.profileService.unbanUser(this.profile.id).subscribe({
         next: () => {
           this.toast.show('User unbanned successfully!');
