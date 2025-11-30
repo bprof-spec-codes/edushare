@@ -3,6 +3,7 @@ import { interval, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { ProfileService } from './profile.service';
 import { AuthService } from './authentication.service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class BanMonitorService {
   constructor(
     private profileService: ProfileService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {}
 
   startMonitoring(): void {
@@ -57,7 +59,7 @@ export class BanMonitorService {
 
   private handleBannedUser(): void {
     this.stopMonitoring();
-    alert('Your account has been banned. You will be logged out.');
+    this.toast.show('Your account has been banned. You will be logged out.');
     this.authService.logout();
     this.router.navigate(['/login']);
   }

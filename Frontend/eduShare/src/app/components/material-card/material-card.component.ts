@@ -8,6 +8,7 @@ import { BehaviorSubject, combineLatest, finalize, map, materialize, Observable,
 import { AuthService } from '../../services/authentication.service';
 import { MaterialViewDto } from '../../dtos/material-view-dto';
 import { MaterialService } from '../../services/material.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-material-card',
@@ -25,7 +26,7 @@ export class MaterialCardComponent implements OnChanges, OnInit {
   material: MaterialViewDto | null = null
   error?: string
 
-  constructor(private router: Router, private profileService: ProfileService, private favService: FavMaterialService, private materialService: MaterialService, public authService: AuthService) {
+  constructor(private router: Router, private profileService: ProfileService, private favService: FavMaterialService, private materialService: MaterialService, public authService: AuthService, private toast: ToastService) {
   }
 
   ngOnInit() {
@@ -80,7 +81,7 @@ export class MaterialCardComponent implements OnChanges, OnInit {
         },
         error: (err) => {
           console.error(err)
-          alert('Nem sikerült törölni az tananyagot.')
+          this.toast.show('Nem sikerült törölni a tananyagot.')
         }
       })
     }

@@ -5,6 +5,7 @@ import { ProfileViewDto } from '../../dtos/profile-view-dto';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FavMaterialService } from '../../services/fav-material.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-navbar',
@@ -23,7 +24,8 @@ export class NavbarComponent implements OnChanges, OnInit {
     private profileService: ProfileService,
     private router: Router,
     private fav: FavMaterialService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private toast: ToastService) {
     console.log('userid: ', auth.getUserId());
   }
 
@@ -37,7 +39,7 @@ export class NavbarComponent implements OnChanges, OnInit {
       },
       error: (err) => {
         console.error(err)
-        alert('Nem sikerült betölteni a profilt.')
+        this.toast.show('Nem sikerült betölteni a profilt.');
         this.auth.logout()
       }
     })
