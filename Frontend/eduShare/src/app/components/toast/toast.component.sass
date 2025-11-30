@@ -6,14 +6,31 @@
   right: 20px
   z-index: 1050
   min-width: 300px
+  max-width: 400px
 
 .toast-custom
-  background-color: $edu-purple-hover !important
+  background: linear-gradient(135deg, $edu-purple 0%, $edu-purple-hover 100%)
   color: #fff !important
   border: none
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15)
+  border-radius: 12px
+  box-shadow: 0 4px 20px rgba(138, 79, 255, 0.3)
+  backdrop-filter: blur(10px)
+  animation: slideInRight 0.3s ease-out
 
 .toast-custom-header
-  background-color: $edu-purple-hover !important
+  background: transparent !important
   color: #fff !important
   border-bottom: none
+  font-weight: 600
+  padding: 12px 16px
+  display: flex
+  align-items: center
+  gap: 8px
+  
+@keyframes slideInRight
+  from
+    transform: translateX(100%)
+    opacity: 0
+  to
+    transform: translateX(0)
+    opacity: 1
