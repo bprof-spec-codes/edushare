@@ -1,0 +1,10 @@
+<div class="modal-backdrop" *ngIf="showModal" (click)="onCancel()"></div>
+<div class="confirm-modal" *ngIf="showModal">
+  <div class="confirm-content">
+    <p class="confirm-message">{{ message }}</p>
+    <div class="confirm-buttons">
+        <button class="btn-confirm" (click)="onConfirm()">Confirm</button>
+      <button class="btn-cancel" (click)="onCancel()">Cancel</button>
+    </div>
+  </div>
+</div>

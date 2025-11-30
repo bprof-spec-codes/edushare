@@ -40,6 +40,7 @@ import { RatingCommentModalComponent } from './components/rating-comment-modal/r
 import { RecommendedMaterialsComponent } from './components/recommended-materials/recommended-materials.component';
 import { MiniMaterialCardComponent } from './components/mini-material-card/mini-material-card.component';
 import { ToastComponent } from './components/toast/toast.component';
+import { ConfirmComponent } from './components/confirm/confirm.component';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { ToastComponent } from './components/toast/toast.component';
     AdminStatisticsComponent,
     RecommendedMaterialsComponent,
     MiniMaterialCardComponent,
-    ToastComponent
+    ToastComponent,
+    ConfirmComponent
   ],
   imports: [
     BrowserModule,
