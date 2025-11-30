@@ -1,0 +1,12 @@
+<div class="toast-container" *ngIf="show">
+  <div class="toast show toast-custom" role="alert">
+    <div class="toast-header toast-custom-header">
+      <i class="bi bi-info-circle-fill me-2"></i>
+      <strong class="me-auto">Notification</strong>
+      <button type="button" class="btn-close btn-close-white" (click)="show = false"></button>
+    </div>
+    <div class="toast-body">
+      {{ message }}
+    </div>
+  </div>
+</div>
