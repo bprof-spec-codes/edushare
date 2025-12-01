@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ProfileService } from '../../services/profile.service';
 import { ProfileViewDto } from '../../dtos/profile-view-dto';
 import { AuthService } from '../../services/authentication.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-profile-list',
@@ -17,7 +18,7 @@ export class ProfileListComponent {
   error?: string
   roles: string[] = []
 
-  constructor(private profileService: ProfileService, private router: Router, private authService : AuthService) { }
+  constructor(private profileService: ProfileService, private router: Router, private authService : AuthService, private toast: ToastService) { }
 
   ngOnInit(): void {
     this.roles = this.authService.getRoles()
@@ -54,7 +55,7 @@ export class ProfileListComponent {
   grantAdmin(id: string) {
     this.profileService.grantAdmin(id).subscribe({
         next: () => {
-          alert("Admin added succesfully!")
+          this.toast.show("Admin added succesfully!");
           //console.log("Admin added")
         },
         error: (err) => {
@@ -67,7 +68,7 @@ export class ProfileListComponent {
   grantTeacher(id: string) {
     this.profileService.grantTeacher(id).subscribe({
         next: () => {
-          alert("Teacher added succesfully!")
+          this.toast.show("Teacher added succesfully!");
           //console.log("Teacher added")
         },
         error: (err) => {
@@ -80,11 +81,11 @@ export class ProfileListComponent {
   revokeRole(id: string) {
     this.profileService.revokeRole(id).subscribe({
         next: () => {
-          alert("Roles deleted succesfully!")
+          this.toast.show("Roles deleted succesfully!");
           //console.log("Teacher added")
         },
         error: (err) => {
-          alert(err.error.message)
+          this.toast.show(err.error.message);
           console.log(err)
         }
       }

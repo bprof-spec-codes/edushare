@@ -8,6 +8,8 @@ import { RatingService } from '../../services/rating.service';
 import { RatingCreateDto } from '../../dtos/rating-create-dto';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RatingViewDto } from '../../dtos/rating-view-dto';
+import { ToastService } from '../../services/toast.service';
+import { ConfirmService } from '../../services/confirm.service';
 
 @Component({
   selector: 'app-material-view',
@@ -41,6 +43,8 @@ export class MaterialViewComponent implements OnInit {
     private router: Router,
     public auth: AuthService,
     private ratingService: RatingService,
+    private toast: ToastService,
+    private confirmService: ConfirmService
   ) { }
 
    ngOnInit(): void {
@@ -48,7 +52,7 @@ export class MaterialViewComponent implements OnInit {
       const id = params.get('id');
 
       if (!id) {
-        alert('Érvénytelen azonosító.');
+        this.toast.show('Érvénytelen azonosító.');
         return;
       }
 
@@ -73,7 +77,7 @@ export class MaterialViewComponent implements OnInit {
       },
       error: (err) => {
         console.error('Hiba a tananyag betöltésekor:', err);
-        alert('Nem sikerült betölteni az adatokat.');
+        this.toast.show('Nem sikerült betölteni az adatokat.');
       }
     });
   }
@@ -120,7 +124,7 @@ export class MaterialViewComponent implements OnInit {
       const url = URL.createObjectURL(blob);
       window.open(url, '_blank');
     } else {
-      alert('Preview is only available for PDF files.');
+      this.toast.show('Preview is only available for PDF files.');
     }
   }
 
@@ -137,9 +141,10 @@ export class MaterialViewComponent implements OnInit {
     this.router.navigate(['/profile-view', id])
   }
 
-  deleteMaterial(): void {
+  async deleteMaterial(): Promise<void> {
     if (!this.material) return
-    if (!confirm('Biztosan törölni szeretnéd az anyagot?')) return
+    const confirmed = await this.confirmService.confirm('Biztosan törölni szeretnéd az anyagot?')
+    if (!confirmed) return
     this.materialService.delete(this.material.id).subscribe({
       next: () => {
         console.log('A tananyag sikeresen törölve lett.')
@@ -147,7 +152,7 @@ export class MaterialViewComponent implements OnInit {
       },
       error: (err) => {
         console.error(err)
-        alert('Nem sikerült törölni az tananyagot.')
+        this.toast.show('Nem sikerült törölni a tananyagot.')
       }
     })
   }
@@ -162,7 +167,7 @@ export class MaterialViewComponent implements OnInit {
       error: (err) => {
         this.loading = false
         console.error(err)
-        alert('Could not load ratings.')
+        this.toast.show('Could not load ratings.')
       }
     })
   }

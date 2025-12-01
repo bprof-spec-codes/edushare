@@ -39,6 +39,8 @@ import { RatingCardComponent } from './components/rating-card/rating-card.compon
 import { RatingCommentModalComponent } from './components/rating-comment-modal/rating-comment-modal.component';
 import { RecommendedMaterialsComponent } from './components/recommended-materials/recommended-materials.component';
 import { MiniMaterialCardComponent } from './components/mini-material-card/mini-material-card.component';
+import { ToastComponent } from './components/toast/toast.component';
+import { ConfirmComponent } from './components/confirm/confirm.component';
 
 
 @NgModule({
@@ -71,7 +73,9 @@ import { MiniMaterialCardComponent } from './components/mini-material-card/mini-
     MainlistComponent,
     AdminStatisticsComponent,
     RecommendedMaterialsComponent,
-    MiniMaterialCardComponent
+    MiniMaterialCardComponent,
+    ToastComponent,
+    ConfirmComponent
   ],
   imports: [
     BrowserModule,
