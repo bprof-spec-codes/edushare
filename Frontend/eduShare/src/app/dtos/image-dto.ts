@@ -1,5 +1,5 @@
-export interface ImageDto {
-    id: string
-    fileName: string
-    file: string
+export class ImageDto {
+    id: string = ""
+    fileName: string = ""
+    file: string = ""
 }
