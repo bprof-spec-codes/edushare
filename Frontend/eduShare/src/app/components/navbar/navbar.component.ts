@@ -30,9 +30,10 @@ export class NavbarComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
-    this.id = this.auth.getUserId() || '';
-    this.isLoggedIn = this.auth.isLoggedIn()
-    this.profileService.getById(this.id).subscribe({
+    this.isLoggedIn = this.auth.isLoggedIn();
+
+    // Feliratkozunk a currentProfile$-ra, így mindig friss lesz
+    this.profileService.currentProfile$.subscribe({
       next: (data) => {
         this.profile = data
         console.log(this.profile)
@@ -42,7 +43,13 @@ export class NavbarComponent implements OnChanges, OnInit {
         this.toast.show('Nem sikerült betölteni a profilt.');
         this.auth.logout()
       }
-    })
+    });
+
+    const userId = this.auth.getUserId();
+    if (userId) {
+      this.profileService.getCurrentProfile(userId).subscribe();
+    }
+    
     this.isTeacher = this.auth.getRoles().some(r => r === 'Teacher' || r === 'Admin')
     this.isAdmin = this.auth.getRoles().some(r => r === 'Admin')
   }
@@ -57,8 +64,8 @@ export class NavbarComponent implements OnChanges, OnInit {
     this.router.navigate(['/fav-materials'])
   }
 
-  openProfile(profileId: string): void {
-    this.router.navigate(['/profile-view', profileId])
+  openProfile(): void {
+    this.router.navigate(['/profile-view', this.auth.getUserId()])
   }
 
   ngOnChanges() {
