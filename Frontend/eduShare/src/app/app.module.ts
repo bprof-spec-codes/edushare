@@ -41,6 +41,7 @@ import { RecommendedMaterialsComponent } from './components/recommended-material
 import { MiniMaterialCardComponent } from './components/mini-material-card/mini-material-card.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { ConfirmComponent } from './components/confirm/confirm.component';
+import { NgxTypedJsModule } from 'ngx-typed-js';
 
 
 @NgModule({
@@ -87,6 +88,7 @@ import { ConfirmComponent } from './components/confirm/confirm.component';
     DatePipe,
     RegisterComponent,
     LoginComponent,
+    NgxTypedJsModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
