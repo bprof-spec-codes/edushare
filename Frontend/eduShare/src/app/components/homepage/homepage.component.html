@@ -56,7 +56,6 @@
     <div class="hero-right">
       <div class="stats-panel">
 
-        <!-- LATEST MATERIALS -->
         <div class="stats-section">
           <div class="stats-section-header">
             <h2>Latest materials</h2>
@@ -98,7 +97,6 @@
 
         <div class="divider"></div>
 
-        <!-- USER STATS -->
         <div class="stats-section" *ngIf="isLoggedIn; else guestStats">
           <div class="stats-section-header">
             <h2>Your stats</h2>
@@ -130,7 +128,6 @@
           </div>
         </div>
 
-        <!-- GUEST STATE -->
         <ng-template #guestStats>
           <div class="stats-section">
             <div class="stats-section-header">

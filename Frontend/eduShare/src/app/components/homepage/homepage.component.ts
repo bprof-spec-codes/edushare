@@ -5,6 +5,7 @@ import { NgxTypedJsModule } from 'ngx-typed-js';
 import { AuthService } from '../../services/authentication.service';
 import { MaterialService } from '../../services/material.service';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
+import { StatisticsService } from '../../services/statistics.service';
 
 @Component({
   selector: 'app-homepage',
@@ -16,9 +17,14 @@ export class HomepageComponent {
   isLoggedIn: boolean = false
   materials: MaterialShortViewDto[] = []
 
-  constructor(private router: Router, private authService: AuthService, private materialService: MaterialService) {
+  constructor(private router: Router, private authService: AuthService, private materialService: MaterialService, private statService: StatisticsService) {
     this.isLoggedIn = this.authService.isLoggedIn()
     this.loadMaterials()
+    statService.getHomepageStatistics().subscribe({
+      next: (data) => {
+        console.log('stast: ',data)
+      }
+    })
   }
 
   loadMaterials(): void {
@@ -56,15 +62,12 @@ export class HomepageComponent {
     'Object-Oriented Programming — Design Patterns Mindmap.png'
   ]
 
-
   userStats = {
     savedMaterials: 20,
     downloads: 44,
     ratingCount: 2,
     averageGivenRating: 4.5
   }
-
-
 
   showMaterials(): void {
     this.router.navigate(['/materials'])
