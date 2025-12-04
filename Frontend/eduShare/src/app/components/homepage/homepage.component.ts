@@ -16,11 +16,14 @@ import { HomepageStatisticsDto } from '../../dtos/homepage-statistics-dto';
 })
 export class HomepageComponent {
   isLoggedIn: boolean = false
+  userId: string | null = null
   stats: HomepageStatisticsDto | null = null
 
   constructor(private router: Router, private authService: AuthService, private statService: StatisticsService) {
     this.isLoggedIn = this.authService.isLoggedIn()
+    this.userId = this.authService.getUserId()
     this.loadStats()
+
   }
 
   loadStats(): void {
