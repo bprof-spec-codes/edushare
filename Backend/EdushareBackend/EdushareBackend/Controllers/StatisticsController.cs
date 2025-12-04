@@ -21,5 +21,11 @@ namespace EdushareBackend.Controllers
         {
             return statisticsLogic.GetAdminStatistics();
         }
+
+        [HttpGet("GetHomePageStatistics")]
+        public HomePageStatisticsDto GetHomePageStatistics()
+        {
+            return statisticsLogic.GetHomePageStatistics();
+        }
     }
 }

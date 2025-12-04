@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.Dtos.Material;
+using Logic.Helper;
+using Microsoft.EntityFrameworkCore;
 
 namespace Logic.Logic
 {
@@ -13,11 +16,15 @@ namespace Logic.Logic
     {
         Repository<AppUser> userRepository;
         Repository<Material> materialRepository;
+        Repository<Subject> subjectRepository;
+        DtoProviders dtoProviders;
 
-        public StatisticsLogic(Repository<AppUser> userRepository, Repository<Material> materialRepository)
+        public StatisticsLogic(Repository<AppUser> userRepository, Repository<Material> materialRepository, Repository<Subject> subjectRepository, DtoProviders dtoProviders)
         {
             this.userRepository = userRepository;
             this.materialRepository = materialRepository;
+            this.subjectRepository = subjectRepository;
+            this.dtoProviders = dtoProviders;
         }
 
         public AdminStatisticsDto GetAdminStatistics()
@@ -74,6 +81,32 @@ namespace Logic.Logic
                 MostActiveUsers = usersWithMostMaterials
             };
 
+        }
+
+        public HomePageStatisticsDto GetHomePageStatistics()
+        {
+            int materialCount = materialRepository.GetAll().Count();
+            int userCount = userRepository.GetAll().Count();
+            int subjectCount = subjectRepository.GetAll().Count();
+
+            var lastMaterials = materialRepository.GetAll()
+                .Include(u => u.Subject)
+                .Include(u => u.Uploader)
+                .ThenInclude(u => u.Image)
+                .Include(u => u.Ratings)
+                .OrderByDescending(m => m.UploadDate)
+                .Take(3)
+                .Select(x => dtoProviders.Mapper.Map<MaterialShortViewDto>(x))
+                .ToList();
+            
+
+            return new HomePageStatisticsDto
+            {
+                MaterialCount = materialCount,
+                UserCount = userCount,
+                SubjectCount = subjectCount,
+                LastMaterials = lastMaterials
+            };
         }
     }
 }
