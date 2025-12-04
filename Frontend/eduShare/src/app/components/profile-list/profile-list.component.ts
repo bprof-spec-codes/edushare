@@ -17,6 +17,7 @@ export class ProfileListComponent {
   loading = false
   error?: string
   roles: string[] = []
+  userRoles: { [key: string]: string | null } = {};
 
   constructor(private profileService: ProfileService, private router: Router, private authService : AuthService, private toast: ToastService) { }
 
@@ -31,7 +32,7 @@ export class ProfileListComponent {
       next: (data) => {
         this.profiles = data
         this.loading = false
-        console.log(this.profiles)
+        this.profiles.forEach(u => this.userRoles[u.id] = u.role)
       },
       error: (err:any) => {
         console.error(err)
@@ -57,7 +58,10 @@ export class ProfileListComponent {
     this.profileService.grantAdmin(id).subscribe({
         next: () => {
           this.toast.show("Admin added succesfully!");
-          //console.log("Admin added")
+          const user = this.profiles.find(u => u.id === id);
+          if (user) {
+            user.role = "Admin";
+          }
         },
         error: (err) => {
           console.error(err)
@@ -70,7 +74,10 @@ export class ProfileListComponent {
     this.profileService.grantTeacher(id).subscribe({
         next: () => {
           this.toast.show("Teacher added succesfully!");
-          //console.log("Teacher added")
+          const user = this.profiles.find(u => u.id === id);
+          if (user) {
+            user.role = "Teacher";
+          }
         },
         error: (err) => {
           console.error(err)
@@ -83,7 +90,10 @@ export class ProfileListComponent {
     this.profileService.revokeRole(id).subscribe({
         next: () => {
           this.toast.show("Roles deleted succesfully!");
-          //console.log("Teacher added")
+          const user = this.profiles.find(u => u.id === id);
+          if (user) {
+            user.role = null;
+          }
         },
         error: (err) => {
           this.toast.show(err.error.message);
@@ -91,5 +101,20 @@ export class ProfileListComponent {
         }
       }
     )
+  }
+
+  changeRole(id: string)
+  {
+    const role = this.userRoles[id]
+
+    if (role === "Admin") {
+      this.grantAdmin(id)
+    }
+    else if (role === "Teacher") {
+      this.grantTeacher(id)
+    }
+    else {
+      this.revokeRole(id)
+    }
   }
 }
