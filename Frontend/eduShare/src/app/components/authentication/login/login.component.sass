@@ -2,7 +2,7 @@
 @use '../../../../styles/_variables' as *;
 
 .login-page
-  background: radial-gradient(circle at top left, lighten($edu-purple, 40%) 0%, #f9f9ff 70%, #f9f9ff 100%)
+  background: radial-gradient(circle at top left, color.adjust($edu-purple, $lightness: 40%) 0%, #f9f9ff 70%, #f9f9ff 100%)
   min-height: 100dvh
   display: flex
   flex-direction: column
@@ -24,7 +24,7 @@
       text-shadow: 0 6px 14px rgba(0,0,0,0.15)
 
 .login-wrapper
-  display: block 
+  display: block
   width: min(90%, 450px)
   min-height: auto
   border-radius: 20px
@@ -71,7 +71,7 @@
         color: color.scale($edu-purple, $lightness: -20%)
         border-right: none
         border-radius: 8px 0 0 8px
-        border: 1px solid lighten($card-background-grey, 5%)
+        border: 1px solid color.adjust($card-background-grey, $lightness: 5%)
 
       .form-control
         background: $card-background-grey
@@ -80,7 +80,7 @@
         color: #333
         font-weight: 500
         padding: 0.75rem 1rem
-        border: 1px solid lighten($card-background-grey, 5%)
+        border: 1px solid color.adjust($card-background-grey, $lightness: 5%)
         &:focus
           outline: none
           border-color: $edu-purple
@@ -103,12 +103,12 @@
         box-shadow: 0 12px 35px rgba(79,70,229,0.3)
 
     p
-      margin-top: 2rem 
+      margin-top: 2rem
       font-size: 0.9rem
       color: #777
       text-align: center
 
-    .register-link
+    .register-link, .login-link
       color: $edu-purple
       font-weight: 700
       &:hover
@@ -116,26 +116,143 @@
         color: $button-hover
 
 .login-right
-  display: none 
+  display: none
+
+.register-page
+  background: radial-gradient(circle at top left, color.adjust($edu-purple, $lightness: 40%) 0%, #f9f9ff 70%, #f9f9ff 100%)
+  min-height: 100dvh
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  padding: 1.5rem
+
+  .logo
+    font-family: 'Erica One'
+    font-size: 3.2rem
+    color: $edu-purple
+    margin-bottom: 2.5rem
+    cursor: pointer
+    text-shadow: 0 4px 10px rgba(0,0,0,0.1)
+    transition: transform 280ms cubic-bezier(.22,.61,.36,1)
+    will-change: transform
+    &:hover
+      transform: scale(1.05)
+      text-shadow: 0 6px 14px rgba(0,0,0,0.15)
+
+.register-wrapper
+  display: block
+  width: min(90%, 450px)
+  min-height: auto
+  border-radius: 20px
+  overflow: hidden
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1)
+  position: relative
+  background: white
+  transition: box-shadow 280ms ease
+
+.register-left
   flex: none
+  width: 100%
+  background: white
+  display: flex
+  justify-content: center
+  align-items: center
+  z-index: 2
+  border-radius: 20px
+  margin-right: 0
+  box-shadow: none
+  padding: 3rem 2rem
+
+  form
+    width: 100%
+    background: transparent
+    backdrop-filter: none
+    -webkit-backdrop-filter: none
+    padding: 0
+    transition: none
+
+    h4
+      font-size: 1.7rem
+      font-weight: 700
+      color: $edu-purple
+      margin-bottom: 2.5rem
+      text-shadow: none
+
+    .input-group
+      width: 100%
+      margin-bottom: 1.5rem
+
+      .input-group-text
+        background: $card-background-grey
+        color: color.scale($edu-purple, $lightness: -20%)
+        border-right: none
+        border-radius: 8px 0 0 8px
+        border: 1px solid color.adjust($card-background-grey, $lightness: 5%)
+
+      .form-control
+        background: $card-background-grey
+        border-left: none
+        border-radius: 0 8px 8px 0
+        color: #333
+        font-weight: 500
+        padding: 0.75rem 1rem
+        border: 1px solid color.adjust($card-background-grey, $lightness: 5%)
+        &:focus
+          outline: none
+          border-color: $edu-purple
+          box-shadow: 0 0 0 2px color.scale($edu-purple, $alpha: -70%)
+        &::placeholder
+          color: #777
+
+    .btn
+      background: $edu-purple
+      border: none
+      border-radius: 12px
+      font-weight: 700
+      width: 100%
+      padding: 0.8rem 0
+      margin-top: 1rem
+      box-shadow: 0 10px 30px rgba(79,70,229,0.2)
+      transition: background 180ms ease, transform 120ms ease, box-shadow 180ms ease
+      &:hover
+        background: $button-hover
+        transform: translateY(-1px)
+        box-shadow: 0 12px 35px rgba(79,70,229,0.3)
+
+    p
+      margin-top: 2rem
+      font-size: 0.9rem
+      color: #777
+      text-align: center
+
+    .login-link
+      color: $edu-purple
+      font-weight: 700
+      &:hover
+        text-decoration: underline
+        color: $button-hover
+
+.register-right
+  display: none
 
 @media (max-width: 1200px)
-  .login-wrapper
+  .login-wrapper, .register-wrapper
     width: min(90%, 420px)
     
-  .login-left
+  .login-left, .register-left
     padding: 2.5rem 1.5rem
     
 @media (max-width: 640px)
-  .login-page
+  .login-page, .register-page
     padding: 1rem
 
-  .login-wrapper
+  .login-wrapper, .register-wrapper
     width: 95vw
     border-radius: 16px
     box-shadow: 0 5px 20px rgba(0,0,0,0.1)
 
-  .login-left
+  .login-left, .register-left
     border-radius: 16px
     padding: 2rem 1rem
     
