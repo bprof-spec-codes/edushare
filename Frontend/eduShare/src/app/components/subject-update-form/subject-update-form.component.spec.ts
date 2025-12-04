@@ -112,4 +112,22 @@ describe('SubjectUpdateFormComponent', () => {
         expect(component.updateForm.get('name')?.value).toBe('Fizika')
         expect(component.updateForm.get('semester')?.value).toBe(5)
     })
+
+    it('ngOnChanges should handle null subject gracefully', () => {
+        // Form still has original values from initialization
+        const originalName = component.updateForm.get('name')?.value
+        const originalSemester = component.updateForm.get('semester')?.value
+
+        component.subject = null as any
+
+        const changes = {
+            subject: new SimpleChange(subjectMock, null, false)
+        } as any
+
+        component.ngOnChanges(changes)
+
+        // Form should not be patched when subject is null (condition fails)
+        expect(component.updateForm.get('name')?.value).toBe(originalName)
+        expect(component.updateForm.get('semester')?.value).toBe(originalSemester)
+    })
 })

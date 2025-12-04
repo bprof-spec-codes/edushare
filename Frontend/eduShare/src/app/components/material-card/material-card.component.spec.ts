@@ -104,6 +104,17 @@ describe('MaterialCardComponent', () => {
 
       expect(mockFavService.toggle$).not.toHaveBeenCalled();
     });
+
+    it('should toggle favourite successfully', () => {
+      component.busy = false;
+      component.m = { id: 'mat-123' } as MaterialShortViewDto;
+      mockFavService.toggle$.and.returnValue(of(undefined));
+
+      component.toggleFavourite();
+
+      expect(mockFavService.toggle$).toHaveBeenCalledWith(component.m);
+      expect(component.busy).toBe(false);
+    });
   });
 
   describe('openMaterial', () => {
@@ -166,6 +177,30 @@ describe('MaterialCardComponent', () => {
       await component.deleteMaterial();
 
       expect(mockMaterialService.delete).not.toHaveBeenCalled();
+    });
+
+    it('should delete material and navigate when confirmed', async () => {
+      spyOn(console, 'log');
+      component.material = { id: 'mat-123' } as MaterialViewDto;
+      mockConfirmService.confirm.and.returnValue(Promise.resolve(true));
+      mockMaterialService.delete.and.returnValue(of(undefined));
+
+      await component.deleteMaterial();
+
+      expect(mockMaterialService.delete).toHaveBeenCalledWith('mat-123');
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/materials']);
+    });
+
+    it('should show error toast when delete fails', async () => {
+      spyOn(console, 'error');
+      component.material = { id: 'mat-123' } as MaterialViewDto;
+      mockConfirmService.confirm.and.returnValue(Promise.resolve(true));
+      const error = new Error('Delete failed');
+      mockMaterialService.delete.and.returnValue(throwError(() => error));
+
+      await component.deleteMaterial();
+
+      expect(mockToastService.show).toHaveBeenCalledWith('Nem sikerült törölni a tananyagot.');
     });
   });
 });
