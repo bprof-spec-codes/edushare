@@ -27,7 +27,7 @@
         <div class="hero-stat">
           <span class="stat-number">
             <h3>
-              <span [countUp]="stats.materials" [options]="countupOptions">0</span>+
+              <span [countUp]="stats?.materialCount || 0" [options]="countupOptions">0</span>+
             </h3>
           </span>
           <p>materials</p>
@@ -35,7 +35,7 @@
         <div class="hero-stat">
           <span class="stat-number">
             <h3>
-              <span [countUp]="stats.users" [options]="countupOptions">0</span>+
+              <span [countUp]="stats?.userCount || 0" [options]="countupOptions">0</span>+
             </h3>
           </span>
           <p class="ms-2">users</p>
@@ -43,7 +43,7 @@
         <div class="hero-stat">
           <span class="stat-number">
             <h3>
-              <span [countUp]="stats.subjects" [options]="countupOptions">0</span>+
+              <span [countUp]="stats?.subjectCount || 0" [options]="countupOptions">0</span>+
             </h3>
           </span>
           <p>subjects</p>
@@ -61,8 +61,8 @@
             <h2>Latest materials</h2>
           </div>
 
-          <div class="latest-materials" *ngIf="materials && materials.length; else noMaterials">
-            <article class="latest-material" *ngFor="let material of materials | slice:0:3; let last = last">
+          <div class="latest-materials" *ngIf=" stats?.lastMaterials && stats?.lastMaterials?.length; else noMaterials">
+            <article class="latest-material" *ngFor="let material of stats?.lastMaterials | slice:0:3; let last = last">
 
               <div class="material-row">
                 <div class="latest-material-main">

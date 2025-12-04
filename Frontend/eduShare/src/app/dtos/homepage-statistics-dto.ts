@@ -1,9 +1,9 @@
 import { MaterialShortViewDto } from "./material-short-view-dto";
 
 export interface HomepageStatisticsDto {
-    materialcount: number
-    usercount: number
-    subjectcount: number
+    materialCount: number
+    userCount: number
+    subjectCount: number
     lastMaterials: MaterialShortViewDto[]
-    downloadcount: number
+    downloadCount: number
 }

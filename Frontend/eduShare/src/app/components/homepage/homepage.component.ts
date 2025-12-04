@@ -6,6 +6,7 @@ import { AuthService } from '../../services/authentication.service';
 import { MaterialService } from '../../services/material.service';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 import { StatisticsService } from '../../services/statistics.service';
+import { HomepageStatisticsDto } from '../../dtos/homepage-statistics-dto';
 
 @Component({
   selector: 'app-homepage',
@@ -15,22 +16,17 @@ import { StatisticsService } from '../../services/statistics.service';
 })
 export class HomepageComponent {
   isLoggedIn: boolean = false
-  materials: MaterialShortViewDto[] = []
+  stats: HomepageStatisticsDto | null = null
 
-  constructor(private router: Router, private authService: AuthService, private materialService: MaterialService, private statService: StatisticsService) {
+  constructor(private router: Router, private authService: AuthService, private statService: StatisticsService) {
     this.isLoggedIn = this.authService.isLoggedIn()
-    this.loadMaterials()
-    statService.getHomepageStatistics().subscribe({
-      next: (data) => {
-        console.log('stast: ',data)
-      }
-    })
+    this.loadStats()
   }
 
-  loadMaterials(): void {
-    this.materialService.loadAll().subscribe({
+  loadStats(): void {
+    this.statService.getHomepageStatistics().subscribe({
       next: (data) => {
-        this.materials = data
+        this.stats = data
       },
       error: (err) => {
         console.error(err)
@@ -45,22 +41,10 @@ export class HomepageComponent {
     'teach and get feedback.'
   ]
 
-  stats = {
-    materials: 13,
-    users: 10,
-    subjects: 6
-  }
-
   countupOptions = {
     enableScrollSpy: true,
     duration: 2
   }
-
-  latestUploads: string[] = [
-    'Web Development — Exam Cheat Sheet.pdf',
-    'Discrete Mathematics — Summary.pptx',
-    'Object-Oriented Programming — Design Patterns Mindmap.png'
-  ]
 
   userStats = {
     savedMaterials: 20,
