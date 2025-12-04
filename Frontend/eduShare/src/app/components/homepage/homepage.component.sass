@@ -1,18 +1,115 @@
-@use '../../../styles/_variables' as *;
+@use '../../../styles/_variables' as *
+
+$color-text-main: #1f1f2e
+$color-text-muted: #6b6b80
+
+:host
+    display: block
 
 .container
-    font-family: 'Nunito', sans-serif
+    max-width: 1200px
+    margin: 0 auto
+    padding: 2rem 1.5rem
+
+.hero
+    background: #ffffff
+    padding: 3rem 0
+
+.hero-inner
     display: flex
-.leftside
-    margin: auto
-h2
-    font-weight: bold
-button
-    background-color: $edu-purple
-    color: white
-button:hover
-    background-color: beige
+    flex-wrap: wrap
+    gap: 3rem
+    align-items: center
+
+.hero-left,
+.hero-right
+    flex: 1 1 320px
+
+// LEFT PANEL
+
+.logo-text
+    font-size: 0.7rem
+    font-weight: 700
+    letter-spacing: 0.14em
+    text-transform: uppercase
+    margin-bottom: 0.5rem
     color: $edu-purple
+
+.hero-eyebrow
+    font-size: 0.8rem
+    text-transform: uppercase
+    letter-spacing: 0.18em
+    color: $edu-purple
+    margin-bottom: 0.5rem
+    font-weight: 700
+
+.hero-title
+    font-size: 2.6rem
+    line-height: 1.1
+    margin-bottom: 1rem
+    color: $color-text-main
+
+.hero-typed-line
+    font-size: 1.1rem
+    margin-bottom: 0.7rem
+    color: $color-text-main
+
+.typing
+    font-weight: 600
+    color: $edu-purple
+
+.typed-cursor
+    font-size: 1.1rem
+    color: $edu-purple-hover
+
+.hero-subtitle
+    max-width: 460px
+    margin-bottom: 1.5rem
+    color: $color-text-muted
+
+// BUTTONS
+.hero-buttons
+    display: flex
+    flex-wrap: wrap
+    gap: 1rem
+    margin-bottom: 2rem
+
+.btn
+    border-radius: 10px
+    padding: 0.7rem 1.7rem
+    font-size: 0.95rem
+    border: 1px solid transparent
+    cursor: pointer
+    transition: 0.2s ease
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    white-space: nowrap
+
+    &--primary
+        background: $card-font-puprle
+        color: #fff
+
+        &:hover
+            background: $button-hover
+            transform: translateY(-1px)
+
+    &--ghost
+        background: #fff
+        border: 1px solid rgba(0, 0, 0, 0.15)
+        color: $edu-purple
+
+        &:hover
+            background: $card-background-grey
+
+.right-panel
+    display: flex
+    justify-content: flex-end
+
 img
     height: 350px
     width: 500px
+
+@media (max-width: 768px)
+    img
+        display: none

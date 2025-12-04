@@ -1,15 +1,33 @@
-<div class="container mt-5">
-  <div class="leftside">
-    <ngx-typed-js [strings]="['Learn,', 'Share,', 'Succeed']" [typeSpeed]="50" [backSpeed]="30" [loop]="true">
-      <h2 class="typing"></h2>
-    </ngx-typed-js>
-    <p>Our goal is to connect students, teachers, and professionals who believe that learning together is more effective
-      and inspiring.</p>
-    <p>EduShare is more then just a platform - it's a community where everyone is both a teacher and a learner</p>
-    <p>Join today and be part of the future of knowledge sharing!</p>
-    <button class="btn" (click)="showMaterials()">See all materials</button>
+<section class="hero">
+  <div class="hero-inner container">
+
+    <div class="hero-left mt-4">
+      <h1 class="logo-text">EduShare</h1>
+      <h1 class="hero-title">Learn, share, succeed.</h1>
+
+      <ngx-typed-js [strings]="typedStrings" [typeSpeed]="45" [backSpeed]="25" [backDelay]="1000" [loop]="true"
+        [showCursor]="true" cursorChar="|">
+        <p class="hero-typed-line">
+          A place to <span class="typing"></span>
+        </p>
+      </ngx-typed-js>
+
+      <p class="hero-subtitle">
+        Join a community where students and educators share their best
+        learning materials - notes, summaries, slides, and exam prep guides, all in one place.
+      </p>
+
+      <div class="hero-buttons">
+        <button class="btn btn--primary" routerLink="/materials">Browse materials</button>
+        <button class="btn btn--ghost" routerLink="/materials/create" *ngIf="!isLoggedIn">Upload your first note</button>
+      </div>
+
+    </div>
+
+    <div class="right-panel">
+      <img src="/images/edushareHomepage.jpg" alt="picture from a group">
+    </div>
+
+
   </div>
-  <div class="rightside">
-    <img src="/images/edushareHomepage.jpg" alt="picture from a group">
-  </div>
-</div>
+</section>

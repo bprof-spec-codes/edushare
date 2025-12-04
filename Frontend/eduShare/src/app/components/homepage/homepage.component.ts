@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MaterialViewDto } from '../../dtos/material-view-dto';
 import { Router } from '@angular/router';
 import { NgxTypedJsModule } from 'ngx-typed-js';
+import { AuthService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-homepage',
@@ -10,13 +11,20 @@ import { NgxTypedJsModule } from 'ngx-typed-js';
   styleUrl: './homepage.component.sass'
 })
 export class HomepageComponent {
-  constructor(private router: Router) {
+  isLoggedIn: boolean = false
 
+  constructor(private router: Router, private authService: AuthService) { 
+    this.isLoggedIn = this.authService.isLoggedIn()
   }
+
+  typedStrings = [
+    'share your notes.',
+    'prepare for exams.',
+    'learn together.',
+    'teach and get feedback.'
+  ]
 
   showMaterials(): void {
     this.router.navigate(['/materials'])
   }
-
-
 }
