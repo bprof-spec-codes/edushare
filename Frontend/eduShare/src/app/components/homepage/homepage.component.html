@@ -19,8 +19,37 @@
 
       <div class="hero-buttons">
         <button class="btn btn--primary" routerLink="/materials">Browse materials</button>
-        <button class="btn btn--ghost" routerLink="/materials/create" *ngIf="!isLoggedIn">Upload your first note</button>
+        <button class="btn btn--ghost" routerLink="/materials/create" *ngIf="!isLoggedIn">Upload your first
+          note</button>
       </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="stat-number">
+            <h3>
+              <span [countUp]="stats.materials" [options]="countupOptions">0</span>+
+            </h3>
+          </span>
+          <p>materials</p>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-number">
+            <h3>
+              <span [countUp]="stats.users" [options]="countupOptions">0</span>+
+            </h3>
+          </span>
+          <p class="ms-2">users</p>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-number">
+            <h3>
+              <span [countUp]="stats.subjects" [options]="countupOptions">0</span>+
+            </h3>
+          </span>
+          <p>subjects</p>
+        </div>
+      </div>
+
 
     </div>
 

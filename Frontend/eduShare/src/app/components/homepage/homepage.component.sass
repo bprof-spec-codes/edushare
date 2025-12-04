@@ -7,7 +7,7 @@ $color-text-muted: #6b6b80
     display: block
 
 .container
-    max-width: 1200px
+    max-width: 1400px
     margin: 0 auto
     padding: 2rem 1.5rem
 
@@ -101,6 +101,28 @@ $color-text-muted: #6b6b80
 
         &:hover
             background: $card-background-grey
+
+//stats
+.hero-stats
+    display: flex
+    flex-wrap: wrap
+    gap: 2.4rem
+
+.hero-stat
+    h3
+        font-size: 1.6rem
+        margin: 0 0 0.15rem
+        color: $color-text-main
+
+    .stat-number
+        display: inline-block
+        width: 50px
+        text-align: right
+
+    p
+        margin: 0
+        font-size: 0.85rem
+        color: $color-text-muted
 
 .right-panel
     display: flex

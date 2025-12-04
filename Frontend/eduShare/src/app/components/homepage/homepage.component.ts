@@ -13,7 +13,7 @@ import { AuthService } from '../../services/authentication.service';
 export class HomepageComponent {
   isLoggedIn: boolean = false
 
-  constructor(private router: Router, private authService: AuthService) { 
+  constructor(private router: Router, private authService: AuthService) {
     this.isLoggedIn = this.authService.isLoggedIn()
   }
 
@@ -23,6 +23,17 @@ export class HomepageComponent {
     'learn together.',
     'teach and get feedback.'
   ]
+
+  stats = {
+    materials: 13,
+    users: 10,
+    subjects: 6
+  }
+
+  countupOptions = {
+    enableScrollSpy: true,
+    duration: 2
+  }
 
   showMaterials(): void {
     this.router.navigate(['/materials'])
