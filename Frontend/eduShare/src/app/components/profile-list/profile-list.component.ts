@@ -31,6 +31,7 @@ export class ProfileListComponent {
       next: (data) => {
         this.profiles = data
         this.loading = false
+        console.log(this.profiles)
       },
       error: (err:any) => {
         console.error(err)

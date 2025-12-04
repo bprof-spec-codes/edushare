@@ -8,4 +8,5 @@ export interface ProfilListViewDto {
     isWarned?: boolean
     isBanned?: boolean
     materialCount?: number
+    role: string
 }
