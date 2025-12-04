@@ -42,6 +42,7 @@ import { MiniMaterialCardComponent } from './components/mini-material-card/mini-
 import { ToastComponent } from './components/toast/toast.component';
 import { ConfirmComponent } from './components/confirm/confirm.component';
 import { NgxTypedJsModule } from 'ngx-typed-js';
+import { CountUpModule } from 'ngx-countup';
 
 
 @NgModule({
@@ -89,6 +90,7 @@ import { NgxTypedJsModule } from 'ngx-typed-js';
     RegisterComponent,
     LoginComponent,
     NgxTypedJsModule,
+    CountUpModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
