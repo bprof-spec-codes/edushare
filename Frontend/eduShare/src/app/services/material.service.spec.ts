@@ -126,4 +126,76 @@ describe('MaterialService Logic Tests', () => {
       req.flush(null);
     });
   });
+
+  describe('Additional Material Functions', () => {
+    it('should create new material', (done) => {
+      const createDto: MaterialCreateDto = {
+        title: 'New Material',
+        subjectId: 's1',
+        content: { fileName: 'test.pdf', file: '' }
+      };
+
+      service.create(createDto).subscribe(() => {
+        expect(true).toBe(true);
+        done();
+      });
+
+      const createReq = httpMock.expectOne(apiBaseUrl);
+      createReq.flush({});
+
+      const getAllReq = httpMock.expectOne(apiBaseUrl);
+      getAllReq.flush([mockMaterialShort]);
+    });
+
+    it('should update material', (done) => {
+      const updateDto: MaterialCreateDto = {
+        title: 'Updated Material',
+        subjectId: 's1',
+        content: { fileName: 'test.pdf', file: '' }
+      };
+
+      service.update('mat-1', updateDto).subscribe(() => {
+        expect(true).toBe(true);
+        done();
+      });
+
+      const updateReq = httpMock.expectOne(`${apiBaseUrl}/mat-1`);
+      updateReq.flush({});
+
+      const getAllReq = httpMock.expectOne(apiBaseUrl);
+      getAllReq.flush([mockMaterialShort]);
+    });
+
+    it('should get material by id', (done) => {
+      const mockMaterialView: MaterialViewDto = {
+        id: 'mat-1',
+        title: 'Test Material',
+        subject: { id: 's1', name: 'Math', semester: 1 },
+        uploader: { id: 'u1', fullName: 'User 1', image: { id: 'img1', fileName: 'pic.jpg', file: '' } },
+        uploadDate: new Date().toISOString(),
+        isExam: false,
+        averageRating: 4.5,
+        ratingCount: 10,
+        downloadCount: 5
+      } as MaterialViewDto;
+
+      service.getById('mat-1').subscribe(material => {
+        expect(material).toEqual(mockMaterialView);
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiBaseUrl}/mat-1`);
+      req.flush(mockMaterialView);
+    });
+
+    it('should track material download', (done) => {
+      service.materialDownloaded('mat-1').subscribe(() => {
+        expect(true).toBe(true);
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiBaseUrl}/MaterialDownloaded`);
+      req.flush({});
+    });
+  });
 });

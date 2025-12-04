@@ -112,4 +112,86 @@ describe('ProfileService Logic Tests', () => {
       getReq.flush(updatedProfile);
     });
   });
+
+  describe('Additional Profile Functions', () => {
+    it('should get profile by id', (done) => {
+      service.getById('user-1').subscribe(profile => {
+        expect(profile).toEqual(mockProfile);
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiBaseUrl}/user-1`);
+      req.flush(mockProfile);
+    });
+
+    it('should grant admin role', (done) => {
+      service.grantAdmin('user-1').subscribe(() => {
+        expect(true).toBe(true);
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiBaseUrl}/GrantAdmin/user-1`);
+      req.flush({});
+    });
+
+    it('should grant teacher role', (done) => {
+      service.grantTeacher('user-1').subscribe(() => {
+        expect(true).toBe(true);
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiBaseUrl}/GrantTeacher/user-1`);
+      req.flush({});
+    });
+
+    it('should revoke role', (done) => {
+      service.revokeRole('user-1').subscribe(() => {
+        expect(true).toBe(true);
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiBaseUrl}/RevokeRole/user-1`);
+      req.flush({});
+    });
+
+    it('should warn user', (done) => {
+      service.warnUser('user-1').subscribe(() => {
+        expect(true).toBe(true);
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiBaseUrl}/Warn/user-1`);
+      req.flush({});
+    });
+
+    it('should remove warning', (done) => {
+      service.removeWarning('user-1').subscribe(() => {
+        expect(true).toBe(true);
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiBaseUrl}/RemoveWarning/user-1`);
+      req.flush({});
+    });
+
+    it('should ban user', (done) => {
+      service.banUser('user-1').subscribe(() => {
+        expect(true).toBe(true);
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiBaseUrl}/Ban/user-1`);
+      req.flush({});
+    });
+
+    it('should unban user', (done) => {
+      service.unbanUser('user-1').subscribe(() => {
+        expect(true).toBe(true);
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiBaseUrl}/Unban/user-1`);
+      req.flush({});
+    });
+  });
 });

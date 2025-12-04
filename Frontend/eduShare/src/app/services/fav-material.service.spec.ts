@@ -74,4 +74,70 @@ describe('FavMaterialService', () => {
       done();
     });
   });
+
+  it('should load all favorite materials', (done) => {
+    service.getAll().subscribe(materials => {
+      expect(materials).toBeTruthy();
+      done();
+    });
+
+    const req = httpMock.expectOne(`${apiBaseUrl}/favouriteMaterials`);
+    expect(req.request.method).toBe('GET');
+    req.flush([mockMaterial1]);
+  });
+
+  it('should add material to favorites', (done) => {
+    const initialCount = service['_favMaterials$'].value.length;
+
+    service.setFavouriteMaterial('mat-1', mockMaterial1).subscribe(() => {
+      const newCount = service['_favMaterials$'].value.length;
+      expect(newCount).toBe(initialCount + 1);
+      done();
+    });
+
+    const req = httpMock.expectOne(`${apiBaseUrl}/setFavouriteMaterial/mat-1`);
+    expect(req.request.method).toBe('POST');
+    req.flush({});
+  });
+
+  it('should remove material from favorites', (done) => {
+    service['_favMaterials$'].next([mockMaterial1]);
+
+    service.removeFavouriteMaterial('mat-1').subscribe(() => {
+      const remaining = service['_favMaterials$'].value;
+      expect(remaining.length).toBe(0);
+      done();
+    });
+
+    const req = httpMock.expectOne(`${apiBaseUrl}/removeFavouriteMaterial/mat-1`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush({});
+  });
+
+  it('should toggle favorite - add when not favorite', (done) => {
+    service['_favMaterials$'].next([]);
+
+    service.toggle$(mockMaterial1).subscribe(() => {
+      const favs = service['_favMaterials$'].value;
+      expect(favs.length).toBe(1);
+      expect(favs[0].id).toBe('mat-1');
+      done();
+    });
+
+    const req = httpMock.expectOne(`${apiBaseUrl}/setFavouriteMaterial/mat-1`);
+    req.flush({});
+  });
+
+  it('should toggle favorite - remove when already favorite', (done) => {
+    service['_favMaterials$'].next([mockMaterial1]);
+
+    service.toggle$(mockMaterial1).subscribe(() => {
+      const favs = service['_favMaterials$'].value;
+      expect(favs.length).toBe(0);
+      done();
+    });
+
+    const req = httpMock.expectOne(`${apiBaseUrl}/removeFavouriteMaterial/mat-1`);
+    req.flush({});
+  });
 });

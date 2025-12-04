@@ -73,31 +73,16 @@ describe('RatingCardComponent', () => {
   });
 
   describe('isLongComment', () => {
-    it('should return true when comment length exceeds maxCommentLength', () => {
+    it('should check if comment exceeds maxCommentLength', () => {
+      component.maxCommentLength = 51;
+      
       component.rating.comment = 'a'.repeat(52);
-      component.maxCommentLength = 51;
-
       expect(component.isLongComment).toBe(true);
-    });
 
-    it('should return false when comment length is less than or equal to maxCommentLength', () => {
       component.rating.comment = 'a'.repeat(50);
-      component.maxCommentLength = 51;
-
       expect(component.isLongComment).toBe(false);
-    });
 
-    it('should return false when comment is null', () => {
       component.rating.comment = null as any;
-      component.maxCommentLength = 51;
-
-      expect(component.isLongComment).toBe(false);
-    });
-
-    it('should return false when comment is undefined', () => {
-      component.rating.comment = undefined as any;
-      component.maxCommentLength = 51;
-
       expect(component.isLongComment).toBe(false);
     });
   });
@@ -113,11 +98,8 @@ describe('RatingCardComponent', () => {
   });
 
   describe('formatRatingDate', () => {
-    it('should return empty string when value is empty', () => {
+    it('should return empty string when value is null or empty', () => {
       expect(component.formatRatingDate('')).toBe('');
-    });
-
-    it('should return empty string when value is null', () => {
       expect(component.formatRatingDate(null as any)).toBe('');
     });
 

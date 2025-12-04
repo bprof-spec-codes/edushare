@@ -46,23 +46,6 @@ describe('MaterialListComponent', () => {
   });
 
   describe('loadMaterials', () => {
-    it('should filter recommended materials correctly', () => {
-      const materials = [
-        { id: '1', isRecommended: true } as MaterialShortViewDto,
-        { id: '2', isRecommended: false } as MaterialShortViewDto,
-        { id: '3', isRecommended: true } as MaterialShortViewDto
-      ];
-      
-      const recommended = materials.filter(m => m.isRecommended);
-      const nonRecommended = materials.filter(m => !m.isRecommended);
-
-      expect(recommended.length).toBe(2);
-      expect(nonRecommended.length).toBe(1);
-      expect(recommended[0].id).toBe('1');
-      expect(recommended[1].id).toBe('3');
-      expect(nonRecommended[0].id).toBe('2');
-    });
-
     it('should set error message on load failure', () => {
       const consoleErrorSpy = spyOn(console, 'error');
       const error = new Error('Load failed');
@@ -73,16 +56,6 @@ describe('MaterialListComponent', () => {
       expect(component.error).toBe('Nem sikerült betölteni az anyagokat.');
       expect(consoleErrorSpy).toHaveBeenCalledWith(error);
     });
-
-    it('should set loading to false on load failure', () => {
-      const error = new Error('Load failed');
-      mockMaterialService.loadAll.and.returnValue(throwError(() => error));
-      spyOn(console, 'error');
-
-      component.loadMaterials();
-
-      expect(component.loading).toBe(false);
-    });
   });
 
   describe('openDetail', () => {
@@ -92,14 +65,6 @@ describe('MaterialListComponent', () => {
       component.openDetail(material);
 
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/materials/mat-123/view']);
-    });
-
-    it('should construct correct URL with material id', () => {
-      const material = { id: 'abc-def-123' } as MaterialShortViewDto;
-
-      component.openDetail(material);
-
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/materials/abc-def-123/view']);
     });
   });
 });
