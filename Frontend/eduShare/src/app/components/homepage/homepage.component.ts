@@ -65,6 +65,12 @@ export class HomepageComponent {
     duration: 2
   }
 
+  countupOptionsWithDecimal = {
+    enableScrollSpy: true,
+    duration: 2,
+    decimalPlaces: 1
+  }
+
   showMaterials(): void {
     this.router.navigate(['/materials'])
   }

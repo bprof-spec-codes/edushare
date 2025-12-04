@@ -105,24 +105,27 @@
 
           <div class="user-stats-grid">
             <div class="user-stat">
-              <p class="user-stat-label">Saved materials</p>
-              <p class="user-stat-value">0</p>
+              <p class="user-stat-label">Favourite materials</p>
+              <p class="user-stat-value"><span [countUp]="userStats?.materialsSaved || 0"
+                  [options]="countupOptions">0</span></p>
             </div>
 
             <div class="user-stat">
-              <p class="user-stat-label">Downloads</p>
-              <p class="user-stat-value">0</p>
+              <p class="user-stat-label">Uploaded materials</p>
+              <p class="user-stat-value"><span [countUp]="userStats?.materialsUploaded || 0"
+                  [options]="countupOptions">0</span></p>
             </div>
 
             <div class="user-stat">
               <p class="user-stat-label">Ratings given</p>
-              <p class="user-stat-value">0</p>
+              <p class="user-stat-value"><span [countUp]="userStats?.ratingsGiven || 0"
+                  [options]="countupOptions">0</span></p>
             </div>
 
             <div class="user-stat">
-              <p class="user-stat-label">Avg. rating you give</p>
+              <p class="user-stat-label">Your avg. rating</p>
               <p class="user-stat-value">
-                {{ 0 | number:'1.1-1' }}/5
+                <span [countUp]="userStats?.userAvgRating || 0" [options]="countupOptionsWithDecimal"></span>/5
               </p>
             </div>
           </div>

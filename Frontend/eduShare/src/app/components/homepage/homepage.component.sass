@@ -10,6 +10,7 @@ $color-text-muted: #6b6b80
     max-width: 1400px
     margin: 0 auto
     padding: 2rem 1.5rem
+    padding-left: calc(1.5rem + 50px)
 
 .hero
     background: #ffffff
@@ -264,9 +265,22 @@ $color-text-muted: #6b6b80
     width: 100%
 
 @media (max-width: 900px)
+    .container
+        padding-left: 1.5rem
+
     .hero-inner
         flex-direction: column
+        margin-top: 1.5rem
 
     .hero-right
         width: 100%
+        justify-content: center
+
+        .stats-panel
+            width: 100%
+            max-width: 360px
+            padding: 1.25rem 1.25rem 1rem 
+            margin: 0 auto
+
+
 
