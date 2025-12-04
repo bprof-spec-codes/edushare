@@ -20,7 +20,7 @@
 .profile-row
     margin-bottom: 10px
     display: flex
-    height: 80px
+    height: 100px
     width: 80%
     max-width: 1000px
     min-width: 840px
@@ -40,6 +40,14 @@
     margin: 5px 0 auto 0
     text-align: center
 
+.role
+    font-size: 14px
+    color: #8b8b8b
+    height: 20px
+
+.roleselect
+    width: 200px
+
 .email
     margin: auto 0 auto 0
     text-align: center
@@ -50,6 +58,12 @@
     flex-direction: row-reverse
     justify-content: space-between
     width: 50%
+
+.role-container
+    margin-left: 20px
+    display: flex
+    flex-direction: row-reverse
+    gap: 10px
 
 .button
     width: 100px
@@ -65,3 +79,6 @@
     &:hover
         background-color: $button-hover
         transition-duration: 0.3s
+
+    &:disabled
+        background-color: #8b8b8b

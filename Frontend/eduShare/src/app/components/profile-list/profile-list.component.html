@@ -20,13 +20,22 @@
                             <i class="bi bi-slash-circle-fill"></i>
                         </span>
                     </div>
+                    <div class="role">
+                        <span *ngIf="profile.role === null">(User)</span>
+                        <span *ngIf="profile.role !== null">({{profile.role}})</span>
+                    </div>
                 </div>  
                 <div class="email">{{profile.email}}</div>
                 <div class="button-container">
                     <button class="button button-view" (click)="openDetail(profile.id)">View</button>
-                    <button class="button button-admin" *ngIf="hasRoleAdmin()" (click)="grantAdmin(profile.id)">Admin</button>
-                    <button class="button button-teacher" *ngIf="hasRoleAdmin()" (click)="grantTeacher(profile.id)">Teacher</button>
-                    <button class="button button-revoke" *ngIf="hasRoleAdmin()" (click)="revokeRole(profile.id)">Revoke</button>
+                    <div class="role-container">
+                        <button class="button button-admin" *ngIf="hasRoleAdmin()" (click)="changeRole(profile.id)" [disabled]="profile.role === userRoles[profile.id]">Save</button>
+                        <select class="roleselect form-select" [(ngModel)]="userRoles[profile.id]">
+                            <option [ngValue]="null">None</option>
+                            <option value="Teacher">Teacher</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <hr class="hr">
