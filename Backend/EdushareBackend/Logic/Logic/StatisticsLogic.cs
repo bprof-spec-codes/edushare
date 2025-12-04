@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Entities.Dtos.Material;
 using Logic.Helper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Logic.Logic
@@ -17,14 +18,16 @@ namespace Logic.Logic
         Repository<AppUser> userRepository;
         Repository<Material> materialRepository;
         Repository<Subject> subjectRepository;
+        Repository<Rating> ratingRepository;
         DtoProviders dtoProviders;
 
-        public StatisticsLogic(Repository<AppUser> userRepository, Repository<Material> materialRepository, Repository<Subject> subjectRepository, DtoProviders dtoProviders)
+        public StatisticsLogic(Repository<AppUser> userRepository, Repository<Material> materialRepository, Repository<Subject> subjectRepository, DtoProviders dtoProviders, Repository<Rating> ratingRepository)
         {
             this.userRepository = userRepository;
             this.materialRepository = materialRepository;
             this.subjectRepository = subjectRepository;
             this.dtoProviders = dtoProviders;
+            this.ratingRepository = ratingRepository;
         }
 
         public AdminStatisticsDto GetAdminStatistics()
@@ -106,6 +109,46 @@ namespace Logic.Logic
                 UserCount = userCount,
                 SubjectCount = subjectCount,
                 LastMaterials = lastMaterials
+            };
+        }
+
+        public UserStatisticsDto GetUserStatistics(string userId)
+        {
+            var user = userRepository.GetAll()
+                .Include(u => u.FavouriteMaterials)
+                .FirstOrDefault(u => u.Id == userId);
+            
+            if (user == null)
+            {
+                return null;
+            }
+            
+            int materialsSaved = user.FavouriteMaterials.Count();
+
+            var materialsUploaded = materialRepository.GetAll()
+                .Where(m => m.Uploader.Id == userId)!
+                .Count();
+            
+            int ratingsGiven = ratingRepository.GetAll()
+                .Select(r => r.UserId == userId)
+                .Count();
+
+            var userMaterials = materialRepository.GetAll()
+                .Include(m => m.Ratings)
+                .Where(m => m.Uploader.Id == userId);
+
+            var allRatings = userMaterials
+                .SelectMany(m => m.Ratings)
+                .Select(r => r.Rate);
+
+            double userAvgRating = allRatings.Any() ? Math.Round(allRatings.Average(), 1) : 0.0;
+
+            return new UserStatisticsDto
+            {
+                MaterialsSaved = materialsSaved,
+                MaterialsUploaded = materialsUploaded,
+                RatingsGiven = ratingsGiven,
+                UserAvgRating = userAvgRating,
             };
         }
     }
