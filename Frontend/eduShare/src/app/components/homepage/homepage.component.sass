@@ -16,10 +16,11 @@ $color-text-muted: #6b6b80
     padding: 3rem 0
 
 .hero-inner
+    margin-top: 2rem 
     display: flex
     flex-wrap: wrap
     gap: 3rem
-    align-items: center
+    align-items: flex-start
 
 .hero-left,
 .hero-right
@@ -124,14 +125,148 @@ $color-text-muted: #6b6b80
         font-size: 0.85rem
         color: $color-text-muted
 
-.right-panel
+.hero-right
     display: flex
-    justify-content: flex-end
+    justify-content: center
 
-img
-    height: 350px
-    width: 500px
+    .stats-panel
+        background: #ffffff
+        border-radius: 18px
+        padding: 1.75rem 1.75rem 1.5rem
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08)
+        border: 1px solid rgba(15, 23, 42, 0.04)
+        max-width: 420px
+        width: 100%
 
-@media (max-width: 768px)
-    img
-        display: none
+.stats-section
+    & + .divider
+        margin-top: 1rem
+
+.divider
+    margin-bottom: 1.5rem
+    height: 1px
+    background: rgba(15, 23, 42, 0.06)
+
+.stats-section-header
+    display: flex
+    justify-content: space-between
+    align-items: baseline
+    gap: 0.75rem
+    margin-bottom: 1rem
+
+    h2
+        font-size: 1.05rem
+        font-weight: 600
+        margin: 0
+        color: $color-text-main
+
+    .stats-caption
+        margin: 0
+        font-size: 0.8rem
+        color: $color-text-muted
+
+.link-small
+    font-size: 0.8rem
+    color: $edu-purple
+    text-decoration: none
+
+    &:hover
+        color: $edu-purple-hover
+        text-decoration: underline
+
+.latest-material
+    padding: 0.3rem 0
+    display: flex
+    flex-direction: column
+    gap: 0.35rem
+
+.material-row
+    display: flex
+    justify-content: space-between
+    align-items: center
+    gap: 1rem
+
+.latest-material-main
+    flex: 1
+    min-width: 0 // hogy ellipsis működjön
+
+.material-title
+    font-size: 0.9rem
+    font-weight: 600
+    margin: 0
+    color: $color-text-main
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+
+.material-meta
+    margin: 0.1rem 0 0
+    font-size: 0.78rem
+    color: $color-text-muted
+    display: flex
+    align-items: center
+    gap: 0.35rem
+
+.view-btn
+    padding: 0.3rem 0.9rem
+    font-size: 0.78rem
+    text-decoration: none
+    color: $edu-purple
+    cursor: pointer
+    flex-shrink: 0
+    transition: 0.15s ease
+
+    &:hover
+        text-decoration: underline
+        border-color: rgba(0,0,0,0.25)
+
+.material-divider
+    height: 1px
+    background: rgba(0, 0, 0, 0.07)
+    margin-top: 0
+
+.latest-material-footer
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+.material-stats
+    font-size: 0.78rem
+    color: $color-text-muted
+
+.empty-state
+    font-size: 0.85rem
+    color: $color-text-muted
+    margin: 0.5rem 0 0
+
+.user-stats-grid
+    margin-top: 0.6rem
+    display: grid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+    gap: 0.8rem 1.2rem
+
+.user-stat
+    padding: 0.35rem 0
+
+.user-stat-label
+    margin: 0 0 0.15rem
+    font-size: 0.78rem
+    color: $color-text-muted
+
+.user-stat-value
+    margin: 0
+    font-size: 1.05rem
+    font-weight: 600
+    color: $color-text-main
+
+.stats-cta
+    margin-top: 1rem
+    width: 100%
+
+@media (max-width: 900px)
+    .hero-inner
+        flex-direction: column
+
+    .hero-right
+        width: 100%
+

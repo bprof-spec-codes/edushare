@@ -1,7 +1,7 @@
 <section class="hero">
   <div class="hero-inner container">
 
-    <div class="hero-left mt-4">
+    <div class="hero-left">
       <h1 class="logo-text">EduShare</h1>
       <h1 class="hero-title">Learn, share, succeed.</h1>
 
@@ -53,9 +53,101 @@
 
     </div>
 
-    <div class="right-panel">
-      <img src="/images/edushareHomepage.jpg" alt="picture from a group">
+    <div class="hero-right">
+      <div class="stats-panel">
+
+        <!-- LATEST MATERIALS -->
+        <div class="stats-section">
+          <div class="stats-section-header">
+            <h2>Latest materials</h2>
+          </div>
+
+          <div class="latest-materials" *ngIf="materials && materials.length; else noMaterials">
+            <article class="latest-material" *ngFor="let material of materials | slice:0:3; let last = last">
+
+              <div class="material-row">
+                <div class="latest-material-main">
+                  <h3 class="material-title" [title]="material.title">
+                    {{ material.title }}
+                  </h3>
+
+                  <p class="material-meta">
+                    <span class="material-course">{{ material.subject.name }}</span>
+                    <span class="dot">•</span>
+                    <span class="material-subject">{{ material.uploader.fullName }}</span>
+                  </p>
+                </div>
+
+                <a class="view-btn" routerLink="/materials/{{material.id}}/view">
+                  View
+                </a>
+              </div>
+
+              <div class="material-divider" *ngIf="!last"></div>
+
+            </article>
+          </div>
+
+
+          <ng-template #noMaterials>
+            <p class="empty-state">
+              No materials yet – be the first to upload!
+            </p>
+          </ng-template>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- USER STATS -->
+        <div class="stats-section" *ngIf="isLoggedIn; else guestStats">
+          <div class="stats-section-header">
+            <h2>Your stats</h2>
+            <p class="stats-caption">Based on your activity</p>
+          </div>
+
+          <div class="user-stats-grid">
+            <div class="user-stat">
+              <p class="user-stat-label">Saved materials</p>
+              <p class="user-stat-value">{{ userStats.savedMaterials }}</p>
+            </div>
+
+            <div class="user-stat">
+              <p class="user-stat-label">Downloads</p>
+              <p class="user-stat-value">{{ userStats.downloads }}</p>
+            </div>
+
+            <div class="user-stat">
+              <p class="user-stat-label">Ratings given</p>
+              <p class="user-stat-value">{{ userStats.ratingCount }}</p>
+            </div>
+
+            <div class="user-stat">
+              <p class="user-stat-label">Avg. rating you give</p>
+              <p class="user-stat-value">
+                {{ userStats.averageGivenRating | number:'1.1-1' }}/5
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- GUEST STATE -->
+        <ng-template #guestStats>
+          <div class="stats-section">
+            <div class="stats-section-header">
+              <h2>Track your learning</h2>
+            </div>
+            <p class="empty-state">
+              Sign in to see your saved materials, downloads and ratings here.
+            </p>
+            <button class="btn btn--primary stats-cta" routerLink="/auth/login">
+              Sign in / Sign up
+            </button>
+          </div>
+        </ng-template>
+
+      </div>
     </div>
+
 
 
   </div>
