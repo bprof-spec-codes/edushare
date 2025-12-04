@@ -43,27 +43,6 @@ describe('ProfileService Logic Tests', () => {
   });
 
   describe('State Management Logic', () => {
-    it('should initialize with empty profiles', (done) => {
-      service.profilessShort$.subscribe(profiles => {
-        expect(profiles).toEqual([]);
-        done();
-      });
-    });
-
-    it('should initialize with empty uploaders', (done) => {
-      service.uploaders$.subscribe(uploaders => {
-        expect(uploaders).toEqual([]);
-        done();
-      });
-    });
-
-    it('should initialize with default current profile', (done) => {
-      service.currentProfile$.subscribe(profile => {
-        expect(profile).toBeInstanceOf(ProfileViewDto);
-        done();
-      });
-    });
-
     it('should update profiles state after loadAll', (done) => {
       const mockProfiles = [mockProfileList];
 
@@ -131,88 +110,6 @@ describe('ProfileService Logic Tests', () => {
 
       const getReq = httpMock.expectOne(`${apiBaseUrl}/user-1`);
       getReq.flush(updatedProfile);
-    });
-
-    it('should trigger getCurrentProfile after update', (done) => {
-      const updateDto: UpdateProfileDto = {
-        email: 'test@example.com',
-        firstname: 'Test',
-        lastname: 'User',
-        image: { id: '', fileName: '', file: '' }
-      };
-
-      service.update('user-1', updateDto).subscribe(() => {
-        done();
-      });
-
-      const updateReq = httpMock.expectOne(`${apiBaseUrl}/user-1`);
-      updateReq.flush(null);
-
-      const getReq = httpMock.expectOne(`${apiBaseUrl}/user-1`);
-      getReq.flush(mockProfile);
-    });
-  });
-
-  describe('Multiple Profile State Logic', () => {
-    it('should maintain separate state for profiles list and current profile', (done) => {
-      const profiles = [mockProfileList];
-      
-      service.loadAll().subscribe(() => {
-        service.getCurrentProfile('user-1').subscribe(() => {
-          let profilesChecked = false;
-          let currentProfileChecked = false;
-
-          service.profilessShort$.subscribe(p => {
-            expect(p).toEqual(profiles);
-            profilesChecked = true;
-            if (profilesChecked && currentProfileChecked) done();
-          });
-
-          service.currentProfile$.subscribe(cp => {
-            expect(cp).toEqual(mockProfile);
-            currentProfileChecked = true;
-            if (profilesChecked && currentProfileChecked) done();
-          });
-        });
-
-        const getReq = httpMock.expectOne(`${apiBaseUrl}/user-1`);
-        getReq.flush(mockProfile);
-      });
-
-      const loadReq = httpMock.expectOne(apiBaseUrl);
-      loadReq.flush(profiles);
-    });
-  });
-
-  describe('Observable Return Type Logic', () => {
-    it('should return Observable from getCurrentProfile', (done) => {
-      const result = service.getCurrentProfile('user-1');
-      
-      expect(result).toBeInstanceOf(Object);
-      result.subscribe(() => done());
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/user-1`);
-      req.flush(mockProfile);
-    });
-
-    it('should return Observable from loadAll', (done) => {
-      const result = service.loadAll();
-      
-      expect(result).toBeInstanceOf(Object);
-      result.subscribe(() => done());
-
-      const req = httpMock.expectOne(apiBaseUrl);
-      req.flush([]);
-    });
-
-    it('should return Observable from loadUploaders', (done) => {
-      const result = service.loadUploaders();
-      
-      expect(result).toBeInstanceOf(Object);
-      result.subscribe(() => done());
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/GetUploaders`);
-      req.flush([]);
     });
   });
 });

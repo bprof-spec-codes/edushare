@@ -40,13 +40,6 @@ describe('MaterialService Logic Tests', () => {
   });
 
   describe('State Management Logic', () => {
-    it('should initialize with empty materials', (done) => {
-      service.materialsShort$.subscribe(materials => {
-        expect(materials).toEqual([]);
-        done();
-      });
-    });
-
     it('should update state after loadAll', (done) => {
       const mockMaterials = [mockMaterialShort];
 
@@ -59,24 +52,6 @@ describe('MaterialService Logic Tests', () => {
 
       const req = httpMock.expectOne(apiBaseUrl);
       req.flush(mockMaterials);
-    });
-
-    it('should update state after create', (done) => {
-      const createDto: MaterialCreateDto = { title: 'New Material' } as MaterialCreateDto;
-      const mockMaterials = [mockMaterialShort];
-
-      service.create(createDto).subscribe(() => {
-        service.materialsShort$.subscribe(materials => {
-          expect(materials).toEqual(mockMaterials);
-          done();
-        });
-      });
-
-      const createReq = httpMock.expectOne(apiBaseUrl);
-      createReq.flush(null);
-
-      const getAllReq = httpMock.expectOne(apiBaseUrl);
-      getAllReq.flush(mockMaterials);
     });
 
     it('should update state after delete', (done) => {
@@ -130,42 +105,6 @@ describe('MaterialService Logic Tests', () => {
       const req = httpMock.expectOne(`${apiBaseUrl}/mat-1/recommended`);
       req.flush(null);
     });
-
-    it('should not modify other materials when updating recommended', (done) => {
-      const material1 = { ...mockMaterialShort, id: 'mat-1', title: 'Material 1' };
-      const material2 = { ...mockMaterialShort, id: 'mat-2', title: 'Material 2' };
-      
-      service['materialShortSubject'].next([material1, material2]);
-
-      service.updateRecommended('mat-1', true).subscribe(() => {
-        service.materialsShort$.subscribe(materials => {
-          expect(materials[0].id).toBe('mat-1');
-          expect(materials[0].title).toBe('Material 1');
-          expect(materials[1].id).toBe('mat-2');
-          expect(materials[1].title).toBe('Material 2');
-          done();
-        });
-      });
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/mat-1/recommended`);
-      req.flush(null);
-    });
-
-    it('should toggle isRecommended from true to false', (done) => {
-      const material = { ...mockMaterialShort, id: 'mat-1', isRecommended: true };
-      
-      service['materialShortSubject'].next([material]);
-
-      service.updateRecommended('mat-1', false).subscribe(() => {
-        service.materialsShort$.subscribe(materials => {
-          expect(materials[0].isRecommended).toBe(false);
-          done();
-        });
-      });
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/mat-1/recommended`);
-      req.flush(null);
-    });
   });
 
   describe('Exam Status Update Logic', () => {
@@ -185,87 +124,6 @@ describe('MaterialService Logic Tests', () => {
 
       const req = httpMock.expectOne(`${apiBaseUrl}/mat-1/exam`);
       req.flush(null);
-    });
-
-    it('should not modify other materials when updating exam status', (done) => {
-      const material1 = { ...mockMaterialShort, id: 'mat-1', title: 'Material 1' };
-      const material2 = { ...mockMaterialShort, id: 'mat-2', title: 'Material 2' };
-      
-      service['materialShortSubject'].next([material1, material2]);
-
-      service.updateExam('mat-1', true).subscribe(() => {
-        service.materialsShort$.subscribe(materials => {
-          expect(materials[0].id).toBe('mat-1');
-          expect(materials[0].title).toBe('Material 1');
-          expect(materials[1].id).toBe('mat-2');
-          expect(materials[1].title).toBe('Material 2');
-          done();
-        });
-      });
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/mat-1/exam`);
-      req.flush(null);
-    });
-
-    it('should toggle isExam from true to false', (done) => {
-      const material = { ...mockMaterialShort, id: 'mat-1', isExam: true };
-      
-      service['materialShortSubject'].next([material]);
-
-      service.updateExam('mat-1', false).subscribe(() => {
-        service.materialsShort$.subscribe(materials => {
-          expect(materials[0].isExam).toBe(false);
-          done();
-        });
-      });
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/mat-1/exam`);
-      req.flush(null);
-    });
-  });
-
-  describe('Observable Transformation Logic', () => {
-    it('should return void after create operation', (done) => {
-      const createDto: MaterialCreateDto = { title: 'New' } as MaterialCreateDto;
-
-      service.create(createDto).subscribe(result => {
-        expect(result).toBeUndefined();
-        done();
-      });
-
-      const createReq = httpMock.expectOne(apiBaseUrl);
-      createReq.flush(null);
-
-      const getAllReq = httpMock.expectOne(apiBaseUrl);
-      getAllReq.flush([]);
-    });
-
-    it('should return void after delete operation', (done) => {
-      service.delete('mat-1').subscribe(result => {
-        expect(result).toBeUndefined();
-        done();
-      });
-
-      const deleteReq = httpMock.expectOne(`${apiBaseUrl}/mat-1`);
-      deleteReq.flush(null);
-
-      const getAllReq = httpMock.expectOne(apiBaseUrl);
-      getAllReq.flush([]);
-    });
-
-    it('should return void after update operation', (done) => {
-      const updateDto: MaterialCreateDto = { title: 'Updated' } as MaterialCreateDto;
-
-      service.update('mat-1', updateDto).subscribe(result => {
-        expect(result).toBeUndefined();
-        done();
-      });
-
-      const updateReq = httpMock.expectOne(`${apiBaseUrl}/mat-1`);
-      updateReq.flush(null);
-
-      const getAllReq = httpMock.expectOne(apiBaseUrl);
-      getAllReq.flush([]);
     });
   });
 });

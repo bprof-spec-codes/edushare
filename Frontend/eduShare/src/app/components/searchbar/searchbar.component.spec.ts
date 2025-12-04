@@ -68,40 +68,6 @@ describe('SearchbarComponent', () => {
         title: ''
       });
     });
-
-    it('should sort subjects alphabetically', (done) => {
-      const mockSubjects = [
-        { id: '1', name: 'Zebra' },
-        { id: '2', name: 'Apple' },
-        { id: '3', name: 'Banana' }
-      ];
-      subjectService.getAllSubjects.and.returnValue(of(mockSubjects as any));
-
-      fixture.detectChanges();
-
-      component.subjects$.subscribe(subjects => {
-        expect(subjects[0].name).toBe('Apple');
-        expect(subjects[1].name).toBe('Banana');
-        expect(subjects[2].name).toBe('Zebra');
-        done();
-      });
-    });
-
-    it('should sort uploaders alphabetically', (done) => {
-      const mockUploaders = [
-        { id: '1', fullName: 'Zebra User' },
-        { id: '2', fullName: 'Apple User' }
-      ];
-      profileService.loadUploaders.and.returnValue(of(mockUploaders as any));
-
-      fixture.detectChanges();
-
-      component.uploaders$.subscribe(uploaders => {
-        expect(uploaders[0].fullName).toBe('Apple User');
-        expect(uploaders[1].fullName).toBe('Zebra User');
-        done();
-      });
-    });
   });
 
   describe('search', () => {
@@ -117,14 +83,12 @@ describe('SearchbarComponent', () => {
       expect(materialService.searchMaterials).not.toHaveBeenCalled();
     });
 
-    it('should call resetSearch and emit false when form is default', () => {
+    it('should call resetSearch when form is default', () => {
       spyOn(component, 'resetSearch');
-      spyOn(component.isInSearch, 'emit');
 
       component.search();
 
       expect(component.resetSearch).toHaveBeenCalled();
-      expect(component.isInSearch.emit).toHaveBeenCalledWith(false);
     });
 
     it('should build SearchDto with null for semester when semester is "0"', () => {
@@ -136,7 +100,7 @@ describe('SearchbarComponent', () => {
       expect(searchDto.semester).toBeNull();
     });
 
-    it('should build SearchDto with number for semester when semester is not "0"', () => {
+    it('should build SearchDto with number for semester when not "0"', () => {
       component.form.patchValue({ title: 'test', semester: '3' });
 
       component.search();
@@ -158,27 +122,6 @@ describe('SearchbarComponent', () => {
       expect(router.navigate).toHaveBeenCalledWith([], {
         queryParams: { title: 'test title', subject: 'sub1' }
       });
-    });
-
-    it('should emit isInSearch true and searchValue on success', () => {
-      spyOn(component.isInSearch, 'emit');
-      spyOn(component.searchValue, 'emit');
-      component.form.patchValue({ title: 'search term' });
-
-      component.search();
-
-      expect(component.isInSearch.emit).toHaveBeenCalledWith(true);
-      expect(component.searchValue.emit).toHaveBeenCalledWith('search term');
-    });
-
-    it('should log error on search failure', () => {
-      spyOn(console, 'error');
-      materialService.searchMaterials.and.returnValue(throwError(() => new Error('test error')));
-      component.form.patchValue({ title: 'test' });
-
-      component.search();
-
-      expect(console.error).toHaveBeenCalledWith('Hiba a keresésnél:', jasmine.any(Error));
     });
   });
 

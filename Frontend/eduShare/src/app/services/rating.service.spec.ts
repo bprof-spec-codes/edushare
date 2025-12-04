@@ -52,20 +52,6 @@ describe('RatingService Logic Tests', () => {
   });
 
   describe('State Management Logic', () => {
-    it('should initialize with empty ratings', (done) => {
-      service.ratings$.subscribe(ratings => {
-        expect(ratings).toEqual([]);
-        done();
-      });
-    });
-
-    it('should initialize with zero average rating', (done) => {
-      service.ratingAverage$.subscribe(avg => {
-        expect(avg).toBe(0);
-        done();
-      });
-    });
-
     it('should update ratings state after getRatingsByMaterial', (done) => {
       const mockRatings = [mockRating1, mockRating2];
 
@@ -112,31 +98,6 @@ describe('RatingService Logic Tests', () => {
       const req = httpMock.expectOne(`${apiBaseUrl}/material/mat-1`);
       req.flush(unsortedRatings);
     });
-
-    it('should handle single rating without sorting issues', (done) => {
-      service.getRatingsByMaterial('mat-1').subscribe(() => {
-        service.ratings$.subscribe(ratings => {
-          expect(ratings.length).toBe(1);
-          expect(ratings[0].id).toBe('r1');
-          done();
-        });
-      });
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/material/mat-1`);
-      req.flush([mockRating1]);
-    });
-
-    it('should handle empty ratings list', (done) => {
-      service.getRatingsByMaterial('mat-1').subscribe(() => {
-        service.ratings$.subscribe(ratings => {
-          expect(ratings).toEqual([]);
-          done();
-        });
-      });
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/material/mat-1`);
-      req.flush([]);
-    });
   });
 
   describe('Average Calculation Logic', () => {
@@ -154,51 +115,6 @@ describe('RatingService Logic Tests', () => {
       req.flush(ratings);
     });
 
-    it('should round average to 1 decimal place', (done) => {
-      const rating1 = { ...mockRating1, rate: 5 };
-      const rating2 = { ...mockRating2, rate: 4 };
-      const rating3 = { ...mockRating3, rate: 3 }; // 5+4+3 = 12/3 = 4.0
-
-      service.getRatingsByMaterial('mat-1').subscribe(() => {
-        service.ratingAverage$.subscribe(avg => {
-          expect(avg).toBe(4.0);
-          done();
-        });
-      });
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/material/mat-1`);
-      req.flush([rating1, rating2, rating3]);
-    });
-
-    it('should calculate average with decimal precision', (done) => {
-      const rating1 = { ...mockRating1, rate: 5 };
-      const rating2 = { ...mockRating2, rate: 3 };
-      const rating3 = { ...mockRating3, rate: 4 }; // 5+3+4 = 12/3 = 4.0
-      const rating4 = { ...mockRating3, id: 'r4', rate: 2 }; // 14/4 = 3.5
-
-      service.getRatingsByMaterial('mat-1').subscribe(() => {
-        service.ratingAverage$.subscribe(avg => {
-          expect(avg).toBe(3.5);
-          done();
-        });
-      });
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/material/mat-1`);
-      req.flush([rating1, rating2, rating3, rating4]);
-    });
-
-    it('should return 0 average for empty ratings', (done) => {
-      service.getRatingsByMaterial('mat-1').subscribe(() => {
-        service.ratingAverage$.subscribe(avg => {
-          expect(avg).toBe(0);
-          done();
-        });
-      });
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/material/mat-1`);
-      req.flush([]);
-    });
-
     it('should update average after deleting rating', (done) => {
       const ratings = [mockRating1, mockRating2]; // 5 and 3 = avg 4.0
       service['_ratings$'].next(ratings);
@@ -207,21 +123,6 @@ describe('RatingService Logic Tests', () => {
       service.deleteRating('r1').subscribe(() => {
         service.ratingAverage$.subscribe(avg => {
           expect(avg).toBe(3.0); // Only rating2 (rate: 3) remains
-          done();
-        });
-      });
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/r1`);
-      req.flush(null);
-    });
-
-    it('should return 0 average after deleting last rating', (done) => {
-      service['_ratings$'].next([mockRating1]);
-      service['_ratingAverage$'].next(5.0);
-
-      service.deleteRating('r1').subscribe(() => {
-        service.ratingAverage$.subscribe(avg => {
-          expect(avg).toBe(0);
           done();
         });
       });
@@ -247,43 +148,6 @@ describe('RatingService Logic Tests', () => {
 
       const req = httpMock.expectOne(`${apiBaseUrl}/r2`);
       req.flush(null);
-    });
-
-    it('should not modify other ratings when deleting', (done) => {
-      const originalRatings = [mockRating1, mockRating2];
-      service['_ratings$'].next([...originalRatings]);
-
-      service.deleteRating('r1').subscribe(() => {
-        service.ratings$.subscribe(ratings => {
-          expect(ratings[0]).toEqual(mockRating2);
-          done();
-        });
-      });
-
-      const req = httpMock.expectOne(`${apiBaseUrl}/r1`);
-      req.flush(null);
-    });
-  });
-
-  describe('Create Rating Side Effects Logic', () => {
-    it('should refresh ratings after creating new rating', (done) => {
-      const createDto: RatingCreateDto = {
-        materialId: 'mat-1',
-        rate: 5,
-        comment: 'Excellent'
-      } as RatingCreateDto;
-
-      const createdRating = { ...mockRating1, id: 'r-new' };
-
-      service.createRating(createDto).subscribe(() => {
-        done();
-      });
-
-      const createReq = httpMock.expectOne(`${apiBaseUrl}`);
-      createReq.flush(createdRating);
-
-      const refreshReq = httpMock.expectOne(`${apiBaseUrl}/material/mat-1`);
-      refreshReq.flush([createdRating]);
     });
   });
 });

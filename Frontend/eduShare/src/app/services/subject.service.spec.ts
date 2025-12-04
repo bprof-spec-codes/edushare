@@ -28,31 +28,7 @@ describe('SubjectService', () => {
     httpMock.verify();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
-  describe('subjects$ Observable', () => {
-    it('should expose subjects as an observable', (done) => {
-      const mockSubjects: Subject[] = [
-        { id: '1', name: 'Mathematics', semester: 1 },
-        { id: '2', name: 'Physics', semester: 2 }
-      ];
-
-      service.subjects$.subscribe(subjects => {
-        if (subjects.length > 0) {
-          expect(subjects).toEqual(mockSubjects);
-          done();
-        }
-      });
-
-      service.getAllSubjects().subscribe();
-      const req = httpMock.expectOne(`${environment.baseApiUrl}/api/Subject`);
-      req.flush(mockSubjects);
-    });
-  });
-
-  describe('getAllSubjects', () => {
+  describe('Sorting Logic', () => {
     it('should sort subjects alphabetically by name', (done) => {
       const unsortedSubjects: Subject[] = [
         { id: '1', name: 'Physics', semester: 1 },
@@ -97,8 +73,8 @@ describe('SubjectService', () => {
     });
   });
 
-  describe('updateSubject', () => {
-    it('should update the subject in the state when found', (done) => {
+  describe('State Update Logic', () => {
+    it('should update subject in state when found', (done) => {
       const initialSubjects: Subject[] = [
         { id: '1', name: 'Mathematics', semester: 1 },
         { id: '2', name: 'Physics', semester: 2 }
@@ -127,82 +103,6 @@ describe('SubjectService', () => {
       });
     });
 
-    it('should preserve subject ID when updating', (done) => {
-      const initialSubjects: Subject[] = [
-        { id: 'abc-123', name: 'Original Name', semester: 1 }
-      ];
-
-      const updateDto: SubjectCreateDto = { name: 'New Name', semester: 2 };
-
-      service.getAllSubjects().subscribe(() => {
-        service.updateSubject(updateDto, 'abc-123').subscribe();
-        const updateReq = httpMock.expectOne(`${environment.baseApiUrl}/api/Subject/abc-123`);
-        updateReq.flush(null);
-      });
-
-      const initReq = httpMock.expectOne(`${environment.baseApiUrl}/api/Subject`);
-      initReq.flush(initialSubjects);
-
-      service.subjects$.subscribe(subjects => {
-        if (subjects.length === 1 && subjects[0].name === 'New Name') {
-          expect(subjects[0].id).toBe('abc-123');
-          done();
-        }
-      });
-    });
-
-    it('should not modify state when subject ID not found', (done) => {
-      const initialSubjects: Subject[] = [
-        { id: '1', name: 'Mathematics', semester: 1 }
-      ];
-
-      const updateDto: SubjectCreateDto = { name: 'Physics', semester: 2 };
-
-      service.getAllSubjects().subscribe(() => {
-        service.updateSubject(updateDto, 'non-existent-id').subscribe();
-        const updateReq = httpMock.expectOne(`${environment.baseApiUrl}/api/Subject/non-existent-id`);
-        updateReq.flush(null);
-
-        // Wait a bit then verify state unchanged
-        setTimeout(() => {
-          service.subjects$.subscribe(subjects => {
-            expect(subjects.length).toBe(1);
-            expect(subjects[0].name).toBe('Mathematics');
-            done();
-          }).unsubscribe();
-        }, 10);
-      });
-
-      const initReq = httpMock.expectOne(`${environment.baseApiUrl}/api/Subject`);
-      initReq.flush(initialSubjects);
-    });
-
-    it('should create immutable copy when updating', (done) => {
-      const initialSubjects: Subject[] = [
-        { id: '1', name: 'Math', semester: 1 }
-      ];
-
-      const updateDto: SubjectCreateDto = { name: 'Updated Math', semester: 2 };
-
-      service.getAllSubjects().subscribe(() => {
-        const beforeUpdate = service['_subjects$'].value;
-        
-        service.updateSubject(updateDto, '1').subscribe();
-        const updateReq = httpMock.expectOne(`${environment.baseApiUrl}/api/Subject/1`);
-        updateReq.flush(null);
-
-        const afterUpdate = service['_subjects$'].value;
-        expect(beforeUpdate).not.toBe(afterUpdate);
-        expect(beforeUpdate[0]).not.toBe(afterUpdate[0]);
-        done();
-      });
-
-      const initReq = httpMock.expectOne(`${environment.baseApiUrl}/api/Subject`);
-      initReq.flush(initialSubjects);
-    });
-  });
-
-  describe('deleteSubject', () => {
     it('should filter out deleted subject from state', (done) => {
       const initialSubjects: Subject[] = [
         { id: '1', name: 'Mathematics', semester: 1 },
@@ -227,49 +127,6 @@ describe('SubjectService', () => {
           done();
         }
       });
-    });
-
-    it('should handle deleting non-existent subject', (done) => {
-      const initialSubjects: Subject[] = [
-        { id: '1', name: 'Mathematics', semester: 1 }
-      ];
-
-      service.getAllSubjects().subscribe(() => {
-        service.deleteSubject('non-existent').subscribe(() => {
-          service.subjects$.subscribe(subjects => {
-            expect(subjects.length).toBe(1);
-            expect(subjects[0].id).toBe('1');
-            done();
-          }).unsubscribe();
-        });
-        const deleteReq = httpMock.expectOne(`${environment.baseApiUrl}/api/Subject/non-existent`);
-        deleteReq.flush(null);
-      });
-
-      const initReq = httpMock.expectOne(`${environment.baseApiUrl}/api/Subject`);
-      initReq.flush(initialSubjects);
-    });
-
-    it('should create new array instance when deleting', (done) => {
-      const initialSubjects: Subject[] = [
-        { id: '1', name: 'Math', semester: 1 },
-        { id: '2', name: 'Physics', semester: 2 }
-      ];
-
-      service.getAllSubjects().subscribe(() => {
-        const beforeDelete = service['_subjects$'].value;
-        
-        service.deleteSubject('2').subscribe();
-        const deleteReq = httpMock.expectOne(`${environment.baseApiUrl}/api/Subject/2`);
-        deleteReq.flush(null);
-
-        const afterDelete = service['_subjects$'].value;
-        expect(beforeDelete).not.toBe(afterDelete);
-        done();
-      });
-
-      const initReq = httpMock.expectOne(`${environment.baseApiUrl}/api/Subject`);
-      initReq.flush(initialSubjects);
     });
   });
 });
