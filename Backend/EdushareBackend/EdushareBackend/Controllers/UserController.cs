@@ -45,20 +45,30 @@ namespace EdushareBackend.Controllers
             var users = await userManager.Users //összes user listázása
                 .Include(u => u.Image)  //include a navigation property miatt kell hogy az is benne legyen
                 .ToListAsync();
+            
+            var result = new List<AppUserShortViewDto>();
 
-            return users.Select(u => new AppUserShortViewDto //átalakítás DTO-vá
+            foreach (var user in users)
             {
-                Id = u.Id,
-                Email = u.Email,
-                FullName = u.FirstName + " " + u.LastName,
-                IsWarned = u.IsWarned,
-                IsBanned = u.IsBanned,
-                Image = new ContentViewDto(
-                    u.Image.Id,
-                    u.Image.FileName,
-                    Convert.ToBase64String(u.Image.File)
-                )
-            });
+                var roles = await userManager.GetRolesAsync(user);
+                
+                result.Add(new AppUserShortViewDto
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    FullName = user.FirstName + " " + user.LastName,
+                    IsWarned = user.IsWarned,
+                    IsBanned = user.IsBanned,
+                    Role = roles.FirstOrDefault(),
+                    Image = new ContentViewDto(
+                        user.Image.Id,
+                        user.Image.FileName,
+                        Convert.ToBase64String(user.Image.File)
+                    )
+                });
+            }
+            
+            return result;
         }
 
         [HttpGet("{id}")]
