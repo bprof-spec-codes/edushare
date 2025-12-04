@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AdminStatisticsDto } from '../dtos/admin-statistics-dto';
 import { environment } from '../../environments/environment';
+import { HomepageStatisticsDto } from '../dtos/homepage-statistics-dto';
+import { UserStatisticsDto } from '../dtos/user-statistics-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -14,5 +16,13 @@ export class StatisticsService {
 
   getAdminStatistics(): Observable<AdminStatisticsDto> {
     return this.http.get<AdminStatisticsDto>(`${this.apiUrl}/GetAdminStatisctics`);
+  }
+
+  getHomepageStatistics(): Observable<HomepageStatisticsDto> {
+    return this.http.get<HomepageStatisticsDto>(`${this.apiUrl}/GetHomepageStatistics`)
+  }
+
+  getUserStatistics(userId: string): Observable<UserStatisticsDto> {
+    return this.http.get<UserStatisticsDto>(`${this.apiUrl}/GetUserStatistics/${userId}`)
   }
 }

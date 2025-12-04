@@ -1,12 +1,154 @@
-<div class="container mt-5">
-  <div class="leftside">
-  <h2>Learn, Share, Succeed</h2>
-  <p>Our goal is to connect students, teachers, and professionals who believe that learning together is more effective and inspiring.</p>
-  <p>EduShare is more then just a platform - it's a community where everyone is both a teacher and a learner</p>
-  <p>Join today and be part of the future of knowledge sharing!</p>
-  <button class="btn" (click)="showMaterials()">See all materials</button>    
+<section class="hero">
+  <div class="hero-inner container">
+
+    <div class="hero-left">
+      <h1 class="logo-text">EduShare</h1>
+      <h1 class="hero-title">Learn, share, succeed.</h1>
+
+      <ngx-typed-js [strings]="typedStrings" [typeSpeed]="45" [backSpeed]="25" [backDelay]="1000" [loop]="true"
+        [showCursor]="true" cursorChar="|">
+        <p class="hero-typed-line">
+          A place to <span class="typing"></span>
+        </p>
+      </ngx-typed-js>
+
+      <p class="hero-subtitle">
+        Join a community where students and educators share their best
+        learning materials - notes, summaries, slides, and exam prep guides, all in one place.
+      </p>
+
+      <div class="hero-buttons">
+        <button class="btn btn--primary" routerLink="/materials">Browse materials</button>
+        <button class="btn btn--ghost" routerLink="/materials/create" *ngIf="!isLoggedIn">Upload your first
+          note</button>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="stat-number">
+            <h3>
+              <span [countUp]="stats?.materialCount || 0" [options]="countupOptions">0</span>+
+            </h3>
+          </span>
+          <p>materials</p>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-number">
+            <h3>
+              <span [countUp]="stats?.userCount || 0" [options]="countupOptions">0</span>+
+            </h3>
+          </span>
+          <p class="ms-2">users</p>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-number">
+            <h3>
+              <span [countUp]="stats?.subjectCount || 0" [options]="countupOptions">0</span>+
+            </h3>
+          </span>
+          <p>subjects</p>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="hero-right">
+      <div class="stats-panel">
+
+        <div class="stats-section">
+          <div class="stats-section-header">
+            <h2>Latest materials</h2>
+          </div>
+
+          <div class="latest-materials" *ngIf=" stats?.lastMaterials && stats?.lastMaterials?.length; else noMaterials">
+            <article class="latest-material" *ngFor="let material of stats?.lastMaterials | slice:0:3; let last = last">
+
+              <div class="material-row">
+                <div class="latest-material-main">
+                  <h3 class="material-title" [title]="material.title">
+                    {{ material.title }}
+                  </h3>
+
+                  <p class="material-meta">
+                    <span class="material-course">{{ material.subject.name }}</span>
+                    <span class="dot">•</span>
+                    <span class="material-subject">{{ material.uploader.fullName }}</span>
+                  </p>
+                </div>
+
+                <a class="view-btn" routerLink="/materials/{{material.id}}/view">
+                  View
+                </a>
+              </div>
+
+              <div class="material-divider" *ngIf="!last"></div>
+
+            </article>
+          </div>
+
+
+          <ng-template #noMaterials>
+            <p class="empty-state">
+              No materials yet – be the first to upload!
+            </p>
+          </ng-template>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="stats-section" *ngIf="isLoggedIn; else guestStats">
+          <div class="stats-section-header">
+            <h2>Your stats</h2>
+            <p class="stats-caption">Based on your activity</p>
+          </div>
+
+          <div class="user-stats-grid">
+            <div class="user-stat">
+              <p class="user-stat-label">Favourite materials</p>
+              <p class="user-stat-value"><span [countUp]="userStats?.materialsSaved || 0"
+                  [options]="countupOptions">0</span></p>
+            </div>
+
+            <div class="user-stat">
+              <p class="user-stat-label">Uploaded materials</p>
+              <p class="user-stat-value"><span [countUp]="userStats?.materialsUploaded || 0"
+                  [options]="countupOptions">0</span></p>
+            </div>
+
+            <div class="user-stat">
+              <p class="user-stat-label">Ratings given</p>
+              <p class="user-stat-value"><span [countUp]="userStats?.ratingsGiven || 0"
+                  [options]="countupOptions">0</span></p>
+            </div>
+
+            <div class="user-stat">
+              <p class="user-stat-label">Your avg. rating</p>
+              <p class="user-stat-value">
+                <span [countUp]="userStats?.userAvgRating || 0" [options]="countupOptionsWithDecimal"></span>/5
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #guestStats>
+          <div class="stats-section">
+            <div class="stats-section-header">
+              <h2>Track your learning</h2>
+            </div>
+            <p class="empty-state">
+              Sign in to see your saved materials, downloads and ratings here.
+            </p>
+            <button class="btn btn--primary stats-cta" routerLink="/auth/login">
+              Sign in / Sign up
+            </button>
+          </div>
+        </ng-template>
+
+      </div>
+    </div>
+
+
+
   </div>
-  <div class="rightside">
-    <img src="/images/edushareHomepage.jpg" alt="picture from a group">
-  </div>
-</div>
+</section>
