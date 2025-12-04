@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MaterialViewDto } from '../../dtos/material-view-dto';
 import { Router } from '@angular/router';
 import { NgxTypedJsModule } from 'ngx-typed-js';
@@ -15,18 +15,19 @@ import { UserStatisticsDto } from '../../dtos/user-statistics-dto';
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.sass'
 })
-export class HomepageComponent {
+export class HomepageComponent implements OnInit {
   isLoggedIn: boolean = false
   userId: string | null = null
   stats: HomepageStatisticsDto | null = null
   userStats: UserStatisticsDto | null = null
 
-  constructor(private router: Router, private authService: AuthService, private statService: StatisticsService) {
+  constructor(private router: Router, private authService: AuthService, private statService: StatisticsService) { }
+
+  ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn()
     this.userId = this.authService.getUserId()
     this.loadStats()
     this.loadUserStats(this.userId || '')
-
   }
 
   loadStats(): void {
