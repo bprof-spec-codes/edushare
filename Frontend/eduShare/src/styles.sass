@@ -3,7 +3,7 @@
 /* Importing Bootstrap SCSS file. */
 @use 'bootstrap/scss/bootstrap'
 @forward 'styles/_variables'
-@import 'styles/_variables'
+@use 'styles/_variables' as *;
 
 :root
     --bs-body-font-family: 'Nunito', Arial, sans-serif
