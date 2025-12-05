@@ -4,6 +4,20 @@
         </div>
         
         <br>
+        <div class=" options-menu dropdown ms-3" *ngIf="authService.isAdmin()">
+            <button class="btn btn-link text-dark p-0" type="button" id="optionsMenu" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <i class="bi bi-three-dots-vertical fs-5"></i>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="optionsMenu">
+              <li>
+                <button class="dropdown-item text-danger" (click)="deleteMaterial()">
+                  <i class="bi bi-trash me-2"></i> Törlés
+                </button>
+              </li>
+            </ul>
+        </div>
         <div [class]="titleClass()" *ngIf="m.uploader.image.file">{{m.title}}</div>
         <div class="datas">
             <div *ngIf="m.isExam" class="examClass">
@@ -11,8 +25,7 @@
             </div>
             <div class="icon-data">
                 <i class="bi bi-book book"></i>
-                <div class="subject">{{m.subject.name}}</div>
-                
+                <button class="subject" (click)="openSubjectMaterials(m.subject.id)">{{m.subject.name}}</button>
             </div>
             
             <div class="icon-data">
@@ -20,8 +33,9 @@
                             ? m.uploader.image.file
                             : 'data:image/*;base64,' + m.uploader.image.file" [alt]="m.uploader.fullName"
                     class="profile-pic" width="21" height="21" />
-                <div class="btn-profile-container"><button class="btn-profile"
-                        (click)="openProfile(m.uploader.id)">{{m.uploader.fullName}}</button></div>
+                <div class="btn-profile-container">
+                    <button class="btn-profile" (click)="openProfile(m.uploader.id)">{{m.uploader.fullName}}</button>
+                </div>
             </div>
             <div class="icon-data">
                 <i class="bi bi-clock clock"></i>

@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.Dtos.Material;
+using Logic.Helper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Logic.Logic
 {
@@ -13,11 +17,17 @@ namespace Logic.Logic
     {
         Repository<AppUser> userRepository;
         Repository<Material> materialRepository;
+        Repository<Subject> subjectRepository;
+        Repository<Rating> ratingRepository;
+        DtoProviders dtoProviders;
 
-        public StatisticsLogic(Repository<AppUser> userRepository, Repository<Material> materialRepository)
+        public StatisticsLogic(Repository<AppUser> userRepository, Repository<Material> materialRepository, Repository<Subject> subjectRepository, DtoProviders dtoProviders, Repository<Rating> ratingRepository)
         {
             this.userRepository = userRepository;
             this.materialRepository = materialRepository;
+            this.subjectRepository = subjectRepository;
+            this.dtoProviders = dtoProviders;
+            this.ratingRepository = ratingRepository;
         }
 
         public AdminStatisticsDto GetAdminStatistics()
@@ -44,7 +54,9 @@ namespace Logic.Logic
                         },
                     },
                     UploadDate = m.UploadDate,
-                    DownloadCount = m.DownloadCount
+                    DownloadCount = m.DownloadCount,
+                    AverageRating = m.Ratings.Count > 0 ? m.Ratings.Average(r => r.Rate) : 0.0,
+                    RatingCount = m.Ratings.Count
                 })
                 .ToList();
 
@@ -72,6 +84,72 @@ namespace Logic.Logic
                 MostActiveUsers = usersWithMostMaterials
             };
 
+        }
+
+        public HomePageStatisticsDto GetHomePageStatistics()
+        {
+            int materialCount = materialRepository.GetAll().Count();
+            int userCount = userRepository.GetAll().Count();
+            int subjectCount = subjectRepository.GetAll().Count();
+
+            var lastMaterials = materialRepository.GetAll()
+                .Include(u => u.Subject)
+                .Include(u => u.Uploader)
+                .ThenInclude(u => u.Image)
+                .Include(u => u.Ratings)
+                .OrderByDescending(m => m.UploadDate)
+                .Take(3)
+                .Select(x => dtoProviders.Mapper.Map<MaterialShortViewDto>(x))
+                .ToList();
+            
+
+            return new HomePageStatisticsDto
+            {
+                MaterialCount = materialCount,
+                UserCount = userCount,
+                SubjectCount = subjectCount,
+                LastMaterials = lastMaterials
+            };
+        }
+
+        public UserStatisticsDto GetUserStatistics(string userId)
+        {
+            var user = userRepository.GetAll()
+                .Include(u => u.FavouriteMaterials)
+                .FirstOrDefault(u => u.Id == userId);
+            
+            if (user == null)
+            {
+                return null;
+            }
+            
+            int materialsSaved = user.FavouriteMaterials.Count();
+
+            var materialsUploaded = materialRepository.GetAll()
+                .Where(m => m.Uploader.Id == userId)!
+                .Count();
+            
+            int ratingsGiven = ratingRepository.GetAll()
+                .Select(r => r.UserId == userId)
+                .Count();
+
+            var userMaterials = materialRepository.GetAll()
+                .Include(m => m.Ratings)
+                .Where(m => m.Uploader.Id == userId);
+
+            var allRatings = userMaterials
+                .SelectMany(m => m.Ratings)
+                .Select(r => r.Rate);
+
+            double userAvgRating = allRatings.Any() ? Math.Round(allRatings.Average(), 1) : 0.0;
+
+            return new UserStatisticsDto
+            {
+                MaterialsSaved = materialsSaved,
+                MaterialsUploaded = materialsUploaded,
+                RatingsGiven = ratingsGiven,
+                UserAvgRating = userAvgRating,
+            };
         }
     }
 }

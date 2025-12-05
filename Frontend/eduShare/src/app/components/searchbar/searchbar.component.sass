@@ -58,3 +58,25 @@ form
 .reset-button:hover
     background-color: $button-hover
     transition-duration: 0.3s
+
+$mobile-max-width: 1200px
+
+@media (max-width: $mobile-max-width) 
+
+  form
+      flex-direction: column
+      align-items: stretch
+      gap: 15px
+      justify-content: flex-start
+
+  .subject-select,
+  .semester-select,
+  .uploader-select,
+  .text-input
+      width: 100%
+
+  .search-button,
+  .reset-button
+      width: 100%
+      margin-top: 10px
+

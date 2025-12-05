@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ProfileService } from '../../services/profile.service';
 import { ProfileViewDto } from '../../dtos/profile-view-dto';
 import { AuthService } from '../../services/authentication.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-profile-list',
@@ -16,8 +17,9 @@ export class ProfileListComponent {
   loading = false
   error?: string
   roles: string[] = []
+  userRoles: { [key: string]: string | null } = {};
 
-  constructor(private profileService: ProfileService, private router: Router, private authService : AuthService) { }
+  constructor(private profileService: ProfileService, private router: Router, private authService : AuthService, private toast: ToastService) { }
 
   ngOnInit(): void {
     this.roles = this.authService.getRoles()
@@ -30,6 +32,7 @@ export class ProfileListComponent {
       next: (data) => {
         this.profiles = data
         this.loading = false
+        this.profiles.forEach(u => this.userRoles[u.id] = u.role)
       },
       error: (err:any) => {
         console.error(err)
@@ -54,8 +57,11 @@ export class ProfileListComponent {
   grantAdmin(id: string) {
     this.profileService.grantAdmin(id).subscribe({
         next: () => {
-          alert("Admin added succesfully!")
-          //console.log("Admin added")
+          this.toast.show("Admin added succesfully!");
+          const user = this.profiles.find(u => u.id === id);
+          if (user) {
+            user.role = "Admin";
+          }
         },
         error: (err) => {
           console.error(err)
@@ -67,8 +73,11 @@ export class ProfileListComponent {
   grantTeacher(id: string) {
     this.profileService.grantTeacher(id).subscribe({
         next: () => {
-          alert("Teacher added succesfully!")
-          //console.log("Teacher added")
+          this.toast.show("Teacher added succesfully!");
+          const user = this.profiles.find(u => u.id === id);
+          if (user) {
+            user.role = "Teacher";
+          }
         },
         error: (err) => {
           console.error(err)
@@ -80,14 +89,32 @@ export class ProfileListComponent {
   revokeRole(id: string) {
     this.profileService.revokeRole(id).subscribe({
         next: () => {
-          alert("Roles deleted succesfully!")
-          //console.log("Teacher added")
+          this.toast.show("Roles deleted succesfully!");
+          const user = this.profiles.find(u => u.id === id);
+          if (user) {
+            user.role = null;
+          }
         },
         error: (err) => {
-          alert(err.error.message)
+          this.toast.show(err.error.message);
           console.log(err)
         }
       }
     )
+  }
+
+  changeRole(id: string)
+  {
+    const role = this.userRoles[id]
+
+    if (role === "Admin") {
+      this.grantAdmin(id)
+    }
+    else if (role === "Teacher") {
+      this.grantTeacher(id)
+    }
+    else {
+      this.revokeRole(id)
+    }
   }
 }

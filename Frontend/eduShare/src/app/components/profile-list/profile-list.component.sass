@@ -20,7 +20,7 @@
 .profile-row
     margin-bottom: 10px
     display: flex
-    height: 80px
+    height: 100px
     width: 80%
     max-width: 1000px
     min-width: 840px
@@ -40,6 +40,14 @@
     margin: 5px 0 auto 0
     text-align: center
 
+.role
+    font-size: 14px
+    color: #8b8b8b
+    height: 20px
+
+.roleselect
+    width: 200px
+
 .email
     margin: auto 0 auto 0
     text-align: center
@@ -50,6 +58,12 @@
     flex-direction: row-reverse
     justify-content: space-between
     width: 50%
+
+.role-container
+    margin-left: 20px
+    display: flex
+    flex-direction: row-reverse
+    gap: 10px
 
 .button
     width: 100px
@@ -65,3 +79,85 @@
     &:hover
         background-color: $button-hover
         transition-duration: 0.3s
+
+    &:disabled
+        background-color: #8b8b8b
+
+@media (max-width: 1200px)
+  .profile-container
+    width: 100%
+    padding: 0 10px
+    max-width: 100%
+
+  .profile-row
+    flex-direction: column
+    align-items: center
+    text-align: center
+    width: 100%
+    max-width: 100%
+    min-width: auto  // mobilon ne legyen fix min-width
+    height: auto
+    padding: 15px
+    margin-bottom: 15px
+    background-color: #f8f8f8
+    border-radius: 12px
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1)
+
+  .hr
+    width: 95%
+    min-width: auto
+    max-width: 100%
+
+  .picture-container
+    width: 50%
+    margin-bottom: 10px
+
+  .profile-pic
+    width: 80px
+    height: 80px
+    border-radius: 50%
+    margin: 0 auto 10px
+
+  .fullname
+    font-size: 16px
+    font-weight: 700
+    margin-bottom: 5px
+
+  .role
+    font-size: 14px
+    color: #8b8b8b
+    margin-bottom: 10px
+
+  .email
+    width: 100%
+    text-align: center
+    margin-bottom: 10px
+    font-size: 14px
+
+  .button-container
+    flex-direction: column
+    width: 100%
+    gap: 10px
+
+  .role-container
+    flex-direction: column
+    align-items: center
+    width: 100%
+    gap: 5px
+    margin: 0
+
+    select.roleselect
+      order: -1
+      width: 90%
+      max-width: 300px
+      margin: 0 auto
+
+  .roleselect
+    width: 100%
+
+  .button
+    width: 90%
+    max-width: 300px
+    margin: 0 auto
+    height: 40px
+    font-size: 14px

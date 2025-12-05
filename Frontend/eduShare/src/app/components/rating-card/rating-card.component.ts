@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { ProfilListViewDto } from '../../dtos/profil-list-view-dto';
 import { RatingViewDto } from '../../dtos/rating-view-dto';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-rating-card',
@@ -22,7 +23,7 @@ export class RatingCardComponent implements OnInit {
   maxCommentLength = 51
   commentModalOpen = false
 
-  constructor(private profileService: ProfileService, private router: Router) { }
+  constructor(private profileService: ProfileService, private router: Router, public auth:AuthService) { }
 
   ngOnInit(): void {
     this.profileService.loadAll().subscribe()

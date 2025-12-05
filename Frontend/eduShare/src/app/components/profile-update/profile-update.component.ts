@@ -7,6 +7,7 @@ import { FileContent } from '../../models/file-content';
 import { ImageDto } from '../../dtos/image-dto';
 import { FileService } from '../../services/file.service';
 import { UpdateProfileDto } from '../../dtos/update-profile-dto';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-profile-update',
@@ -26,7 +27,7 @@ export class ProfileUpdateComponent {
   selectedFile: File | null = null;
   selectedFileDataUrl: string | null = null;
 
-  constructor(private route:ActivatedRoute, private profileService: ProfileService,private fb: FormBuilder , private router: Router, private fileService:FileService) { 
+  constructor(private route:ActivatedRoute, private profileService: ProfileService,private fb: FormBuilder , private router: Router, private fileService:FileService, private toast: ToastService) { 
     
   }
   ngOnInit(){
@@ -41,7 +42,7 @@ export class ProfileUpdateComponent {
 
     const id = this.route.snapshot.paramMap.get('id')
       if(!id) {
-        alert('Érvénytelen azonosító.')
+        this.toast.show('Érvénytelen azonosító.');
         return
       }
       this.id = id;
@@ -66,7 +67,7 @@ export class ProfileUpdateComponent {
   
         error: (err) => {
           console.error(err)
-          alert('Nem sikerült betölteni a profilt.')
+          this.toast.show('Nem sikerült betölteni a profilt.');
         }
       })
     }
@@ -102,12 +103,12 @@ onUpdate() {
 
   this.profileService.update(this.id, dto).subscribe({
     next: () => {
-      alert('Profil sikeresen módosítva!');
+      this.toast.show('Profil sikeresen módosítva!');
       this.router.navigate(['/profile-view', this.id]);
     },
     error: (err) => {
       console.error('Hiba történt a módosítás során', err);
-      alert('Nem sikerült módosítani a profilt.');
+      this.toast.show('Nem sikerült módosítani a profilt.');
     }
   });
 }
@@ -122,7 +123,7 @@ async onFileSelected(event: Event) {
 
 
   if (!ext || !this.allowed.includes(ext)) {
-    alert('Csak PNG és JPEG formátum engedélyezett!');
+    this.toast.show('Csak PNG és JPEG formátum engedélyezett!');
     input.value = '';
     this.selectedFileDataUrl = null;
     this.content = undefined;
