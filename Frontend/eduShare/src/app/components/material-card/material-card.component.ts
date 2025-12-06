@@ -17,6 +17,7 @@ import { MaterialService } from '../../services/material.service';
 })
 export class MaterialCardComponent implements OnChanges, OnInit {
   @Input({ required: true }) m!: MaterialShortViewDto
+  @Output() deleted = new EventEmitter<string>();
 
   private materialId$ = new BehaviorSubject<string | null>(null)
   isFav$!: Observable<boolean>
@@ -71,17 +72,18 @@ export class MaterialCardComponent implements OnChanges, OnInit {
     this.router.navigate(['/materials'], { queryParams: { subject: subjectId } });
   }
   deleteMaterial(): void {
-      if (!this.material) return
-      if (!confirm('Biztosan törölni szeretnéd az anyagot?')) return
-      this.materialService.delete(this.material.id).subscribe({
-        next: () => {
-          console.log('A tananyag sikeresen törölve lett.')
-          this.router.navigate(['/materials'])
-        },
-        error: (err) => {
-          console.error(err)
-          alert('Nem sikerült törölni az tananyagot.')
-        }
-      })
+  if (!this.m) return;
+  if (!confirm('Biztosan törölni szeretnéd az anyagot?')) return;
+
+  this.materialService.delete(this.m.id).subscribe({
+    next: () => {
+      console.log('A tananyag sikeresen törölve lett.');
+      this.deleted.emit(this.m.id); 
+    },
+    error: (err) => {
+      console.error(err);
+      alert('Nem sikerült törölni a tananyagot.');
     }
+  });
+}
 }

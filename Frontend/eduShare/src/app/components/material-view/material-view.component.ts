@@ -135,7 +135,7 @@ export class MaterialViewComponent implements OnInit {
       },
       error: (err) => {
         console.error(err)
-        alert('Nem sikerült törölni az tananyagot.')
+        alert('Nem sikerült törölni a tananyagot.')
       }
     })
   }
