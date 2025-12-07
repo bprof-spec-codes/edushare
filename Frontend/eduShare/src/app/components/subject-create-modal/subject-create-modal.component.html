@@ -21,23 +21,25 @@
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Semester</label>
-                            <input class="form-control" type="number" formControlName="semester" min="1"
-                                placeholder="min 1, max 20">
-                            <div class="form-text text-danger"
-                                *ngIf="createForm.get('semester')?.invalid && (createForm.get('semester')?.dirty || createForm.get('semester')?.touched)">
-                                Semester must be at least 1, max 20.
+                        <div class="d-flex justify-content-between">
+                            <div class="mb-3">
+                                <label class="form-label">Semester</label>
+                                <input class="form-control" type="number" formControlName="semester" min="1"
+                                    placeholder="min 1, max 20">
+                                <div class="form-text text-danger"
+                                    *ngIf="createForm.get('semester')?.invalid && (createForm.get('semester')?.dirty || createForm.get('semester')?.touched)">
+                                    Semester must be at least 1, max 20.
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Credit</label>
-                            <input class="form-control" type="number" formControlName="credit" min="0"
-                                placeholder="min 0, max 30">
-                            <div class="form-text text-danger"
-                                *ngIf="createForm.get('credit')?.invalid && (createForm.get('credit')?.dirty || createForm.get('credit')?.touched)">
-                                Credit must be at least 0, max 30.
+                            <div class="mb-3">
+                                <label class="form-label">Credit</label>
+                                <input class="form-control" type="number" formControlName="credit" min="0"
+                                    placeholder="min 0, max 30">
+                                <div class="form-text text-danger"
+                                    *ngIf="createForm.get('credit')?.invalid && (createForm.get('credit')?.dirty || createForm.get('credit')?.touched)">
+                                    Credit must be at least 0, max 30.
+                                </div>
                             </div>
                         </div>
 

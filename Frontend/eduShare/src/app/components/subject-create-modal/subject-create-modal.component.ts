@@ -48,7 +48,7 @@ export class SubjectCreateModalComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['open']?.currentValue === true && this.createForm) {
-      this.createForm.reset({ name: '', semester: 1 });
+      this.createForm.reset({ name: '', semester: 1, credit: 0 });
     }
   }
 
