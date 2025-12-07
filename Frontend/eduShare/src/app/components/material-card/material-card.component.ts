@@ -82,17 +82,17 @@ export class MaterialCardComponent implements OnChanges, OnInit {
   }
 
   async deleteMaterial(): Promise<void> {
-    const confirmed = await this.confirmService.confirm('Biztosan törölni szeretnéd az anyagot?')
+    const confirmed = await this.confirmService.confirm('Are you sure you want to delete the material?')
     if (!confirmed) return;
 
     this.materialService.delete(this.m.id).subscribe({
       next: () => {
-        console.log('A tananyag sikeresen törölve lett.');
+        console.log('The material has been successfully deleted.');
         this.deleted.emit(this.m.id); 
       },
       error: (err) => {
         console.error(err);
-        this.toast.show('Nem sikerült törölni a tananyagot.')
+        this.toast.show('The material could not be deleted.')
       }
   });
 }

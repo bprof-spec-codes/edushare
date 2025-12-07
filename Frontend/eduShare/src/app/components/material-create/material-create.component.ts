@@ -16,7 +16,7 @@ constructor(private materialService: MaterialService, private router: Router, pr
 
   onCreate(value: MaterialFormValue) {
     if (!value.content) {
-      this.toast.show('Kérlek, válassz egy fájlt!')
+      this.toast.show('Please choose file!')
       return
     }
 
@@ -29,11 +29,11 @@ constructor(private materialService: MaterialService, private router: Router, pr
 
     this.materialService.create(dto).subscribe({
       next: () => {
-        console.log('A tananyag sikeresen létre lett hozva.')
+        console.log('The material has been successfully created.')
         this.router.navigate(['/materials'])
       },
       error: (err) => {
-        console.error('Nem sikerült létrehozni a tananyagot', err)
+        console.error('The material could not be created.', err)
         this.router.navigate(['/materials'])
       }
     })

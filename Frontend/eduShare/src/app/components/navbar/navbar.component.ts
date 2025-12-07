@@ -40,7 +40,7 @@ export class NavbarComponent implements OnChanges, OnInit {
       },
       error: (err) => {
         console.error(err)
-        this.toast.show('Nem sikerült betölteni a profilt.');
+        this.toast.show('The profile could not be loaded.');
         this.auth.logout()
       }
     });
