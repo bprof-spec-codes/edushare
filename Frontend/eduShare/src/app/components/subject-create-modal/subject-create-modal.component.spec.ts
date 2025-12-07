@@ -67,6 +67,7 @@ describe('SubjectCreateModalComponent', () => {
     expect(component.save.emit).toHaveBeenCalledOnceWith({
       name: 'Analízis',
       semester: 3,
+      credit: 2
     })
   })
 
