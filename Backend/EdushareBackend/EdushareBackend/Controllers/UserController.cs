@@ -16,6 +16,7 @@ using Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Logic.Helper;
 
 namespace EdushareBackend.Controllers
 {
@@ -26,17 +27,19 @@ namespace EdushareBackend.Controllers
         UserManager<AppUser> userManager;
         RoleManager<IdentityRole> roleManager;
         Repository<AppUser> appuserRepo;
+        ImageCompressor imageCompressor;
         private readonly IWebHostEnvironment env;
         private readonly JwtSettings jwtSettings;
 
 
-        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, IOptions<JwtSettings> jwtSettings, Repository<AppUser> appuserRepo)
+        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, IOptions<JwtSettings> jwtSettings, Repository<AppUser> appuserRepo, ImageCompressor imageCompressor)
         {
             this.userManager = userManager;
             this.env = env;
             this.roleManager = roleManager;
             this.jwtSettings = jwtSettings.Value;
             this.appuserRepo = appuserRepo;
+            this.imageCompressor = imageCompressor;
         }
 
         [HttpGet]
@@ -210,7 +213,11 @@ namespace EdushareBackend.Controllers
                 .Include(u => u.Image)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-
+            if(dto.Image != null)
+            {
+                dto.Image.File = await imageCompressor.CompressToTargetSyieAsync(dto.Image.File);
+            }
+            
             currentUser.Email = dto.Email;
             currentUser.FirstName = dto.FirstName;
             currentUser.LastName = dto.LastName;
