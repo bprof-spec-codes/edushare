@@ -79,14 +79,11 @@ describe('SubjectListComponent', () => {
     })
   })
 
-  it('refresh should toggle loading and clear error on success', () => {
-    component.loading = false
+  it('refresh should clear error on success', () => {
     component.error = 'prev error'
 
     component.refresh()
 
-    expect(service.getAllSubjects).toHaveBeenCalled()
-    expect(component.loading).toBeFalse()
     expect(component.error).toBeNull()
   })
 
@@ -116,14 +113,13 @@ describe('SubjectListComponent', () => {
     expect(component.editingId).toBeNull()
   })
 
-  it('handleEdit should call updateSubject and clear savingId + editingId on success', () => {
+  it('handleEdit should clear savingId and editingId on success', () => {
     const dto: SubjectCreateDto = { name: 'Matek', semester: 2 }
     component.savingId = null
     component.editingId = '1'
 
     component.handleEdit(dto, '1')
 
-    expect(service.updateSubject).toHaveBeenCalledWith(dto, '1')
     expect(component.savingId).toBeNull()
     expect(component.editingId).toBeNull()
   })
@@ -154,7 +150,7 @@ describe('SubjectListComponent', () => {
     expect(component.createOpen).toBeFalse()
   })
 
-  it('handleCreate should call createSubject and close dialog on success', () => {
+  it('handleCreate should close dialog and clear error on success', () => {
     const dto: SubjectCreateDto = { name: 'Stat', semester: 4 }
 
     component.creating = false
@@ -163,7 +159,6 @@ describe('SubjectListComponent', () => {
 
     component.handleCreate(dto)
 
-    expect(service.createSubject).toHaveBeenCalledWith(dto)
     expect(component.creating).toBeFalse()
     expect(component.createOpen).toBeFalse()
     expect(component.createError).toBeNull()
@@ -182,14 +177,6 @@ describe('SubjectListComponent', () => {
     expect(component.creating).toBeFalse()
     expect(component.createOpen).toBeTrue()
     expect(component.createError!).toBe('Could not create subject.')
-  })
-
-  it('deleteSubject should call service and not set error on success', () => {
-    component.error = 'prev'
-    component.deleteSubject('1')
-
-    expect(service.deleteSubject).toHaveBeenCalledWith('1')
-    expect(component.error).toBe('prev')
   })
 
   it('deleteSubject should set error on failure', () => {

@@ -19,6 +19,7 @@ import { ConfirmService } from '../../services/confirm.service';
 })
 export class MaterialCardComponent implements OnChanges, OnInit {
   @Input({ required: true }) m!: MaterialShortViewDto
+  @Output() deleted = new EventEmitter<string>();
 
   private materialId$ = new BehaviorSubject<string | null>(null)
   isFav$!: Observable<boolean>
@@ -79,19 +80,20 @@ export class MaterialCardComponent implements OnChanges, OnInit {
   openSubjectMaterials(subjectId: string) {
     this.router.navigate(['/materials'], { queryParams: { subject: subjectId } });
   }
+
   async deleteMaterial(): Promise<void> {
-      if (!this.material) return
-      const confirmed = await this.confirmService.confirm('Biztosan törölni szeretnéd az anyagot?')
-      if (!confirmed) return
-      this.materialService.delete(this.material.id).subscribe({
-        next: () => {
-          console.log('A tananyag sikeresen törölve lett.')
-          this.router.navigate(['/materials'])
-        },
-        error: (err) => {
-          console.error(err)
-          this.toast.show('Nem sikerült törölni a tananyagot.')
-        }
-      })
-    }
+    const confirmed = await this.confirmService.confirm('Biztosan törölni szeretnéd az anyagot?')
+    if (!confirmed) return;
+
+    this.materialService.delete(this.m.id).subscribe({
+      next: () => {
+        console.log('A tananyag sikeresen törölve lett.');
+        this.deleted.emit(this.m.id); 
+      },
+      error: (err) => {
+        console.error(err);
+        this.toast.show('Nem sikerült törölni a tananyagot.')
+      }
+  });
+}
 }

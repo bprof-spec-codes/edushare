@@ -1,6 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MaterialViewDto } from '../../dtos/material-view-dto';
 import { Router } from '@angular/router';
+import { NgxTypedJsModule } from 'ngx-typed-js';
+import { AuthService } from '../../services/authentication.service';
+import { MaterialService } from '../../services/material.service';
+import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
+import { StatisticsService } from '../../services/statistics.service';
+import { HomepageStatisticsDto } from '../../dtos/homepage-statistics-dto';
+import { UserStatisticsDto } from '../../dtos/user-statistics-dto';
 
 @Component({
   selector: 'app-homepage',
@@ -8,12 +15,64 @@ import { Router } from '@angular/router';
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.sass'
 })
-export class HomepageComponent {
-  constructor(private router: Router){
+export class HomepageComponent implements OnInit {
+  isLoggedIn: boolean = false
+  userId: string | null = null
+  stats: HomepageStatisticsDto | null = null
+  userStats: UserStatisticsDto | null = null
 
+  constructor(private router: Router, private authService: AuthService, private statService: StatisticsService) { }
+
+  ngOnInit(): void {
+    this.isLoggedIn = this.authService.isLoggedIn()
+    this.userId = this.authService.getUserId()
+    this.loadStats()
+    this.loadUserStats(this.userId || '')
+  }
+
+  loadStats(): void {
+    this.statService.getHomepageStatistics().subscribe({
+      next: (data) => {
+        this.stats = data
+      },
+      error: (err) => {
+        console.error(err)
+      },
+    })
+  }
+
+  loadUserStats(userId: string): void {
+    if (userId) {
+      this.statService.getUserStatistics(userId).subscribe({
+        next: (data) => {
+          this.userStats = data
+        },
+        error: (err) => {
+          console.error(err)
+        },
+      })
+    }
+  }
+
+  typedStrings = [
+    'share your notes.',
+    'prepare for exams.',
+    'learn together.',
+    'teach and get feedback.'
+  ]
+
+  countupOptions = {
+    enableScrollSpy: true,
+    duration: 2
+  }
+
+  countupOptionsWithDecimal = {
+    enableScrollSpy: true,
+    duration: 2,
+    decimalPlaces: 1
   }
 
   showMaterials(): void {
-         this.router.navigate(['/materials'])
-    }
+    this.router.navigate(['/materials'])
+  }
 }

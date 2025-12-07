@@ -95,7 +95,8 @@
     </div>
   </div>
 
-  <h2>Uploaded materials by {{profile?.fullName}}: </h2>
+  <h2 *ngIf="(profile?.materials?.length ?? 0) > 0">Uploaded materials by {{profile?.fullName}}: </h2>
+  <h2 *ngIf="!loading && (profile?.materials?.length ?? 0) === 0">No materials uploaded</h2>
   <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
   <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
   <div *ngIf="!loading && (profile?.materials?.length ?? 0) > 0">

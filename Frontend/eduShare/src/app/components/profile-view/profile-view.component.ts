@@ -48,6 +48,8 @@ export class ProfileViewComponent {
   }
 
   loadProfile(id: string) {
+    this.profile = null
+    this.error = undefined
     this.loading = true
     this.profileService.getById(id).subscribe({
       next: (data) => {

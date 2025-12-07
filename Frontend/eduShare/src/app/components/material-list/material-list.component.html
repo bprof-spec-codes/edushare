@@ -3,7 +3,7 @@
     <h2 class="title">Recommended materials:</h2>
     <div class="card-list">
       <div *ngFor="let material of recommendedMaterials; trackBy: trackById">
-        <app-material-card [m]="material">
+        <app-material-card [m]="material" (deleted)="onChildDeleted($event)">
         </app-material-card>
       </div>
     </div>
