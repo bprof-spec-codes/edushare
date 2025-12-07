@@ -128,7 +128,7 @@ async onFileSelected(event: Event) {
     return;
   }
    if (file.name.length > 50) {
-    alert('A fájlnév túl hosszú! Maximum 50 karakter engedélyezett.');
+    this.toast.show('A fájlnév túl hosszú! Maximum 50 karakter engedélyezett.');
     input.value = '';
     this.selectedFileDataUrl = null;
     this.content = undefined;
