@@ -1,5 +1,3 @@
-using System.Text;
-using AutoMapper;
 using Data;
 using Entities.Dtos.Content;
 using Entities.Dtos.Material;
@@ -97,27 +95,27 @@ namespace EdushareBackend.Controllers
             // Közös subject példányok (hogy ne legyen duplikált az adatbázisban)
             var subjects = new List<SubjectCreateDto>
             {
-                new SubjectCreateDto { Name = "Informatika", Semester = 1 },
-                new SubjectCreateDto { Name = "Adatbázis", Semester = 2 },
-                new SubjectCreateDto { Name = "Hálózatok", Semester = 3 },
-                new SubjectCreateDto { Name = "Webfejlesztés", Semester = 2 },
-                new SubjectCreateDto { Name = "Backend fejlesztés", Semester = 3 },
-                new SubjectCreateDto { Name = "C#", Semester = 1 },
-                new SubjectCreateDto { Name = "Fejlesztési eszközök", Semester = 4 },
-                new SubjectCreateDto { Name = "Szoftvertervezés", Semester = 5 },
-                new SubjectCreateDto { Name = "DevOps", Semester = 6 },
-                new SubjectCreateDto { Name = "Tesztelés", Semester = 5 },
-                new SubjectCreateDto { Name = "Biztonság", Semester = 6 }
+                new SubjectCreateDto { Name = "Informatika", Semester = 1, Credit=4},
+                new SubjectCreateDto { Name = "Adatbázis", Semester = 2, Credit = 4 },
+                new SubjectCreateDto { Name = "Hálózatok", Semester = 3, Credit = 4 },
+                new SubjectCreateDto { Name = "Webfejlesztés", Semester = 2 , Credit = 6},
+                new SubjectCreateDto { Name = "Backend fejlesztés", Semester = 3 , Credit = 5},
+                new SubjectCreateDto { Name = "C#", Semester = 1 , Credit = 3},
+                new SubjectCreateDto { Name = "Fejlesztési eszközök", Semester = 4 , Credit = 2},
+                new SubjectCreateDto { Name = "Szoftvertervezés", Semester = 5 , Credit = 5 },
+                new SubjectCreateDto { Name = "DevOps", Semester = 6 , Credit = 5},
+                new SubjectCreateDto { Name = "Tesztelés", Semester = 5 , Credit = 3},
+                new SubjectCreateDto { Name = "Biztonság", Semester = 6 , Credit = 3}
             };
 
             var subjectDictionary = new Dictionary<string, string>();
-            
+
             foreach (var subject in subjects)
             {
                 subjectLogic.AddSubject(subject);
                 subjectDictionary.Add(subject.Name, subjectRepo.GetAll().FirstOrDefault(s => s.Name == subject.Name)!.Id);
             }
-            
+
             var materials = new List<MaterialCreateUpdateDto>
             {
                 new MaterialCreateUpdateDto
