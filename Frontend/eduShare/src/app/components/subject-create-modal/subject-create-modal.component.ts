@@ -23,19 +23,21 @@ export class SubjectCreateModalComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.createForm = this.fb.group({
       name: ['', [Validators.required]],
-      semester: [null, [Validators.min(1), Validators.max(20)]]
+      semester: [null, [Validators.min(1), Validators.max(20)]],
+      credit: [null, [Validators.min(0), Validators.max(30)]],
     })
   }
 
   submit() {
     if (this.createForm.valid) {
-      const { name, semester } = this.createForm.getRawValue();
+      const { name, semester, credit } = this.createForm.getRawValue();
 
       const formattedName = name ? name.charAt(0).toUpperCase() + name.slice(1) : name;
 
       this.save.emit({
         name: formattedName,
-        semester
+        semester,
+        credit
       });
     }
   }
@@ -46,7 +48,7 @@ export class SubjectCreateModalComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['open']?.currentValue === true && this.createForm) {
-      this.createForm.reset({ name: '', semester: 1 });
+      this.createForm.reset({ name: '', semester: 1, credit: 0 });
     }
   }
 
