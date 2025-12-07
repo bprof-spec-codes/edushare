@@ -1,53 +1,107 @@
 <div class="container py-3 w-50">
-    <div class="d-flex align-items-center gap-3 mb-2">
-        <h2 class="m-0">Subject list</h2>
-        <span *ngIf="(subjects$ | async)?.length as count" class="badge count">{{ count }}</span>
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <div class="d-flex align-items-center gap-3">
+      <h2 class="m-0">Subjects</h2>
+      <span *ngIf="(subjects$ | async)?.length as count" class="badge count">
+        {{ count }}
+      </span>
     </div>
-    <hr>
 
-    <div *ngIf="loading" class="text-center text-secondary my-4">Loading...</div>
-    <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+    <button
+      type="button"
+      class="btn btn-outline-edupurple btn-sm"
+      (click)="openCreate()"
+      aria-label="Add subject"
+    >
+      <i class="bi bi-plus-lg me-1"></i>
+      Add subject
+    </button>
+  </div>
 
-    <ul *ngIf="!loading" class="list-group shadow-sm rounded-3 overflow-hidden">
-        <ng-container *ngFor="let subject of subjects$ | async">
+  <div *ngIf="loading" class="text-center text-secondary my-4">
+    Loading subjects...
+  </div>
 
-            <li *ngIf="editingId!== subject.id"
-                class="list-group-item d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                    <span class="fw-medium">{{ subject.name }}</span>
-                    <span class="badge text-bg-light border">{{ subject.semester }}</span>
-                </div>
+  <div *ngIf="error" class="alert alert-danger text-center">
+    {{ error }}
+  </div>
 
-                <div class="btn-group">
-                    <button type="button" (click)="startEdit(subject)" class="btn btn-outline-edupurple btn-sm" aria-label="Edit">
-                        <i class="bi bi-pencil"></i>
-                    </button>
-                    <button type="button" (click)="deleteSubject(subject.id)" class="btn btn-outline-danger btn-sm"
-                        aria-label="Delete">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </div>
-            </li>
+  <table
+    *ngIf="!loading"
+    class="table table-hover align-middle shadow-sm rounded-3 overflow-hidden"
+  >
+    <thead class="table-light">
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Semester</th>
+        <th scope="col">Credit</th>
+        <th scope="col" class="text-end">Actions</th>
+      </tr>
+    </thead>
 
-            <app-subject-update-form 
-                *ngIf="editingId === subject.id" 
-                [subject]="subject"
-                [saving]="savingId === subject.id" 
-                (save)="handleEdit($event,subject.id)" 
-                (cancel)="cancelEdit()">
-            </app-subject-update-form>
-
-        </ng-container>
-        <li class="list-group-item list-group-item-action text-center d-flex align-items-center justify-content-center"
-            (click)="openCreate()" role="button">
-            <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-plus-lg fs-4 plus"></i>
-                <span class="visually-hidden">Add subject</span>
+    <tbody>
+      <ng-container *ngFor="let subject of subjects$ | async; trackBy: trackById">
+        <tr *ngIf="editingId !== subject.id">
+          <td class="fw-medium">
+            {{ subject.name }}
+          </td>
+          <td>
+            <span class="badge text-bg-light border">{{ subject.semester }}</span>
+          </td>
+          <td>
+            {{ subject.credit }}
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="button"
+                (click)="startEdit(subject)"
+                class="btn btn-outline-edupurple btn-sm"
+                aria-label="Edit subject"
+              >
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button
+                type="button"
+                (click)="deleteSubject(subject.id)"
+                class="btn btn-outline-danger btn-sm"
+                aria-label="Delete subject"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
             </div>
-        </li>
-    </ul>
+          </td>
+        </tr>
+
+        <tr *ngIf="editingId === subject.id">
+          <td colspan="4">
+            <app-subject-update-form
+              [subject]="subject"
+              [saving]="savingId === subject.id"
+              (save)="handleEdit($event, subject.id)"
+              (cancel)="cancelEdit()"
+            >
+            </app-subject-update-form>
+          </td>
+        </tr>
+      </ng-container>
+
+      <tr
+        *ngIf="(subjects$ | async)?.length === 0 && !loading && !error"
+      >
+        <td colspan="4" class="text-center text-muted py-4">
+          No subjects yet. Click "Add subject" to create one.
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
-<app-subject-create-modal [open]="createOpen" [loading]="creating" [error]="createError" (save)="handleCreate($event)"
-    (close)="closeCreate()">
+<app-subject-create-modal
+  [open]="createOpen"
+  [loading]="creating"
+  [error]="createError"
+  (save)="handleCreate($event)"
+  (close)="closeCreate()"
+>
 </app-subject-create-modal>
