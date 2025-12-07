@@ -1,18 +1,286 @@
-@use '../../../styles/_variables' as *;
+@use '../../../styles/_variables' as *
+
+$color-text-main: #1f1f2e
+$color-text-muted: #6b6b80
+
+:host
+    display: block
 
 .container
-    font-family: 'Nunito', sans-serif
+    max-width: 1400px
+    margin: 0 auto
+    padding: 2rem 1.5rem
+    padding-left: calc(1.5rem + 50px)
+
+.hero
+    background: #ffffff
+    padding: 3rem 0
+
+.hero-inner
+    margin-top: 2rem 
     display: flex
-.leftside
-    margin: auto
-h2
-    font-weight: bold
-button
-    background-color: $edu-purple
-    color: white
-button:hover
-    background-color: beige
+    flex-wrap: wrap
+    gap: 3rem
+    align-items: flex-start
+
+.hero-left,
+.hero-right
+    flex: 1 1 320px
+
+// LEFT PANEL
+
+.logo-text
+    font-size: 0.7rem
+    font-weight: 700
+    letter-spacing: 0.14em
+    text-transform: uppercase
+    margin-bottom: 0.5rem
     color: $edu-purple
-img
-    height: 350px
-    width: 500px
+
+.hero-eyebrow
+    font-size: 0.8rem
+    text-transform: uppercase
+    letter-spacing: 0.18em
+    color: $edu-purple
+    margin-bottom: 0.5rem
+    font-weight: 700
+
+.hero-title
+    font-size: 2.6rem
+    line-height: 1.1
+    margin-bottom: 1rem
+    color: $color-text-main
+
+.hero-typed-line
+    font-size: 1.1rem
+    margin-bottom: 0.7rem
+    color: $color-text-main
+
+.typing
+    font-weight: 600
+    color: $edu-purple
+
+.typed-cursor
+    font-size: 1.1rem
+    color: $edu-purple-hover
+
+.hero-subtitle
+    max-width: 460px
+    margin-bottom: 1.5rem
+    color: $color-text-muted
+
+// BUTTONS
+.hero-buttons
+    display: flex
+    flex-wrap: wrap
+    gap: 1rem
+    margin-bottom: 2rem
+
+.btn
+    border-radius: 10px
+    padding: 0.7rem 1.7rem
+    font-size: 0.95rem
+    border: 1px solid transparent
+    cursor: pointer
+    transition: 0.2s ease
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    white-space: nowrap
+
+    &--primary
+        background: $card-font-puprle
+        color: #fff
+
+        &:hover
+            background: $button-hover
+            transform: translateY(-1px)
+
+    &--ghost
+        background: #fff
+        border: 1px solid rgba(0, 0, 0, 0.15)
+        color: $edu-purple
+
+        &:hover
+            background: $card-background-grey
+
+//stats
+.hero-stats
+    display: flex
+    flex-wrap: wrap
+    gap: 2.4rem
+
+.hero-stat
+    h3
+        font-size: 1.6rem
+        margin: 0 0 0.15rem
+        color: $color-text-main
+
+    .stat-number
+        display: inline-block
+        width: 50px
+        text-align: right
+
+    p
+        margin: 0
+        font-size: 0.85rem
+        color: $color-text-muted
+
+.hero-right
+    display: flex
+    justify-content: center
+
+    .stats-panel
+        background: #ffffff
+        border-radius: 18px
+        padding: 1.75rem 1.75rem 1.5rem
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08)
+        border: 1px solid rgba(15, 23, 42, 0.04)
+        max-width: 420px
+        width: 100%
+
+.stats-section
+    & + .divider
+        margin-top: 1rem
+
+.divider
+    margin-bottom: 1.5rem
+    height: 1px
+    background: rgba(15, 23, 42, 0.06)
+
+.stats-section-header
+    display: flex
+    justify-content: space-between
+    align-items: baseline
+    gap: 0.75rem
+    margin-bottom: 1rem
+
+    h2
+        font-size: 1.05rem
+        font-weight: 600
+        margin: 0
+        color: $color-text-main
+
+    .stats-caption
+        margin: 0
+        font-size: 0.8rem
+        color: $color-text-muted
+
+.link-small
+    font-size: 0.8rem
+    color: $edu-purple
+    text-decoration: none
+
+    &:hover
+        color: $edu-purple-hover
+        text-decoration: underline
+
+.latest-material
+    padding: 0.3rem 0
+    display: flex
+    flex-direction: column
+    gap: 0.35rem
+
+.material-row
+    display: flex
+    justify-content: space-between
+    align-items: center
+    gap: 1rem
+
+.latest-material-main
+    flex: 1
+    min-width: 0
+
+.material-title
+    font-size: 0.9rem
+    font-weight: 600
+    margin: 0
+    color: $color-text-main
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+
+.material-meta
+    margin: 0.1rem 0 0
+    font-size: 0.78rem
+    color: $color-text-muted
+    display: flex
+    align-items: center
+    gap: 0.35rem
+
+.view-btn
+    padding: 0.3rem 0.9rem
+    font-size: 0.78rem
+    text-decoration: none
+    color: $edu-purple
+    cursor: pointer
+    flex-shrink: 0
+    transition: 0.15s ease
+
+    &:hover
+        text-decoration: underline
+        border-color: rgba(0,0,0,0.25)
+
+.material-divider
+    height: 1px
+    background: rgba(0, 0, 0, 0.07)
+    margin-top: 0
+
+.latest-material-footer
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+.material-stats
+    font-size: 0.78rem
+    color: $color-text-muted
+
+.empty-state
+    font-size: 0.85rem
+    color: $color-text-muted
+    margin: 0.5rem 0 0
+
+.user-stats-grid
+    margin-top: 0.6rem
+    display: grid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+    gap: 0.8rem 1.2rem
+
+.user-stat
+    padding: 0.35rem 0
+
+.user-stat-label
+    margin: 0 0 0.15rem
+    font-size: 0.78rem
+    color: $color-text-muted
+
+.user-stat-value
+    margin: 0
+    font-size: 1.05rem
+    font-weight: 600
+    color: $color-text-main
+
+.stats-cta
+    margin-top: 1rem
+    width: 100%
+
+@media (max-width: 900px)
+    .container
+        padding-left: 1.5rem
+
+    .hero-inner
+        flex-direction: column
+        margin-top: 1.5rem
+
+    .hero-right
+        width: 100%
+        justify-content: center
+
+        .stats-panel
+            width: 100%
+            max-width: 360px
+            padding: 1.25rem 1.25rem 1rem 
+            margin: 0 auto
+
+
+

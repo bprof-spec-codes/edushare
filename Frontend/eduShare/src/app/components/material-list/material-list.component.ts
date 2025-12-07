@@ -26,23 +26,33 @@ export class MaterialListComponent {
   trackById = (_: number, m: MaterialShortViewDto) => m.id;
 
   loadMaterials(): void {
-    this.loading = true
-    this.materialService.loadAll().subscribe({
+    this.loading = true;
+    this.materialService.materialsShort$.subscribe({
       next: (data) => {
-        this.materials = data
-        this.recommendedMaterials = data.filter(m => m.isRecommended)
-        this.nonRecommendedMaterials = data.filter(m => !m.isRecommended)
-        this.loading = false
+        this.materials = data;
+        this.recommendedMaterials = data.filter(m => m.isRecommended);
+        this.nonRecommendedMaterials = data.filter(m => !m.isRecommended);
+        this.loading = false;
       },
       error: (err) => {
-        console.error(err)
-        this.error = 'Nem sikerült betölteni az anyagokat.'
-        this.loading = false
-      },
-    })
+        console.error(err);
+        this.error = 'Nem sikerült betölteni az anyagokat.';
+        this.loading = false;
+      }
+    });
+
+    this.materialService.loadAll().subscribe();
   }
+
 
   openDetail(material: MaterialShortViewDto): void {
     this.router.navigate(['/materials/' + material.id + '/view'])
   }
+  onChildDeleted(id: string): void {
+  // minden listából kiszedjük
+  this.materials = this.materials.filter(m => m.id !== id);
+  this.recommendedMaterials = this.recommendedMaterials.filter(m => m.id !== id);
+  this.nonRecommendedMaterials = this.nonRecommendedMaterials.filter(m => m.id !== id);
+}
+  
 }
