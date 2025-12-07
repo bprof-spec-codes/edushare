@@ -210,6 +210,7 @@ namespace EdushareBackend.Controllers
                 .Include(u => u.Image)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
+
             currentUser.Email = dto.Email;
             currentUser.FirstName = dto.FirstName;
             currentUser.LastName = dto.LastName;
