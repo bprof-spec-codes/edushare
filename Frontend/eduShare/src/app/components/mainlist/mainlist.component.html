@@ -1,5 +1,21 @@
-<div class="searchbar">
-    <app-searchbar (isInSearch)="changeIsInSearch($event)" (searchValue)="searchValue($event)" [subjectId]="subjectId"></app-searchbar>
+<div class="search-wrapper">
+  <button
+    type="button"
+    class="search-toggle d-md-none"
+    (click)="toggleSearch()"
+  >
+    <span class="text-center">Filter & search</span>
+    <i class="bi ms-auto" [ngClass]="showSearch ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+  </button>
+
+  <div class="searchbar" [class.is-open]="showSearch || !isMobile">
+    <app-searchbar
+      (isInSearch)="changeIsInSearch($event)"
+      (searchValue)="searchValue($event)"
+      [subjectId]="subjectId">
+    </app-searchbar>
+  </div>
 </div>
+
 <app-material-list *ngIf="!isInSearch"></app-material-list>
 <app-material-search-list *ngIf="isInSearch" [search]="search"></app-material-search-list>

@@ -1,2 +1,38 @@
+@use '../../../styles/_variables' as *
+
+.search-wrapper
+    margin: 0 5% 20px 5%
+
+.search-toggle
+    width: 100%
+    padding: 10px 14px
+    border-radius: 8px
+    border: 1px solid lighten($card-font-puprle, 15%)
+    background-color: white
+    font-weight: 600
+    display: flex
+    align-items: center
+    gap: 8px
+    margin-bottom: 8px
+
 .searchbar
-    margin: 30px 5% 20px 5%
+    transition: max-height 0.25s ease, opacity 0.25s ease, margin-top 0.25s ease
+
+@media (max-width: 768px)
+    .searchbar
+        max-height: 0
+        overflow: hidden
+        opacity: 0
+        margin-top: 0
+
+        &.is-open
+            max-height: 500px
+            opacity: 1
+            margin-top: 8px
+    .text-center
+        text-align: center
+
+@media (min-width: 769px)
+    .searchbar
+        max-height: none
+        opacity: 1
