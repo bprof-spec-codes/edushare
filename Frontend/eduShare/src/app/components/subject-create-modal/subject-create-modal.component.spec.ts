@@ -56,6 +56,22 @@ describe('SubjectCreateModalComponent', () => {
     expect(sem.valid).toBeTrue()
   })
 
+  it('should validate credit min/max (0..30)', () => {
+    const credit = component.createForm.get('credit')!
+
+    credit.setValue(-1)
+    expect(credit.valid).toBeFalse()
+
+    credit.setValue(31)
+    expect(credit.valid).toBeFalse()
+
+    credit.setValue(0)
+    expect(credit.valid).toBeTrue()
+
+    credit.setValue(30)
+    expect(credit.valid).toBeTrue()
+  })
+
   it('submit() should emit save with capitalized name when form is valid', () => {
     spyOn(component.save, 'emit')
 
