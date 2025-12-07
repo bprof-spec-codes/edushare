@@ -1,4 +1,4 @@
-<div class="container py-3 w-50">
+<div class="container py-3 subject-container">
   <div class="d-flex align-items-center justify-content-between mb-2">
     <div class="d-flex align-items-center gap-3">
       <h2 class="m-0">Subjects</h2>
@@ -7,15 +7,13 @@
       </span>
     </div>
 
-    <button
-      type="button"
-      class="btn btn-outline-edupurple btn-sm"
-      (click)="openCreate()"
-      aria-label="Add subject"
-    >
-      <i class="bi bi-plus-lg me-1"></i>
-      Add subject
+    <button type="button" class="btn btn-outline-edupurple btn-sm" (click)="openCreate()" aria-label="Add subject">
+      <i class="bi bi-plus-lg"></i>
+      <span class="d-none d-sm-inline ms-1">
+        Add subject
+      </span>
     </button>
+
   </div>
 
   <div *ngIf="loading" class="text-center text-secondary my-4">
@@ -26,10 +24,7 @@
     {{ error }}
   </div>
 
-  <table
-    *ngIf="!loading"
-    class="table table-hover align-middle shadow-sm rounded-3 overflow-hidden"
-  >
+  <table *ngIf="!loading" class="table table-hover align-middle shadow-sm rounded-3 overflow-hidden">
     <thead class="table-light">
       <tr>
         <th scope="col">Name</th>
@@ -46,27 +41,19 @@
             {{ subject.name }}
           </td>
           <td>
-            <span class="badge text-bg-light border">{{ subject.semester }}</span>
+            {{ subject.semester }}
           </td>
           <td>
-            {{ subject.credit }}
+            <span class="badge text-bg-light border">{{ subject.credit }}</span>
           </td>
           <td class="text-end">
             <div class="btn-group">
-              <button
-                type="button"
-                (click)="startEdit(subject)"
-                class="btn btn-outline-edupurple btn-sm"
-                aria-label="Edit subject"
-              >
+              <button type="button" (click)="startEdit(subject)" class="btn btn-outline-edupurple btn-sm"
+                aria-label="Edit subject">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button
-                type="button"
-                (click)="deleteSubject(subject.id)"
-                class="btn btn-outline-danger btn-sm"
-                aria-label="Delete subject"
-              >
+              <button type="button" (click)="deleteSubject(subject.id)" class="btn btn-outline-danger btn-sm"
+                aria-label="Delete subject">
                 <i class="bi bi-trash"></i>
               </button>
             </div>
@@ -75,20 +62,14 @@
 
         <tr *ngIf="editingId === subject.id">
           <td colspan="4">
-            <app-subject-update-form
-              [subject]="subject"
-              [saving]="savingId === subject.id"
-              (save)="handleEdit($event, subject.id)"
-              (cancel)="cancelEdit()"
-            >
+            <app-subject-update-form [subject]="subject" [saving]="savingId === subject.id"
+              (save)="handleEdit($event, subject.id)" (cancel)="cancelEdit()">
             </app-subject-update-form>
           </td>
         </tr>
       </ng-container>
 
-      <tr
-        *ngIf="(subjects$ | async)?.length === 0 && !loading && !error"
-      >
+      <tr *ngIf="(subjects$ | async)?.length === 0 && !loading && !error">
         <td colspan="4" class="text-center text-muted py-4">
           No subjects yet. Click "Add subject" to create one.
         </td>
@@ -97,11 +78,6 @@
   </table>
 </div>
 
-<app-subject-create-modal
-  [open]="createOpen"
-  [loading]="creating"
-  [error]="createError"
-  (save)="handleCreate($event)"
-  (close)="closeCreate()"
->
+<app-subject-create-modal [open]="createOpen" [loading]="creating" [error]="createError" (save)="handleCreate($event)"
+  (close)="closeCreate()">
 </app-subject-create-modal>
