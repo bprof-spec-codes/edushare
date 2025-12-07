@@ -27,10 +27,7 @@ export class SubjectService {
 
   createSubject(subject: SubjectCreateDto): Observable<void> {
     return this.http.post<void>(`${environment.baseApiUrl}/api/Subject`, subject).pipe(
-      tap(() => {
-        const current = this._subjects$.value
-        this._subjects$.next([...current, subject as Subject])
-      })
+      tap(() => this.getAllSubjects().subscribe())
     )
   }
 

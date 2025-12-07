@@ -25,7 +25,7 @@
       <div>
         <h5 class="alert-heading mb-1">Your account has been warned</h5>
         <p class="mb-0">
-          You received a warning for inappropriate behavior<span *ngIf="profile.warnedAt"> on {{ profile.warnedAt | date:'medium' }}</span>.</p>
+          You received a warning for inappropriate behavior<span *ngIf="profile.warnedAt"> on {{ profile.warnedAt | date:'yyyy-MM-dd HH:mm' }}</span>.</p>
       </div>
     </div>
     <!-- Ban alert -->
@@ -34,7 +34,7 @@
       <div>
         <h5 class="alert-heading mb-1">Your account has been banned</h5>
         <p class="mb-0">
-          Your account was banned<span *ngIf="profile.bannedAt"> on {{ profile.bannedAt | date:'medium' }}</span>.</p>
+          Your account was banned<span *ngIf="profile.bannedAt"> on {{ profile.bannedAt | date:'yyyy-MM-dd HH:mm' }}</span>.</p>
       </div>
     </div>
   </div>
@@ -53,11 +53,11 @@
         <div class="d-flex gap-2 flex-wrap">
           <span *ngIf="profile.isWarned" class="badge bg-warning text-dark fs-6">
             <i class="bi bi-exclamation-triangle-fill me-1"></i>Warned
-            <span *ngIf="profile.warnedAt"> on {{ profile.warnedAt | date:'short' }}</span>
+            <span *ngIf="profile.warnedAt"> on {{ profile.warnedAt | date:'yyyy-MM-dd HH:mm' }}</span>
           </span>
           <span *ngIf="profile.isBanned" class="badge bg-danger fs-6">
             <i class="bi bi-slash-circle-fill me-1"></i>Banned
-            <span *ngIf="profile.bannedAt"> on {{ profile.bannedAt | date:'short' }}</span>
+            <span *ngIf="profile.bannedAt"> on {{ profile.bannedAt | date:'yyyy-MM-dd HH:mm' }}</span>
           </span>
           <span *ngIf="!profile.isWarned && !profile.isBanned" class="badge bg-success fs-6">
             <i class="bi bi-check-circle-fill me-1"></i>Good
@@ -95,7 +95,8 @@
     </div>
   </div>
 
-  <h2>Uploaded materials by {{profile?.fullName}}: </h2>
+  <h2 *ngIf="(profile?.materials?.length ?? 0) > 0">Uploaded materials by {{profile?.fullName}}: </h2>
+  <h2 *ngIf="!loading && (profile?.materials?.length ?? 0) === 0">No materials uploaded</h2>
   <div *ngIf="loading" class="text-center text-secondary">Loading...</div>
   <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
   <div *ngIf="!loading && (profile?.materials?.length ?? 0) > 0">

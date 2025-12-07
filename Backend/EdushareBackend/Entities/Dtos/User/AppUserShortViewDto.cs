@@ -18,5 +18,6 @@ namespace Entities.Dtos.User
         public int MaterialCount { get; set; } = 0;
         public bool IsWarned { get; set; } = false;
         public bool IsBanned { get; set; } = false;
+        public string Role { get; set; } = string.Empty;
     }
 }

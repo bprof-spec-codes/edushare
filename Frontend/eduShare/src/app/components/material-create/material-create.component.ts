@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MaterialService } from '../../services/material.service';
 import { MaterialFormValue } from '../material-form/material-form.component';
 import { Router } from '@angular/router';
+import { ToastService } from '../../services/toast.service';
 
 
 @Component({
@@ -11,11 +12,11 @@ import { Router } from '@angular/router';
   styleUrl: './material-create.component.sass'
 })
 export class MaterialCreateComponent {
-constructor(private materialService: MaterialService, private router: Router) {}
+constructor(private materialService: MaterialService, private router: Router, private toast: ToastService) {}
 
   onCreate(value: MaterialFormValue) {
     if (!value.content) {
-      alert('Kérlek, válassz egy fájlt!')
+      this.toast.show('Kérlek, válassz egy fájlt!')
       return
     }
 
