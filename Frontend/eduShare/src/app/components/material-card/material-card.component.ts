@@ -80,19 +80,20 @@ export class MaterialCardComponent implements OnChanges, OnInit {
   openSubjectMaterials(subjectId: string) {
     this.router.navigate(['/materials'], { queryParams: { subject: subjectId } });
   }
-  deleteMaterial(): void {
-  if (!this.m) return;
-  if (!confirm('Biztosan törölni szeretnéd az anyagot?')) return;
 
-  this.materialService.delete(this.m.id).subscribe({
-    next: () => {
-      console.log('A tananyag sikeresen törölve lett.');
-      this.deleted.emit(this.m.id); 
-    },
-    error: (err) => {
-      console.error(err);
-      this.toast.show('Nem sikerült törölni a tananyagot.')
-    }
+  async deleteMaterial(): Promise<void> {
+    const confirmed = await this.confirmService.confirm('Biztosan törölni szeretnéd az anyagot?')
+    if (!confirmed) return;
+
+    this.materialService.delete(this.m.id).subscribe({
+      next: () => {
+        console.log('A tananyag sikeresen törölve lett.');
+        this.deleted.emit(this.m.id); 
+      },
+      error: (err) => {
+        console.error(err);
+        this.toast.show('Nem sikerült törölni a tananyagot.')
+      }
   });
 }
 }
