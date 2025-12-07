@@ -1,19 +1,16 @@
 <li class="list-group-item">
   <form [formGroup]="updateForm" (ngSubmit)="submit()" class="d-flex align-items-center gap-2">
 
-    <input type="text"
-           class="form-control"
-           formControlName="name"
-           placeholder="Subject name"
-           [class.is-invalid]="updateForm.get('name')?.invalid && (updateForm.get('name')?.dirty || updateForm.get('name')?.touched)">
+    <input type="text" class="form-control" formControlName="name" placeholder="Subject name"
+      [class.is-invalid]="updateForm.get('name')?.invalid && (updateForm.get('name')?.dirty || updateForm.get('name')?.touched)">
 
-    <input type="number"
-           class="form-control"
-           formControlName="semester"
-           min="1"
-           placeholder="min 1, max 20"
-           style="max-width: 120px;"
-           [class.is-invalid]="updateForm.get('semester')?.invalid && (updateForm.get('semester')?.dirty || updateForm.get('semester')?.touched)">
+    <input type="number" class="form-control" formControlName="semester" min="1" placeholder="min 1, max 20"
+      style="max-width: 120px;"
+      [class.is-invalid]="updateForm.get('semester')?.invalid && (updateForm.get('semester')?.dirty || updateForm.get('semester')?.touched)">
+      
+    <input type="number" class="form-control" formControlName="credit" min="0" placeholder="min 0, max 30"
+      style="max-width: 120px;"
+      [class.is-invalid]="updateForm.get('credit')?.invalid && (updateForm.get('credit')?.dirty || updateForm.get('credit')?.touched)">
 
     <button type="submit" class="btn btn-save btn-sm" [disabled]="updateForm.invalid || saving">
       <i class="bi bi-check-lg"></i>
@@ -24,10 +21,16 @@
     </button>
   </form>
 
-  <div class="mt-1 small text-danger" *ngIf="updateForm.get('name')?.invalid && (updateForm.get('name')?.dirty || updateForm.get('name')?.touched)">
+  <div class="mt-1 small text-danger"
+    *ngIf="updateForm.get('name')?.invalid && (updateForm.get('name')?.dirty || updateForm.get('name')?.touched)">
     Subject name is required.
   </div>
-  <div class="small text-danger" *ngIf="updateForm.get('semester')?.invalid && (updateForm.get('semester')?.dirty || updateForm.get('semester')?.touched)">
+  <div class="small text-danger"
+    *ngIf="updateForm.get('semester')?.invalid && (updateForm.get('semester')?.dirty || updateForm.get('semester')?.touched)">
     Semester must be at least 1.
+  </div>
+  <div class="small text-danger"
+    *ngIf="updateForm.get('credit')?.invalid && (updateForm.get('credit')?.dirty || updateForm.get('credit')?.touched)">
+    Credit must be between 0 and 30.
   </div>
 </li>

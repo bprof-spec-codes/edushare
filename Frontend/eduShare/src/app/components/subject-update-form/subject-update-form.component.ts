@@ -23,7 +23,8 @@ export class SubjectUpdateFormComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.updateForm = this.fb.group({
       name: [this.subject.name, [Validators.required]],
-      semester: [this.subject.semester, [Validators.required, Validators.min(1), Validators.max(20)]] 
+      semester: [this.subject.semester, [Validators.required, Validators.min(1), Validators.max(20)]],
+      credit: [this.subject.credit, [Validators.required, Validators.min(0), Validators.max(30)]],
     })
   }
 
@@ -31,7 +32,8 @@ export class SubjectUpdateFormComponent implements OnInit, OnChanges {
     if (changes['subject']?.currentValue && this.updateForm) {
       this.updateForm.patchValue({
         name: this.subject?.name ?? '',
-        semester: this.subject?.semester ?? 1
+        semester: this.subject?.semester ?? 1,
+        credit: this.subject?.credit ?? 0
       }, { emitEvent: false });
     }
 
