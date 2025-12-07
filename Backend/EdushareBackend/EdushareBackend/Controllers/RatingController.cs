@@ -31,7 +31,7 @@ namespace EdushareBackend.Controllers
             return ratingLogic.GetRatingsByMaterialId(materialId);
         }
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Teacher,Admin")]
+        [Authorize]
         public void DeleteRating(string id)
         {
             ratingLogic.DeleteRatingById(id);
