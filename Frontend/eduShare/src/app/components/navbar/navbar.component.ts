@@ -2,10 +2,11 @@ import { Component, OnChanges, OnInit } from '@angular/core';
 import { AuthService } from '../../services/authentication.service';
 import { ProfileService } from '../../services/profile.service';
 import { ProfileViewDto } from '../../dtos/profile-view-dto';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FavMaterialService } from '../../services/fav-material.service';
 import { ToastService } from '../../services/toast.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -19,6 +20,7 @@ export class NavbarComponent implements OnChanges, OnInit {
   id: string = ''
   isTeacher: boolean = false
   isAdmin: boolean = false
+  navbarCollapsed = true
 
   constructor(private auth: AuthService,
     private profileService: ProfileService,
@@ -26,13 +28,16 @@ export class NavbarComponent implements OnChanges, OnInit {
     private fav: FavMaterialService,
     private modalService: NgbModal,
     private toast: ToastService) {
-    console.log('userid: ', auth.getUserId());
+    router.events
+    .pipe(filter(e=> e instanceof  NavigationEnd))
+    .subscribe(() => {
+      this.navbarCollapsed = true;
+    })    
   }
 
   ngOnInit(): void {
     this.isLoggedIn = this.auth.isLoggedIn();
 
-    // Feliratkozunk a currentProfile$-ra, így mindig friss lesz
     this.profileService.currentProfile$.subscribe({
       next: (data) => {
         this.profile = data
@@ -49,9 +54,17 @@ export class NavbarComponent implements OnChanges, OnInit {
     if (userId) {
       this.profileService.getCurrentProfile(userId).subscribe();
     }
-    
+
     this.isTeacher = this.auth.getRoles().some(r => r === 'Teacher' || r === 'Admin')
     this.isAdmin = this.auth.getRoles().some(r => r === 'Admin')
+  }
+
+  toggleNavbar() {
+    this.navbarCollapsed = !this.navbarCollapsed;
+  }
+  
+  closeNavbar() {
+    this.navbarCollapsed = true;
   }
 
   getProfileImageSrc(): string {
@@ -60,7 +73,7 @@ export class NavbarComponent implements OnChanges, OnInit {
     return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
   }
 
-  openFavs(){
+  openFavs() {
     this.router.navigate(['/fav-materials'])
   }
 
@@ -77,8 +90,8 @@ export class NavbarComponent implements OnChanges, OnInit {
   //}
 
   logout() {
-  //  this.modalService.dismissAll()
-  this.fav.clear()
-  this.auth.logout()
+    //  this.modalService.dismissAll()
+    this.fav.clear()
+    this.auth.logout()
   }
 }
