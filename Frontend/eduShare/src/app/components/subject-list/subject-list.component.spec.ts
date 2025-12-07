@@ -13,8 +13,8 @@ class SubjectServiceMock {
 
   getAllSubjects = jasmine.createSpy('getAllSubjects').and.callFake(() => {
     this._subjects$.next([
-      { id: '1', name: 'Analízis', semester: 3 },
-      { id: '2', name: 'Fizika', semester: 2 },
+      { id: '1', name: 'Analízis', semester: 3, credit: 5 },
+      { id: '2', name: 'Fizika', semester: 2, credit: 4 },
     ]);
     return of(void 0)
   })
@@ -25,6 +25,7 @@ class SubjectServiceMock {
       id: (current.length + 1).toString(),
       name: dto.name,
       semester: dto.semester ?? 1,
+      credit: dto.credit ?? 1,
     }
     this._subjects$.next([...current, created])
     return of(created)
@@ -100,12 +101,12 @@ describe('SubjectListComponent', () => {
   })
 
   it('trackById should return entity id', () => {
-    const s: Subject = { id: '42', name: 'Prog', semester: 1 }
+    const s: Subject = { id: '42', name: 'Prog', semester: 1, credit: 3 }
     expect(component.trackById(0, s)).toBe('42')
   })
 
   it('startEdit/cancelEdit should set/reset editingId', () => {
-    const s: Subject = { id: '1', name: 'Analízis', semester: 3 }
+    const s: Subject = { id: '1', name: 'Analízis', semester: 3, credit: 5 }
     component.startEdit(s)
     expect(component.editingId).toBe('1')
 
@@ -114,7 +115,7 @@ describe('SubjectListComponent', () => {
   })
 
   it('handleEdit should clear savingId and editingId on success', () => {
-    const dto: SubjectCreateDto = { name: 'Matek', semester: 2 }
+    const dto: SubjectCreateDto = { name: 'Matek', semester: 2, credit: 4 }
     component.savingId = null
     component.editingId = '1'
 
@@ -126,7 +127,7 @@ describe('SubjectListComponent', () => {
 
   it('handleEdit should set error and clear savingId on error', () => {
     (service.updateSubject as jasmine.Spy).and.returnValue(throwError(() => new Error('upd fail')))
-    const dto: SubjectCreateDto = { name: 'Matek', semester: 2 }
+    const dto: SubjectCreateDto = { name: 'Matek', semester: 2, credit: 4 }
 
     component.savingId = null
     component.editingId = '1'
@@ -151,7 +152,7 @@ describe('SubjectListComponent', () => {
   })
 
   it('handleCreate should close dialog and clear error on success', () => {
-    const dto: SubjectCreateDto = { name: 'Stat', semester: 4 }
+    const dto: SubjectCreateDto = { name: 'Stat', semester: 4, credit: 3 }
 
     component.creating = false
     component.createOpen = true
@@ -167,7 +168,7 @@ describe('SubjectListComponent', () => {
   it('handleCreate should set error and stop creating on failure', () => {
     (service.createSubject as jasmine.Spy).and.returnValue(throwError(() => new Error('create fail')))
 
-    const dto: SubjectCreateDto = { name: 'Stat', semester: 4 }
+    const dto: SubjectCreateDto = { name: 'Stat', semester: 4, credit: 3 }
     component.creating = false
     component.createOpen = true
     component.createError = null
