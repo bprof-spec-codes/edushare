@@ -85,6 +85,18 @@ namespace EdushareBackend.Controllers
                     await roleManager.CreateAsync(new IdentityRole("Admin"));
                     await userManager.AddToRoleAsync(user, "Admin");
                 }
+                
+                if (user.Email == "kiss.evelin@example.com")
+                {
+                    var roleExsists = await roleManager.RoleExistsAsync("Teacher");
+
+                    if (!(roleExsists))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole("Teacher"));
+                    }
+                    
+                    await  userManager.AddToRoleAsync(user, "Teacher");
+                }
             }
 
             // --- ANYAGOK ---
