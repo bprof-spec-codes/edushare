@@ -120,10 +120,15 @@ async onFileSelected(event: Event) {
   const file = input.files[0];
   const ext = file.name.split('.').pop()?.toLowerCase();
 
-
-
   if (!ext || !this.allowed.includes(ext)) {
     this.toast.show('Only PNG and JPEG formats are allowed!');
+    input.value = '';
+    this.selectedFileDataUrl = null;
+    this.content = undefined;
+    return;
+  }
+   if (file.name.length > 50) {
+    this.toast.show('A fájlnév túl hosszú! Maximum 50 karakter engedélyezett.');
     input.value = '';
     this.selectedFileDataUrl = null;
     this.content = undefined;
