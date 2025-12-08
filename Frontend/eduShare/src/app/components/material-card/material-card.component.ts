@@ -94,6 +94,14 @@ export class MaterialCardComponent implements OnChanges, OnInit {
         console.error(err);
         this.toast.show('Nem sikerült törölni a tananyagot.')
       }
-  });
-}
+    });
+  }
+
+  openButtonClass(): string {
+    if (this.isLoggedIn) {
+      return "open-button"
+    }
+
+    return "open-button-big"
+  }
 }
