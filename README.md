@@ -57,12 +57,12 @@ Runs at: `http://localhost:4200/`
 
 ---
 
-## 🔐 Develop Default Accounts after loaded Seed API
+## 🔐 Develop Default Accounts after loaded Seed API (Test Page)
 
 | Role | Email | Password |
 |---|---|---|
 | Admin | molnar.tamas@example.com | 123123123 |
-| Teacher | testteacher@gmail.com | test |
+| Teacher | kiss.evelin@example.com | 123123123 |
 | Student | toth.milan@example.com | 123123123 |
 
 > Seeded users, subjects and materials are included.
@@ -143,8 +143,8 @@ Runs at: `http://localhost:4200/`
 |---|---|---|
 | CORS error | FE/BE | Configure allowed origins and headers in the API |
 | PDF preview restrictions | FE | Embedded PDF viewer with proper CSP settings |
-| EF migration conflict | BE | Resolved via `update-database` and schema reset |
-| JWT token handling | FE | Implemented HTTP interceptor and secure storage |
+| SCRUM poker scoring | Team | team-based task estimation |
+| JWT token handling | FE | Payload decryption |
 | File upload size limit | BE | Increased request size and client-side validation |
 
 ---
