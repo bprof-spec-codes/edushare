@@ -11,7 +11,8 @@ describe('SubjectUpdateFormComponent', () => {
     const subjectMock = {
         id: 's1',
         name: 'Analízis',
-        semester: 3
+        semester: 3,
+        credit: 2
     };
 
     beforeEach(async () => {
@@ -35,6 +36,7 @@ describe('SubjectUpdateFormComponent', () => {
         expect(form).toBeTruthy()
         expect(form.get('name')?.value).toBe('Analízis')
         expect(form.get('semester')?.value).toBe(3)
+        expect(form.get('credit')?.value).toBe(2)
     })
 
     it('should require name', () => {
@@ -58,6 +60,18 @@ describe('SubjectUpdateFormComponent', () => {
         expect(control.valid).toBeTrue()
     })
 
+    it('should validate credit min/max (0..30)', () => {
+        const control = component.updateForm.get('credit')!
+        control.setValue(-1)
+        expect(control.valid).toBeFalse()
+        expect(control.hasError('min')).toBeTrue()
+        control.setValue(31)
+        expect(control.valid).toBeFalse()
+        expect(control.hasError('max')).toBeTrue()
+        control.setValue(15)
+        expect(control.valid).toBeTrue()
+    })
+
     it('submit() should emit save with form value when valid', () => {
         spyOn(component.save, 'emit')
         component.updateForm.setValue({ name: 'Matek', semester: 2 })
@@ -67,7 +81,8 @@ describe('SubjectUpdateFormComponent', () => {
 
         expect(component.save.emit).toHaveBeenCalledWith({
             name: 'Matek',
-            semester: 2
+            semester: 2,
+            credit: 2
         })
     })
 
@@ -100,7 +115,7 @@ describe('SubjectUpdateFormComponent', () => {
     })
 
     it('ngOnChanges should patch form when subject input changes (FIX: use changes["subject"])', () => {
-        const newSubject = { id: 's2', name: 'Fizika', semester: 5 }
+        const newSubject = { id: 's2', name: 'Fizika', semester: 5, credit: 4 }
         component.subject = newSubject
 
         const changes = {
@@ -111,12 +126,14 @@ describe('SubjectUpdateFormComponent', () => {
 
         expect(component.updateForm.get('name')?.value).toBe('Fizika')
         expect(component.updateForm.get('semester')?.value).toBe(5)
+        expect(component.updateForm.get('credit')?.value).toBe(4)
     })
 
     it('ngOnChanges should handle null subject gracefully', () => {
         // Form still has original values from initialization
         const originalName = component.updateForm.get('name')?.value
         const originalSemester = component.updateForm.get('semester')?.value
+        const originalCredit = component.updateForm.get('credit')?.value
 
         component.subject = null as any
 
@@ -129,5 +146,6 @@ describe('SubjectUpdateFormComponent', () => {
         // Form should not be patched when subject is null (condition fails)
         expect(component.updateForm.get('name')?.value).toBe(originalName)
         expect(component.updateForm.get('semester')?.value).toBe(originalSemester)
+        expect(component.updateForm.get('credit')?.value).toBe(originalCredit)
     })
 })
