@@ -47,5 +47,9 @@ namespace Logic.Logic
             ratingRepo.DeleteById(id);
         }
 
+        public Rating GetRatingById(string id)
+        {
+            return ratingRepo.FindById(id);
+        }
     }
 }
