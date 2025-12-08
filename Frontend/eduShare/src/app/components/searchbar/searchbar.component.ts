@@ -99,7 +99,7 @@ export class SearchbarComponent implements OnInit{
         this.searchValue.emit(title);
         console.log("searched")
       },
-      error: (err) => console.error("Hiba a keresésnél:", err)
+      error: (err) => console.error("Error in search:", err)
     });
   }
 

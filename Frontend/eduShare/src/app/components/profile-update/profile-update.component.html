@@ -24,7 +24,7 @@
     <label for="firstname" class="form-label">Surname</label>
     <input type="text" id="firstname" formControlName="firstname" class="form-control" />
     <div *ngIf="updateForm.get('firstname')?.touched && updateForm.get('firstname')?.invalid" class="text-danger">
-      A vezetéknév megadása kötelező.
+      The surname must be provided.
     </div>
   </div>
 
@@ -32,7 +32,7 @@
     <label for="lastname" class="form-label">Firstname</label>
     <input type="text" id="lastname" formControlName="lastname" class="form-control" />
     <div *ngIf="updateForm.get('lastname')?.touched && updateForm.get('lastname')?.invalid" class="text-danger">
-      A keresztnév megadása kötelező.
+      The first name is mandatory.
     </div>
   </div>
 
@@ -40,7 +40,7 @@
     <label for="email" class="form-label">Email</label>
     <input type="email" id="email" formControlName="email" class="form-control" />
     <div *ngIf="updateForm.get('email')?.touched && updateForm.get('email')?.invalid" class="text-danger">
-      Az email cím megadása kötelező és érvényes formátumú legyen.
+      The email address must be provided and must be in a valid format.
     </div>
   </div>
 

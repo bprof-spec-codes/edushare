@@ -25,7 +25,7 @@ export class MaterialUpdateComponent implements OnInit{
         this.material=data
       },
       error: (err) => {
-        console.error("Nem sikerült betölteni az anyagot", err)
+        console.error("The materials could not be loaded.", err)
         this.router.navigate(['/materials'])
       }
     })
@@ -43,12 +43,12 @@ export class MaterialUpdateComponent implements OnInit{
     
     this.materialService.update(this.id, dto).subscribe({
       next: () => {
-        console.log("Sikeres módosítás!")
+        console.log("Modification successful!")
         this.router.navigate(['/materials', this.id, 'view'])
       },
       error: (err) => {
-        console.error("Nem sikerült módosítani az anyagot", err)
-        this.toast.show("Sikertelen módosítás!")
+        console.error("Unable to modify the material", err)
+        this.toast.show("Modification unsuccessful!")
         this.router.navigate(['/materials'])
       }
     })

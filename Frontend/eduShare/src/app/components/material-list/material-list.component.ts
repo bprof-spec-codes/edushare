@@ -36,7 +36,7 @@ export class MaterialListComponent {
       },
       error: (err) => {
         console.error(err);
-        this.error = 'Nem sikerült betölteni az anyagokat.';
+        this.error = 'The materials could not be loaded.';
         this.loading = false;
       }
     });

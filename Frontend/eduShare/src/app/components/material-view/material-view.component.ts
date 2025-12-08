@@ -52,7 +52,7 @@ export class MaterialViewComponent implements OnInit {
       const id = params.get('id');
 
       if (!id) {
-        this.toast.show('Érvénytelen azonosító.');
+        this.toast.show('Invalid ID.');
         return;
       }
 
@@ -76,8 +76,8 @@ export class MaterialViewComponent implements OnInit {
         this.ratingsLoad(id);
       },
       error: (err) => {
-        console.error('Hiba a tananyag betöltésekor:', err);
-        this.toast.show('Nem sikerült betölteni az adatokat.');
+        console.error('Error loading course material:', err);
+        this.toast.show('The data could not be loaded.');
       }
     });
   }
@@ -85,16 +85,16 @@ export class MaterialViewComponent implements OnInit {
   recommendedMaterial(id: string) {
     this.material!.isRecommended = !this.material?.isRecommended;
     this.materialService.updateRecommended(id, this.material!.isRecommended).subscribe({
-      next: () => console.log('Sikeres mentés!'),
-      error: (err) => console.error('Hiba történt:', err)
+      next: () => console.log('Save successfull!'),
+      error: (err) => console.error('An error has occurred:', err)
     });
     console.log(this.material!.isRecommended);
   }
   examMaterial(id: string){
   this.material!.isExam=!this.material?.isExam;
   this.materialService.updateExam(id, this.material!.isExam).subscribe({
-    next: () => console.log('Sikeres mentés!'),
-    error: (err) => console.error('Hiba történt:', err)
+    next: () => console.log('Save successfull!'),
+    error: (err) => console.error('An error has occurred:', err)
   });
     console.log(this.material!.isExam);
   }
@@ -143,16 +143,16 @@ export class MaterialViewComponent implements OnInit {
 
   async deleteMaterial(): Promise<void> {
     if (!this.material) return
-    const confirmed = await this.confirmService.confirm('Biztosan törölni szeretnéd az anyagot?')
+    const confirmed = await this.confirmService.confirm('Are you sure you want to delete the material?')
     if (!confirmed) return
     this.materialService.delete(this.material.id).subscribe({
       next: () => {
-        console.log('A tananyag sikeresen törölve lett.')
+        console.log('The course material has been successfully deleted.')
         this.router.navigate(['/materials'])
       },
       error: (err) => {
         console.error(err)
-        this.toast.show('Nem sikerült törölni a tananyagot.')
+        this.toast.show('The course material could not be deleted.')
       }
     })
   }
