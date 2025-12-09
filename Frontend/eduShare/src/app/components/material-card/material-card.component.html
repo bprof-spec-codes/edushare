@@ -43,7 +43,7 @@
             </div>
         </div>
         <div class="open-bookmark">
-            <button class="open-button" (click)="openMaterial(m)" [style]="isLoggedIn ? 'width: 65%' : 'width: 190px'">Open</button>
+            <button [className]="openButtonClass()" (click)="openMaterial(m)" [style]="isLoggedIn ? 'width: 65%' : 'width: 190px'">Open</button>
             <button type="button" class="btn-bookmark" (click)="toggleFavourite()" *ngIf="isLoggedIn"
                 [attr.aria-pressed]="((isFav$ | async) ?? false) ? 'true' : 'false'">
 

@@ -1,34 +1,44 @@
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid nav-inner">
-    <a class="navbar-brand logo" routerLink="/homepage">
+    <a class="navbar-brand logo" routerLink="/homepage" (click)="closeNavbar()">
       <img src="/images/hog2.png" alt="hogrider" height="30px" class="mb-1">
       EduShare
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
-      aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" (click)="toggleNavbar()" [attr.aria-expanded]="!navbarCollapsed"
+      aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="mainNavbar">
+    <div class="collapse navbar-collapse" [ngClass]="{ 'show': !navbarCollapsed }" id="mainNavbar">
       <ul class="navbar-nav ms-auto align-items-center">
         <li class="nav-item me-3">
-          <a class="nav-link" routerLink="/materials/create"><strong>Upload</strong></a>
+          <a class="nav-link" routerLink="/materials/create" (click)="closeNavbar()">
+            <strong>Upload</strong>
+          </a>
         </li>
         <li class="nav-item me-2">
-          <a class="nav-link" routerLink="/materials"><strong>Materials</strong></a>
+          <a class="nav-link" routerLink="/materials" (click)="closeNavbar()">
+            <strong>Materials</strong>
+          </a>
         </li>
         <li class="nav-item me-2" *ngIf="isTeacher">
-          <a class="nav-link" routerLink="/subjects"><strong>Subjects</strong></a>
+          <a class="nav-link" routerLink="/subjects" (click)="closeNavbar()">
+            <strong>Subjects</strong>
+          </a>
         </li>
         <li class="nav-item me-2">
-          <a class="nav-link" routerLink="/profile-list"><strong>Profiles</strong></a>
+          <a class="nav-link" routerLink="/profile-list" (click)="closeNavbar()">
+            <strong>Profiles</strong>
+          </a>
         </li>
         <li class="nav-item me-2" *ngIf="isAdmin">
-          <a class="nav-link" routerLink="/statistics"><strong>Statistics</strong></a>
+          <a class="nav-link" routerLink="/statistics" (click)="closeNavbar()">
+            <strong>Statistics</strong>
+          </a>
         </li>
 
-        <li class="nav-item dropdown" *ngIf="isLoggedIn">
+        <li class="nav-item dropdown d-none d-lg-block" *ngIf="isLoggedIn">
           <button class="btn p-0 avatar-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
             aria-expanded="false" aria-label="User menu">
             <img *ngIf="profile?.image?.file" [src]="getProfileImageSrc()" [alt]="profile?.fullName" class="avatar" />
@@ -39,8 +49,29 @@
             <li><button class="dropdown-item" (click)="logout()">Log out</button></li>
           </ul>
         </li>
+
+        <ng-container *ngIf="isLoggedIn">
+          <li class="nav-item d-lg-none">
+            <a class="nav-link" (click)="openProfile(); closeNavbar()">
+              <strong>View profile</strong>
+            </a>
+          </li>
+          <li class="nav-item d-lg-none">
+            <a class="nav-link" (click)="openFavs(); closeNavbar()">
+              <strong>Favourites</strong>
+            </a>
+          </li>
+          <li class="nav-item d-lg-none">
+            <a class="nav-link" (click)="logout(); closeNavbar()">
+              <strong>Log out</strong>
+            </a>
+          </li>
+        </ng-container>
+
         <li class="nav-item ms-2" *ngIf="!isLoggedIn">
-          <button type="button" class="btn loginbtn" routerLink="/login">Log in</button>
+          <button type="button" class="btn loginbtn" routerLink="/login" (click)="closeNavbar()">
+            Log in
+          </button>
         </li>
       </ul>
     </div>

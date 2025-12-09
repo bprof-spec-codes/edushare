@@ -1,16 +1,27 @@
 @use '../../../styles/_variables' as *
 
 .container-fluid
-  padding: 30px 5% 20px 5%
+  padding: 30px 1% 20px 1%
   font-family: 'Nunito'
+
+.material-page
+  max-width: 1400px
+  margin-inline: auto
 
 .file-button
   background-color: $edu-purple
   color: white
+  border-radius: 10px
+  min-height: 44px
+  font-weight: 600
 
   &:hover
     background-color: $edu-purple-hover
-    
+
+.buttons-row
+  max-width: 900px
+  margin-inline: auto
+
 .text-body
   text-align: justify
 
@@ -21,8 +32,8 @@
   margin-left: auto
   opacity: 0.9
 
-.btn-link:hover
-  text-decoration: underline
+  &:hover
+    text-decoration: underline
 
 .add-rating
   font-size: 1rem
@@ -64,13 +75,18 @@
 
   &:hover::-webkit-scrollbar-thumb
     background: #c5c5c5
-  
-.subject 
+
+.star
+  color: #f7c948
+  vertical-align: middle
+  font-size: 14pt
+
+.subject
   background-color: transparent
   border: 0
   padding: 0
   color: #585c5f
-  font-weight: semi-bold
+  font-weight: 600
   text-overflow: ellipsis
   overflow: hidden
   white-space: nowrap
@@ -79,3 +95,19 @@
   &:hover
     text-decoration: underline
 
+@media (max-width: 1200px)
+  .container-fluid
+    padding-inline: 1.25rem
+
+  .file-button
+    width: 100%
+
+@media (max-width: 575.98px)
+  .material-page
+    padding-top: 15px
+
+  h3
+    font-size: 1.25rem
+
+  .rating-scroll-container
+    gap: 0.75rem

@@ -11,8 +11,13 @@ export class MainlistComponent {
   isInSearch: boolean = false
   search: string = ""
   subjectId: string = ""
+  showSearch = false
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute) { }
+
+  get isMobile(): boolean {
+    return window.innerWidth <= 1200
+  }
 
   changeIsInSearch(isInSearch: boolean) {
     this.isInSearch = isInSearch
@@ -33,6 +38,14 @@ export class MainlistComponent {
         this.searchSubject(subject, title);
       }
     });
+
+    if (!this.isMobile) {
+      this.showSearch = true
+    }
+  }
+
+  toggleSearch(): void {
+    this.showSearch = !this.showSearch
   }
 
   searchSubject(subjectId: string, title: string) {
