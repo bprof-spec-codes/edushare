@@ -1,7 +1,7 @@
 @use '../../../styles/_variables' as *
 
-.search-wrapper
-    margin: 0 5% 20px 5%
+.wrapper
+    margin: 20px 5%
 
 .search-toggle
     width: 100%
@@ -18,7 +18,7 @@
 .searchbar
     transition: max-height 0.25s ease, opacity 0.25s ease, margin-top 0.25s ease
 
-@media (max-width: 768px)
+@media (max-width: 1199.98px)
     .searchbar
         max-height: 0
         overflow: hidden
@@ -29,10 +29,14 @@
             max-height: 500px
             opacity: 1
             margin-top: 8px
+
     .text-center
         text-align: center
 
-@media (min-width: 769px)
+@media (min-width: 1200px)
     .searchbar
         max-height: none
         opacity: 1
+        margin-top: 0
+
+

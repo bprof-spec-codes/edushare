@@ -16,7 +16,7 @@ export class MainlistComponent {
   constructor(private route: ActivatedRoute) { }
 
   get isMobile(): boolean {
-    return window.innerWidth <= 768
+    return window.innerWidth <= 1200
   }
 
   changeIsInSearch(isInSearch: boolean) {
