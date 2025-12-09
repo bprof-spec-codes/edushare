@@ -133,7 +133,7 @@ namespace EdushareBackend.Controllers
         {
             if (dto.Password.Length < 8) throw new ArgumentException("A jelszónak legalább 8 karakter hosszúnak kell lennie");
 
-            if (await userManager.FindByEmailAsync(dto.Email) != null) throw new ArgumentException("Az emalcím már létezik");
+            if (await userManager.FindByEmailAsync(dto.Email) != null) throw new ArgumentException("Az email cím már létezik");
 
             if (!(IsValidEmail(dto.Email))) throw new ArgumentException("Az email cím formátuma nem megfelelő");
 
