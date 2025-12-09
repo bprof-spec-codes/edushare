@@ -87,7 +87,7 @@ export class MaterialCardComponent implements OnChanges, OnInit {
 
     this.materialService.delete(this.m.id).subscribe({
       next: () => {
-        console.log('The material has been successfully deleted.');
+        //console.log('The material has been successfully deleted.');
         this.deleted.emit(this.m.id); 
       },
       error: (err) => {

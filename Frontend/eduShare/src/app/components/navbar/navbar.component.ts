@@ -26,7 +26,7 @@ export class NavbarComponent implements OnChanges, OnInit {
     private fav: FavMaterialService,
     private modalService: NgbModal,
     private toast: ToastService) {
-    console.log('userid: ', auth.getUserId());
+    //console.log('userid: ', auth.getUserId());
   }
 
   ngOnInit(): void {
@@ -36,7 +36,7 @@ export class NavbarComponent implements OnChanges, OnInit {
     this.profileService.currentProfile$.subscribe({
       next: (data) => {
         this.profile = data
-        console.log(this.profile)
+        //console.log(this.profile)
       },
       error: (err) => {
         console.error(err)

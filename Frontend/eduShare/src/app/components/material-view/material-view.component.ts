@@ -47,7 +47,7 @@ export class MaterialViewComponent implements OnInit {
     private confirmService: ConfirmService
   ) { }
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
 
@@ -60,7 +60,7 @@ export class MaterialViewComponent implements OnInit {
     });
   }
 
-  
+
 
   loadMaterial(id: string) {
     this.currentUserId = this.auth.getUserId() || '';
@@ -71,7 +71,7 @@ export class MaterialViewComponent implements OnInit {
         this.material = data;
         this.recommendedMaterials = data.recommendedMaterials || [];
 
-        console.log('Loaded material:', data);
+        //console.log('Loaded material:', data);
 
         this.ratingsLoad(id);
       },
@@ -85,18 +85,22 @@ export class MaterialViewComponent implements OnInit {
   recommendedMaterial(id: string) {
     this.material!.isRecommended = !this.material?.isRecommended;
     this.materialService.updateRecommended(id, this.material!.isRecommended).subscribe({
-      next: () => console.log('Save successfull!'),
+      next: () => {
+        //console.log('Save successfull!')
+      },
       error: (err) => console.error('An error has occurred:', err)
     });
-    console.log(this.material!.isRecommended);
+    //console.log(this.material!.isRecommended);
   }
-  examMaterial(id: string){
-  this.material!.isExam=!this.material?.isExam;
-  this.materialService.updateExam(id, this.material!.isExam).subscribe({
-    next: () => console.log('Save successfull!'),
-    error: (err) => console.error('An error has occurred:', err)
-  });
-    console.log(this.material!.isExam);
+  examMaterial(id: string) {
+    this.material!.isExam = !this.material?.isExam;
+    this.materialService.updateExam(id, this.material!.isExam).subscribe({
+      next: () => {
+        //console.log('Save successfull!')
+      },
+      error: (err) => console.error('An error has occurred:', err)
+    });
+    //console.log(this.material!.isExam);
   }
 
   downloadFile(base64: string | undefined, fileName: string | undefined): void {
@@ -147,7 +151,7 @@ export class MaterialViewComponent implements OnInit {
     if (!confirmed) return
     this.materialService.delete(this.material.id).subscribe({
       next: () => {
-        console.log('The course material has been successfully deleted.')
+        //console.log('The course material has been successfully deleted.')
         this.router.navigate(['/materials'])
       },
       error: (err) => {

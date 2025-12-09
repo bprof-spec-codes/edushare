@@ -43,7 +43,7 @@ export class MaterialUpdateComponent implements OnInit{
     
     this.materialService.update(this.id, dto).subscribe({
       next: () => {
-        console.log("Modification successful!")
+        //console.log("Modification successful!")
         this.router.navigate(['/materials', this.id, 'view'])
       },
       error: (err) => {
