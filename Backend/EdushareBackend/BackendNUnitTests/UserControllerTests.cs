@@ -1,22 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Data;
 using EdushareBackend.Controllers;
 using Entities.Dtos.Content;
 using Entities.Dtos.Material;
 using Entities.Dtos.User;
 using Entities.Helpers;
 using Entities.Models;
+using Logic.Helper;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using MockQueryable.Moq;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using MockQueryable.Moq;
+using System.Threading.Tasks;
 
 namespace BackendNUnitTests
 {
@@ -28,6 +30,9 @@ namespace BackendNUnitTests
         private Mock<IWebHostEnvironment> _envMock;
         private Mock<IOptions<JwtSettings>> _jwtSettingsMock;
         private UserController _controller;
+        private Mock<Repository<AppUser>> _appUserRepoMock;
+        private Mock<ImageCompressor> _imageCompressorMock;
+
 
         [SetUp]
         public void Setup()
@@ -36,6 +41,9 @@ namespace BackendNUnitTests
             _roleManagerMock = MockRoleManager();
             _envMock = new Mock<IWebHostEnvironment>();
             _jwtSettingsMock = new Mock<IOptions<JwtSettings>>();
+            _appUserRepoMock = new Mock<Repository<AppUser>>();
+            _imageCompressorMock = new Mock<ImageCompressor>();
+
 
             _jwtSettingsMock.Setup(j => j.Value).Returns(new JwtSettings
             {
@@ -48,8 +56,12 @@ namespace BackendNUnitTests
                 _envMock.Object,
                 _roleManagerMock.Object,
                 _jwtSettingsMock.Object,
-                null //error van itt 
+                _appUserRepoMock.Object,
+                _imageCompressorMock.Object
             );
+            
+
+
         }
 
         private static Mock<UserManager<AppUser>> MockUserManager()
@@ -105,6 +117,7 @@ namespace BackendNUnitTests
         [Test]
         public async Task RegisterUser_Should_CreateUserSuccessfully()
         {
+            // Arrange
             var dto = new AppUserRegisterDto
             {
                 Email = "test@example.com",
@@ -113,6 +126,7 @@ namespace BackendNUnitTests
                 LastName = "Doe"
             };
 
+            // Mock UserManager metódusok
             _userManagerMock.Setup(u => u.FindByEmailAsync(dto.Email))
                 .ReturnsAsync((AppUser)null);
 
@@ -122,22 +136,22 @@ namespace BackendNUnitTests
             _userManagerMock.Setup(u => u.Users)
                 .Returns(new List<AppUser>().AsQueryable());
 
-            // Platformfüggetlen temp könyvtár
-            var tempPath = Path.Combine(Path.GetTempPath(), "images");
-
-            // Mock beállítása
-            _envMock.Setup(e => e.WebRootPath).Returns(tempPath);
-
-            // Könyvtár létrehozása, ha nem létezik
+            // Temp könyvtár létrehozása a WebRootPath-hez
+            var tempPath = Path.Combine(Path.GetTempPath(), "images", "images");
             Directory.CreateDirectory(tempPath);
 
             // Tesztfájl létrehozása
             var filePath = Path.Combine(tempPath, "default.png");
-            File.WriteAllBytes(filePath, new byte[1]);
+            if (!File.Exists(filePath))
+                File.WriteAllBytes(filePath, new byte[1]);
 
+            // Mock WebRootPath
+            _envMock.Setup(e => e.WebRootPath).Returns(Path.Combine(Path.GetTempPath(), "images"));
 
+            // Act & Assert
             Assert.DoesNotThrowAsync(async () => await _controller.RegisterUser(dto));
         }
+
 
         // ---------- LOGIN TESTS ----------
 
@@ -212,17 +226,17 @@ namespace BackendNUnitTests
 
         // ---------- GET USER ----------
 
-       /* [Test]
-        public async Task GetUserById_Should_ReturnNotFound_WhenUserDoesNotExist()
-        {
-            _userManagerMock.Setup(u => u.Users)
-                .Returns(new List<AppUser>().AsQueryable());
+        /* [Test]
+         public async Task GetUserById_Should_ReturnNotFound_WhenUserDoesNotExist()
+         {
+             _userManagerMock.Setup(u => u.Users)
+                 .Returns(new List<AppUser>().AsQueryable());
 
-            var result = await _controller.GetUserById("missing");
+             var result = await _controller.GetUserById("missing");
 
-            Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
-        }
-       */
+             Assert.That(result.Result, Is.InstanceOf<NotFoundObjectResult>());
+         }
+        */
 
         /*[Test]
         public async Task GetUserById_Should_ReturnUser_WhenExists()
@@ -259,26 +273,26 @@ namespace BackendNUnitTests
 
         // ---------- UPDATE USER ----------
 
-       /* [Test]
-        public void UpdateUser_Should_Throw_WhenUnauthorized()
-        {
-            var user = new AppUser
-            {
-                Id = "1",
-                Email = "john@example.com",
-                FirstName = "John",
-                LastName = "Doe",
-                Image = new FileContent("test.png", new byte[] { 1 })
-            };
+        /* [Test]
+         public void UpdateUser_Should_Throw_WhenUnauthorized()
+         {
+             var user = new AppUser
+             {
+                 Id = "1",
+                 Email = "john@example.com",
+                 FirstName = "John",
+                 LastName = "Doe",
+                 Image = new FileContent("test.png", new byte[] { 1 })
+             };
 
-            _userManagerMock.Setup(u => u.Users)
-                .Returns(new List<AppUser> { user }.AsQueryable());
+             _userManagerMock.Setup(u => u.Users)
+                 .Returns(new List<AppUser> { user }.AsQueryable());
 
-            var dto = new AppUserUpdateDto { Email = "new@example.com", FirstName = "New", LastName = "Name" };
+             var dto = new AppUserUpdateDto { Email = "new@example.com", FirstName = "New", LastName = "Name" };
 
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _controller.UpdateUser("1", dto));
-        }
-       */
+             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _controller.UpdateUser("1", dto));
+         }
+        */
 
         // ---------- DELETE USER ----------
 
@@ -317,15 +331,39 @@ namespace BackendNUnitTests
         [Test]
         public async Task GrantTeacherRole_Should_CreateRoleIfNotExists()
         {
-            var user = new AppUser { Id = "1", Email = "teacher@example.com" };
+            var user = new AppUser
+            {
+                Id = "1",
+                Email = "teacher@example.com",
+                UserName = "TestUser"
+            };
 
-            _userManagerMock.Setup(u => u.FindByIdAsync("1")).ReturnsAsync(user);
-            _roleManagerMock.Setup(r => r.RoleExistsAsync("Teacher")).ReturnsAsync(false);
-            _roleManagerMock.Setup(r => r.CreateAsync(It.IsAny<IdentityRole>())).ReturnsAsync(IdentityResult.Success);
-            _userManagerMock.Setup(u => u.AddToRoleAsync(user, "Teacher")).ReturnsAsync(IdentityResult.Success);
+            _userManagerMock.Setup(u => u.FindByIdAsync("1"))
+                .ReturnsAsync(user);
 
-            Assert.DoesNotThrowAsync(async () => await _controller.GrantTeacherRole("1"));
+            _userManagerMock.Setup(u => u.Users)
+                .Returns(new List<AppUser> { user }.AsQueryable());
+
+            _userManagerMock.Setup(u => u.AddToRoleAsync(user, "Teacher"))
+                .ReturnsAsync(IdentityResult.Success);
+
+            _roleManagerMock.Setup(r => r.RoleExistsAsync("Teacher"))
+                .ReturnsAsync(false);
+
+            _roleManagerMock.Setup(r => r.CreateAsync(It.IsAny<IdentityRole>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            _userManagerMock.Setup(u => u.GetRolesAsync(user))
+                .ReturnsAsync(new List<string>());
+
+            _userManagerMock.Setup(u => u.GetUsersInRoleAsync("Admin"))
+                .ReturnsAsync(new List<AppUser> { user }); // fontos, hogy ne dobjon nullt
+
+            Assert.DoesNotThrowAsync(async () =>
+                await _controller.GrantTeacherRole("1"));
         }
+
+
 
         [Test]
         public async Task RevokeRole_Should_Throw_WhenLastAdmin()
@@ -637,6 +675,6 @@ namespace BackendNUnitTests
             Assert.That(unauthorized!.Value!.ToString(), Does.Contain("banned"));
         }
 
-        
+
     }
 }
