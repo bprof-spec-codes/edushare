@@ -13,14 +13,22 @@
 
               <div class="d-inline-flex align-items-center gap-1 ps-0 rating flex-wrap mb-1">
                 <span>{{ ratingAverage$ | async | number:'1.1-1' }}</span>
+
+                <span class="material-icons star d-inline d-sm-none">
+                  star
+                </span>
+
                 <span class="d-none d-sm-inline">
                   <app-rating-stars [rating]="ratingAverage$ | async"></app-rating-stars>
                 </span>
+
                 <span class="text-muted" style="font-size: 0.9rem" count>
-                  ({{(ratings$ | async)?.length}})
+                  ({{ (ratings$ | async)?.length }})
                 </span>
+
                 <i class="bi bi-plus-circle add-rating" (click)="openRatingCreateModal()"></i>
               </div>
+
 
               <div class="small text-muted d-flex align-items-center">
                 <i class="bi bi-download me-1"></i>
@@ -186,23 +194,33 @@
 
         <div class="row my-4">
           <div class="col-12">
-            <div class="d-flex flex-column flex-md-row justify-content-center align-items-stretch gap-3">
-              <button class="btn flex-fill file-button"
+            <div class="
+    d-flex
+    flex-column
+    flex-md-row
+    justify-content-center
+    justify-content-md-between
+    align-items-center
+    align-items-sm-center
+    gap-3
+    buttons-row
+  ">
+              <button class="btn file-button w-50 w-md-25 w-sm-auto"
                 (click)="downloadFile(material.content.file, material.content.fileName)">
                 Download
               </button>
 
-              <button class="btn flex-fill file-button" (click)="previewFile()">
+              <button class="btn file-button w-50 w-md-25 w-sm-auto" (click)="previewFile()">
                 Preview
               </button>
 
-              <button class="btn flex-fill file-button" *ngIf="auth.isAdmin() || auth.isTeacher()"
+              <button class="btn file-button w-50 w-md-25 w-sm-auto" *ngIf="auth.isAdmin() || auth.isTeacher()"
                 (click)="recommendedMaterial(material.id)">
                 <i class="bi bi-pin-angle-fill me-2"></i>
                 <span>Recommend</span>
               </button>
 
-              <button class="btn flex-fill file-button" *ngIf="auth.isAdmin() || auth.isTeacher()"
+              <button class="btn file-button w-50 w-md-25 w-sm-auto" *ngIf="auth.isAdmin() || auth.isTeacher()"
                 (click)="examMaterial(material.id)">
                 <i class="bi bi-exclamation-diamond-fill me-2"></i>
                 <span>Exam</span>

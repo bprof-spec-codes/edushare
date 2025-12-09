@@ -1,7 +1,7 @@
 @use '../../../styles/_variables' as *
 
 .container-fluid
-  padding: 30px 5% 20px 5%
+  padding: 30px 1% 20px 1%
   font-family: 'Nunito'
 
 .material-page
@@ -11,12 +11,16 @@
 .file-button
   background-color: $edu-purple
   color: white
-  border-radius: 999px
+  border-radius: 10px
   min-height: 44px
   font-weight: 600
 
   &:hover
     background-color: $edu-purple-hover
+
+.buttons-row
+  max-width: 900px
+  margin-inline: auto
 
 .text-body
   text-align: justify
@@ -72,6 +76,11 @@
   &:hover::-webkit-scrollbar-thumb
     background: #c5c5c5
 
+.star
+  color: #f7c948
+  vertical-align: middle
+  font-size: 14pt
+
 .subject
   background-color: transparent
   border: 0
@@ -86,7 +95,7 @@
   &:hover
     text-decoration: underline
 
-@media (max-width: 991.98px)
+@media (max-width: 1200px)
   .container-fluid
     padding-inline: 1.25rem
 
