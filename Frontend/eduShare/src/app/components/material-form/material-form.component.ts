@@ -74,7 +74,7 @@ export class MaterialFormComponent implements OnInit {
 
     const fileExtension = file.name.split('.').pop()?.toLowerCase() || ''
     if (!this.allowed.includes(fileExtension)) {
-      this.fileError = 'Nem támogatott fájltípus. Kérlek, válassz egy érvényes fájlt. (pdf, doc, docx, ppt, pptx)'
+      this.fileError = 'Unsupported file type. Please select a valid file. (pdf, doc, docx, ppt, pptx)'
       this.content = new FileContent()
       this.materialForm.get('file')?.setValue('')
       return
@@ -97,7 +97,7 @@ export class MaterialFormComponent implements OnInit {
       ...(this.materialForm.value.file ? { content: this.content } : {})
     }
 
-    console.log(dto)
+    //console.log(dto)
 
     this.submitted.emit(dto)
   }

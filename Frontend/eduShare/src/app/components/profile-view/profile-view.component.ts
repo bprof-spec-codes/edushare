@@ -62,7 +62,7 @@ export class ProfileViewComponent {
           this.profile.bannedAt = this.profile.bannedAt + 'Z'
         }
         
-        console.log(this.profile)
+        //console.log(this.profile)
         this.loading = false
       },
       error: (err) => {

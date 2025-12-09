@@ -65,7 +65,7 @@ export class SearchbarComponent implements OnInit{
   }
 
   search() {
-    console.log(this.form.valid)
+    //console.log(this.form.valid)
     if (!this.form.valid) return;
 
     if (this.formIsDefault(this.form)) {
@@ -91,15 +91,15 @@ export class SearchbarComponent implements OnInit{
     // ⚡ Itt nincs merge, csak a jelenlegi param-ek lesznek az URL-ben
     this.router.navigate([], { queryParams });
 
-    console.log(searchDto)
+    //console.log(searchDto)
 
     this.materialService.searchMaterials(searchDto).subscribe({
       next: () => {
         this.isInSearch.emit(true);
         this.searchValue.emit(title);
-        console.log("searched")
+        //console.log("searched")
       },
-      error: (err) => console.error("Hiba a keresésnél:", err)
+      error: (err) => console.error("Error in search:", err)
     });
   }
 

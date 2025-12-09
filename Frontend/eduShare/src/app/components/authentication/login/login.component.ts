@@ -29,7 +29,7 @@ export class LoginComponent {
       next: (res: any) => {
         const token = res?.token ?? res?.Token;
         if (!token) {
-          this.error = 'Hibás válasz a szervertől.';
+          this.error = 'Invalid response from server.';
           this.loading = false;
           return;
         }
@@ -40,7 +40,7 @@ export class LoginComponent {
       },
       error: (err) => {
         this.loading = false;
-        this.error = err?.error?.message ?? err?.message ?? 'Hibás email vagy jelszó.';
+        this.error = err?.error?.message ?? err?.message ?? 'Invalid email or password.';
       }
     });
   }

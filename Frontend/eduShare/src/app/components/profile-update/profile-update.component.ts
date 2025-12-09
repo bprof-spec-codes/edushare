@@ -42,7 +42,7 @@ export class ProfileUpdateComponent {
 
     const id = this.route.snapshot.paramMap.get('id')
       if(!id) {
-        this.toast.show('Érvénytelen azonosító.');
+        this.toast.show('Invalid ID.');
         return
       }
       this.id = id;
@@ -67,7 +67,7 @@ export class ProfileUpdateComponent {
   
         error: (err) => {
           console.error(err)
-          this.toast.show('Nem sikerült betölteni a profilt.');
+          this.toast.show('The profile could not be loaded.');
         }
       })
     }
@@ -103,12 +103,12 @@ onUpdate() {
 
   this.profileService.update(this.id, dto).subscribe({
     next: () => {
-      this.toast.show('Profil sikeresen módosítva!');
+      this.toast.show('Profile successfully modified!');
       this.router.navigate(['/profile-view', this.id]);
     },
     error: (err) => {
-      console.error('Hiba történt a módosítás során', err);
-      this.toast.show('Nem sikerült módosítani a profilt.');
+      console.error('An error occurred during the modification', err);
+      this.toast.show('The profile could not be modified.');
     }
   });
 }
@@ -120,10 +120,15 @@ async onFileSelected(event: Event) {
   const file = input.files[0];
   const ext = file.name.split('.').pop()?.toLowerCase();
 
-
-
   if (!ext || !this.allowed.includes(ext)) {
-    this.toast.show('Csak PNG és JPEG formátum engedélyezett!');
+    this.toast.show('Only PNG and JPEG formats are allowed!');
+    input.value = '';
+    this.selectedFileDataUrl = null;
+    this.content = undefined;
+    return;
+  }
+   if (file.name.length > 50) {
+    this.toast.show('A fájlnév túl hosszú! Maximum 50 karakter engedélyezett.');
     input.value = '';
     this.selectedFileDataUrl = null;
     this.content = undefined;

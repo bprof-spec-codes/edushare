@@ -47,12 +47,12 @@ export class MaterialViewComponent implements OnInit {
     private confirmService: ConfirmService
   ) { }
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
 
       if (!id) {
-        this.toast.show('Érvénytelen azonosító.');
+        this.toast.show('Invalid ID.');
         return;
       }
 
@@ -60,7 +60,7 @@ export class MaterialViewComponent implements OnInit {
     });
   }
 
-  
+
 
   loadMaterial(id: string) {
     this.currentUserId = this.auth.getUserId() || '';
@@ -71,13 +71,13 @@ export class MaterialViewComponent implements OnInit {
         this.material = data;
         this.recommendedMaterials = data.recommendedMaterials || [];
 
-        console.log('Loaded material:', data);
+        //console.log('Loaded material:', data);
 
         this.ratingsLoad(id);
       },
       error: (err) => {
-        console.error('Hiba a tananyag betöltésekor:', err);
-        this.toast.show('Nem sikerült betölteni az adatokat.');
+        console.error('Error loading course material:', err);
+        this.toast.show('The data could not be loaded.');
       }
     });
   }
@@ -85,18 +85,22 @@ export class MaterialViewComponent implements OnInit {
   recommendedMaterial(id: string) {
     this.material!.isRecommended = !this.material?.isRecommended;
     this.materialService.updateRecommended(id, this.material!.isRecommended).subscribe({
-      next: () => console.log('Sikeres mentés!'),
-      error: (err) => console.error('Hiba történt:', err)
+      next: () => {
+        //console.log('Save successfull!')
+      },
+      error: (err) => console.error('An error has occurred:', err)
     });
-    console.log(this.material!.isRecommended);
+    //console.log(this.material!.isRecommended);
   }
-  examMaterial(id: string){
-  this.material!.isExam=!this.material?.isExam;
-  this.materialService.updateExam(id, this.material!.isExam).subscribe({
-    next: () => console.log('Sikeres mentés!'),
-    error: (err) => console.error('Hiba történt:', err)
-  });
-    console.log(this.material!.isExam);
+  examMaterial(id: string) {
+    this.material!.isExam = !this.material?.isExam;
+    this.materialService.updateExam(id, this.material!.isExam).subscribe({
+      next: () => {
+        //console.log('Save successfull!')
+      },
+      error: (err) => console.error('An error has occurred:', err)
+    });
+    //console.log(this.material!.isExam);
   }
 
   downloadFile(base64: string | undefined, fileName: string | undefined): void {
@@ -143,16 +147,16 @@ export class MaterialViewComponent implements OnInit {
 
   async deleteMaterial(): Promise<void> {
     if (!this.material) return
-    const confirmed = await this.confirmService.confirm('Biztosan törölni szeretnéd az anyagot?')
+    const confirmed = await this.confirmService.confirm('Are you sure you want to delete the material?')
     if (!confirmed) return
     this.materialService.delete(this.material.id).subscribe({
       next: () => {
-        console.log('A tananyag sikeresen törölve lett.')
+        //console.log('The course material has been successfully deleted.')
         this.router.navigate(['/materials'])
       },
       error: (err) => {
         console.error(err)
-        this.toast.show('Nem sikerült törölni a tananyagot.')
+        this.toast.show('The course material could not be deleted.')
       }
     })
   }

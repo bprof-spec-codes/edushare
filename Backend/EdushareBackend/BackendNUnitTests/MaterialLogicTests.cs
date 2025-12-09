@@ -23,32 +23,54 @@ namespace BackendNUnitTests
         private Mock<Repository<AppUser>> appuserRepoMock;
         private Mock<DtoProviders> dtoProviderMock;
         private MaterialLogic logic;
-        private Mock<UserManager<AppUser>> _userManagerMock;
+        private Mock<UserManager<AppUser>> userManagerMock;
         private Mock<Repository<Subject>> subjectRepoMock;
+        private static Mock<UserManager<AppUser>> MockUserManager()
+        {
+            var store = new Mock<IUserStore<AppUser>>();
+            return new Mock<UserManager<AppUser>>(
+                store.Object, // IUserStore<AppUser>
+                null, // IOptions<IdentityOptions>
+                null, // IPasswordHasher<AppUser>
+                null, // IEnumerable<IUserValidator<AppUser>>
+                null, // IEnumerable<IPasswordValidator<AppUser>>
+                null, // ILookupNormalizer
+                null, // IdentityErrorDescriber
+                null, // IServiceProvider
+                null  // ILogger<UserManager<AppUser>>
+            );
+        }
+
 
         [SetUp]
         public void Setup()
         {
             materialRepoMock = new Mock<Repository<Material>>();
             appuserRepoMock = new Mock<Repository<AppUser>>();
-            dtoProviderMock = new Mock<DtoProviders>(null!);
-            _userManagerMock = new Mock<UserManager<AppUser>>();
+            dtoProviderMock = new Mock<DtoProviders>(null!); // mapper null, nem használjuk
+           
             subjectRepoMock = new Mock<Repository<Subject>>();
-            var usermanagerMock = new Mock<UserManager<AppUser>>();
-            logic = new MaterialLogic(materialRepoMock.Object, dtoProviderMock.Object, appuserRepoMock.Object, subjectRepoMock.Object, usermanagerMock.Object);
+            var userManagerMock = MockUserManager(); // itt létrehozzuk
+            logic = new MaterialLogic(
+                materialRepoMock.Object,
+                dtoProviderMock.Object,
+                appuserRepoMock.Object,
+                subjectRepoMock.Object,
+                userManagerMock.Object
+            );
         }
 
         [Test]
-        public void AddMaterial_ShouldAddMaterial_WithoutMapper()
+        public void AddMaterial_ShouldAddMaterialWithoutMapper()
         {
-            // Arrange
-            var appUser = new AppUser { Id = "userId", UserName = "testuser" };
-            appuserRepoMock.Setup(r => r.FindById("userId")).Returns(appUser);
+            var appUser = new AppUser { Id = "user1", UserName = "testuser" };
+            appuserRepoMock.Setup(r => r.FindById("user1")).Returns(appUser);
 
             var dto = new MaterialCreateUpdateDto
             {
-                Title = "Test Title",
-                Description = "Test Description",
+                Title = "Title",
+                Description = "Desc",
+                SubjectId = "subj1",
                 Content = new ContentCreateUpdateDto
                 {
                     FileName = "file.txt",
@@ -56,142 +78,130 @@ namespace BackendNUnitTests
                 }
             };
 
+            var subject = new Subject { Id = "subj1", Name = "Math" };
+            subjectRepoMock.Setup(r => r.FindById("subj1")).Returns(subject);
+
             // Act
-            var mat = new Material
+            var material = new Material
             {
                 Title = dto.Title,
                 Description = dto.Description,
-                Content = new FileContent(
-                    dto.Content.FileName,
-                    Convert.FromBase64String(dto.Content.File)
-                ),
-                Uploader = appuserRepoMock.Object.FindById("userId")
+                Content = new FileContent(dto.Content.FileName, Convert.FromBase64String(dto.Content.File)),
+                Uploader = appUser,
+                Subject = subject
             };
 
-            materialRepoMock.Object.Add(mat);
+            materialRepoMock.Object.Add(material);
 
             // Assert
             materialRepoMock.Verify(r => r.Add(It.Is<Material>(m =>
                 m.Title == dto.Title &&
                 m.Description == dto.Description &&
-                m.Uploader.Id == "userId" &&
-                m.Content.FileName == dto.Content.FileName
+                m.Uploader.Id == "user1" &&
+                m.Content.FileName == dto.Content.FileName &&
+                m.Subject.Id == "subj1"
             )), Times.Once);
         }
+        
+
+
+
         [Test]
         public void DeleteMaterialById_ShouldCallRepoDelete()
         {
-            // Arrange
-            var materialId = "material123";
+            var id = "mat1";
 
-            // Act
-            logic.DeleteMaterialById(materialId);
+            logic.DeleteMaterialById(id);
 
-            // Assert
-            materialRepoMock.Verify(r => r.DeleteById(materialId), Times.Once);
+            materialRepoMock.Verify(r => r.DeleteById(id), Times.Once);
         }
+
         [Test]
         public void UpdateMaterial_ShouldUpdateExistingMaterial()
         {
-
-            // Arrange
-            var appUser = new AppUser { Id = "user123", UserName = "testuser" };
-            appuserRepoMock.Setup(r => r.FindById("user123")).Returns(appUser);
-            var existingMaterial = new Material
+            var existing = new Material
             {
-                Id = "mat123",
-                Title = "Old Title",
-                Description = "Old Description",
-                SubjectId = "placeholder",
-                Content = new FileContent("oldfile.txt", Encoding.UTF8.GetBytes("Old content")),
-                Uploader = new AppUser { Id = "user123", UserName = "testuser" }
+                Id = "mat1",
+                Title = "Old",
+                Description = "OldDesc",
+                SubjectId = "subj1",
+                Content = new FileContent("old.txt", Encoding.UTF8.GetBytes("Old")),
+                Uploader = new AppUser { Id = "user1" }
             };
+
+            materialRepoMock.Setup(r => r.FindById("mat1")).Returns(existing);
 
             var dto = new MaterialCreateUpdateDto
             {
-                Title = "New Title",
-                Description = "New Description",
-                SubjectId = "placeholder",
+                Title = "New",
+                Description = "NewDesc",
+                SubjectId = "subj1",
                 Content = new ContentCreateUpdateDto
                 {
-                    FileName = "newfile.txt",
-                    File = Convert.ToBase64String(Encoding.UTF8.GetBytes("New content"))
+                    FileName = "new.txt",
+                    File = Convert.ToBase64String(Encoding.UTF8.GetBytes("New"))
                 }
             };
 
-            materialRepoMock.Setup(r => r.FindById("mat123")).Returns(existingMaterial);
+            logic.UpdateMaterial("mat1", dto);
 
-            // Act
-            logic.UpdateMaterial("mat123", dto);
-
-            // Assert
             materialRepoMock.Verify(r => r.Update(It.Is<Material>(m =>
-                m.Id == "mat123" &&
-                m.Title == dto.Title &&
-                m.Description == dto.Description &&
-                m.Uploader.Id == "user123" &&
-                m.SubjectId == dto.SubjectId &&
-                m.Content != null &&
-                m.Content.FileName == dto.Content.FileName &&
-                Encoding.UTF8.GetString(m.Content.File) == "New content"
+                m.Id == "mat1" &&
+                m.Title == "New" &&
+                m.Description == "NewDesc" &&
+                Encoding.UTF8.GetString(m.Content.File) == "New" &&
+                m.Content.FileName == "new.txt"
             )), Times.Once);
         }
+
+        [Test]
+        public void SetExamStatus_ShouldUpdateMaterial()
+        {
+            var mat = new Material { Id = "m1", IsExam = false };
+            materialRepoMock.Setup(r => r.FindById("m1")).Returns(mat);
+
+            logic.SetExamStatus("m1", true);
+
+            materialRepoMock.Verify(r => r.Update(It.Is<Material>(m => m.IsExam)), Times.Once);
+        }
+
         [Test]
         public void GetAllMaterials_ShouldReturnAllMaterials()
         {
-            // Arrange
             var materials = new List<Material>
             {
-                new Material { Id = "1", Title = "Mat1", Uploader = new AppUser { Id = "user1" } },
-                new Material { Id = "2", Title = "Mat2", Uploader = new AppUser { Id = "user2" } }
+                new Material { Id = "1", Title = "Mat1", Uploader = new AppUser { Id = "u1" } },
+                new Material { Id = "2", Title = "Mat2", Uploader = new AppUser { Id = "u2" } }
             }.AsQueryable();
 
             materialRepoMock.Setup(r => r.GetAll()).Returns(materials);
 
-            // Act
             var result = logic.GetAllMaterials().ToList();
 
-            // Assert
             Assert.AreEqual(2, result.Count);
             Assert.IsTrue(result.Any(m => m.Id == "1"));
             Assert.IsTrue(result.Any(m => m.Id == "2"));
         }
+
         [Test]
-        public void GetMaterialById_ShouldReturnCorrectMaterial()
+        public void GetMaterialById_ShouldReturnMaterial()
         {
-            // Arrange
-            var material = new Material
+            var mat = new Material
             {
-                Id = "mat123",
-                Title = "Mat123",
-                Uploader = new AppUser
-                {
-                    Id = "user123",
-                    Image = new FileContent("default.png", Encoding.UTF8.GetBytes("dummy"))
-                }
+                Id = "mat1",
+                Title = "TestMat",
+                Uploader = new AppUser { Id = "user1", Image = new FileContent("img.png", Encoding.UTF8.GetBytes("img")) },
+                Subject = new Subject { Id = "subj1", Name = "Math" },
+                Content = new FileContent("file.txt", Encoding.UTF8.GetBytes("file"))
             };
 
-            materialRepoMock.Setup(r => r.GetAll())
-                .Returns(new List<Material> { material }.AsQueryable());
+            materialRepoMock.Setup(r => r.GetAll()).Returns(new List<Material> { mat }.AsQueryable());
 
-            // Act
-            var result = logic.GetMaterialById("mat123");
+            var result = logic.GetMaterialById("mat1");
 
-            // Assert
-            Assert.AreEqual("mat123", result.Id);
-            Assert.AreEqual("Mat123", result.Title);
-            Assert.AreEqual("user123", result.Uploader.Id);
+            Assert.AreEqual("mat1", result.Id);
+            Assert.AreEqual("TestMat", result.Title);
+            Assert.AreEqual("user1", result.Uploader.Id);
         }
-        [Test]
-        public void SetMaterialExamStatus_ShouldUpdateIsExam()
-        {
-            var material = new Material { Id = "m1", IsExam = false };
-            materialRepoMock.Setup(r => r.FindById("m1")).Returns(material);
-
-            logic.SetExamStatus("m1", true);
-
-            materialRepoMock.Verify(r => r.Update(It.Is<Material>(m => m.IsExam == true)), Times.Once);
-        }
-
     }
 }
