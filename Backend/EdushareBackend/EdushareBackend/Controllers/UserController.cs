@@ -131,11 +131,11 @@ namespace EdushareBackend.Controllers
         [HttpPost("Register")]
         public async Task RegisterUser(AppUserRegisterDto dto)
         {
-            if (dto.Password.Length < 8) throw new ArgumentException("A jelszónak legalább 8 karakter hosszúnak kell lennie");
+            if (dto.Password.Length < 8) throw new ArgumentException("The password must be at least 8 characters long");
 
-            if (await userManager.FindByEmailAsync(dto.Email) != null) throw new ArgumentException("Az email cím már létezik");
+            if (await userManager.FindByEmailAsync(dto.Email) != null) throw new ArgumentException("Profile with this email already exists");
 
-            if (!(IsValidEmail(dto.Email))) throw new ArgumentException("Az email cím formátuma nem megfelelő");
+            if (!(IsValidEmail(dto.Email))) throw new ArgumentException("The email address format is invalid");
 
             var user = new AppUser();
             user.FirstName = dto.FirstName;
