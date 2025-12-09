@@ -2,6 +2,7 @@ export class Subject {
     constructor (
         public id: string,
         public name: string,
-        public semester: number
+        public semester: number,
+        public credit: number,
     ) {}
 }

@@ -6,6 +6,10 @@ import { ProfileService } from '../../services/profile.service';
 import { FavMaterialService } from '../../services/fav-material.service';
 import { BehaviorSubject, combineLatest, finalize, map, materialize, Observable, of } from 'rxjs';
 import { AuthService } from '../../services/authentication.service';
+import { MaterialViewDto } from '../../dtos/material-view-dto';
+import { MaterialService } from '../../services/material.service';
+import { ToastService } from '../../services/toast.service';
+import { ConfirmService } from '../../services/confirm.service';
 
 @Component({
   selector: 'app-material-card',
@@ -15,13 +19,23 @@ import { AuthService } from '../../services/authentication.service';
 })
 export class MaterialCardComponent implements OnChanges, OnInit {
   @Input({ required: true }) m!: MaterialShortViewDto
+  @Output() deleted = new EventEmitter<string>();
 
   private materialId$ = new BehaviorSubject<string | null>(null)
   isFav$!: Observable<boolean>
   busy = false
   isLoggedIn: boolean = false
+  material: MaterialViewDto | null = null
+  error?: string
 
-  constructor(private router: Router, private profileService: ProfileService, private favService: FavMaterialService, private authService: AuthService) {
+  constructor(
+    private router: Router, 
+    private profileService: ProfileService, 
+    private favService: FavMaterialService, 
+    private materialService: MaterialService, 
+    public authService: AuthService, 
+    private toast: ToastService, 
+    private confirmService: ConfirmService) {
   }
 
   ngOnInit() {
@@ -61,5 +75,33 @@ export class MaterialCardComponent implements OnChanges, OnInit {
       return "isExam"
     }
     return "isNotExam"
+  }
+
+  openSubjectMaterials(subjectId: string) {
+    this.router.navigate(['/materials'], { queryParams: { subject: subjectId } });
+  }
+
+  async deleteMaterial(): Promise<void> {
+    const confirmed = await this.confirmService.confirm('Are you sure you want to delete the material?')
+    if (!confirmed) return;
+
+    this.materialService.delete(this.m.id).subscribe({
+      next: () => {
+        //console.log('The material has been successfully deleted.');
+        this.deleted.emit(this.m.id); 
+      },
+      error: (err) => {
+        console.error(err);
+        this.toast.show('The material could not be deleted.')
+      }
+    });
+  }
+
+  openButtonClass(): string {
+    if (this.isLoggedIn) {
+      return "open-button"
+    }
+
+    return "open-button-big"
   }
 }

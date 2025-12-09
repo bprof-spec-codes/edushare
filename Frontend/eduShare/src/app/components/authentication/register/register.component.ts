@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RegisterService } from '../../../services/register.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -22,7 +22,7 @@ export class RegisterComponent {
   error: string | null = null;
   success: string | null = null;
 
-  constructor(private registerService: RegisterService) {}
+  constructor(private registerService: RegisterService, private router: Router) {}
 
   onRegister() {
     this.error = null;
@@ -45,10 +45,13 @@ export class RegisterComponent {
         this.loading = false;
         this.success = 'Registration successful!';
         this.clearForm();
+        setTimeout(() => {
+          this.router.navigate(["/login"])
+        }, 3000)
       },
       error: (err: any) => {
         this.loading = false;
-        this.error = err?.error || 'Registration failed. Please try again.';
+        this.error = err?.error.message || 'Registration failed. Please try again.';
       },
     });
   }

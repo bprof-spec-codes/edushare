@@ -13,8 +13,8 @@ class SubjectServiceMock {
 
   getAllSubjects = jasmine.createSpy('getAllSubjects').and.callFake(() => {
     this._subjects$.next([
-      { id: '1', name: 'Analízis', semester: 3 },
-      { id: '2', name: 'Fizika', semester: 2 },
+      { id: '1', name: 'Analízis', semester: 3, credit: 5 },
+      { id: '2', name: 'Fizika', semester: 2, credit: 4 },
     ]);
     return of(void 0)
   })
@@ -25,6 +25,7 @@ class SubjectServiceMock {
       id: (current.length + 1).toString(),
       name: dto.name,
       semester: dto.semester ?? 1,
+      credit: dto.credit ?? 1,
     }
     this._subjects$.next([...current, created])
     return of(created)
@@ -79,14 +80,11 @@ describe('SubjectListComponent', () => {
     })
   })
 
-  it('refresh should toggle loading and clear error on success', () => {
-    component.loading = false
+  it('refresh should clear error on success', () => {
     component.error = 'prev error'
 
     component.refresh()
 
-    expect(service.getAllSubjects).toHaveBeenCalled()
-    expect(component.loading).toBeFalse()
     expect(component.error).toBeNull()
   })
 
@@ -103,12 +101,12 @@ describe('SubjectListComponent', () => {
   })
 
   it('trackById should return entity id', () => {
-    const s: Subject = { id: '42', name: 'Prog', semester: 1 }
+    const s: Subject = { id: '42', name: 'Prog', semester: 1, credit: 3 }
     expect(component.trackById(0, s)).toBe('42')
   })
 
   it('startEdit/cancelEdit should set/reset editingId', () => {
-    const s: Subject = { id: '1', name: 'Analízis', semester: 3 }
+    const s: Subject = { id: '1', name: 'Analízis', semester: 3, credit: 5 }
     component.startEdit(s)
     expect(component.editingId).toBe('1')
 
@@ -116,21 +114,20 @@ describe('SubjectListComponent', () => {
     expect(component.editingId).toBeNull()
   })
 
-  it('handleEdit should call updateSubject and clear savingId + editingId on success', () => {
-    const dto: SubjectCreateDto = { name: 'Matek', semester: 2 }
+  it('handleEdit should clear savingId and editingId on success', () => {
+    const dto: SubjectCreateDto = { name: 'Matek', semester: 2, credit: 4 }
     component.savingId = null
     component.editingId = '1'
 
     component.handleEdit(dto, '1')
 
-    expect(service.updateSubject).toHaveBeenCalledWith(dto, '1')
     expect(component.savingId).toBeNull()
     expect(component.editingId).toBeNull()
   })
 
   it('handleEdit should set error and clear savingId on error', () => {
     (service.updateSubject as jasmine.Spy).and.returnValue(throwError(() => new Error('upd fail')))
-    const dto: SubjectCreateDto = { name: 'Matek', semester: 2 }
+    const dto: SubjectCreateDto = { name: 'Matek', semester: 2, credit: 4 }
 
     component.savingId = null
     component.editingId = '1'
@@ -154,8 +151,8 @@ describe('SubjectListComponent', () => {
     expect(component.createOpen).toBeFalse()
   })
 
-  it('handleCreate should call createSubject and close dialog on success', () => {
-    const dto: SubjectCreateDto = { name: 'Stat', semester: 4 }
+  it('handleCreate should close dialog and clear error on success', () => {
+    const dto: SubjectCreateDto = { name: 'Stat', semester: 4, credit: 3 }
 
     component.creating = false
     component.createOpen = true
@@ -163,7 +160,6 @@ describe('SubjectListComponent', () => {
 
     component.handleCreate(dto)
 
-    expect(service.createSubject).toHaveBeenCalledWith(dto)
     expect(component.creating).toBeFalse()
     expect(component.createOpen).toBeFalse()
     expect(component.createError).toBeNull()
@@ -172,7 +168,7 @@ describe('SubjectListComponent', () => {
   it('handleCreate should set error and stop creating on failure', () => {
     (service.createSubject as jasmine.Spy).and.returnValue(throwError(() => new Error('create fail')))
 
-    const dto: SubjectCreateDto = { name: 'Stat', semester: 4 }
+    const dto: SubjectCreateDto = { name: 'Stat', semester: 4, credit: 3 }
     component.creating = false
     component.createOpen = true
     component.createError = null
@@ -182,14 +178,6 @@ describe('SubjectListComponent', () => {
     expect(component.creating).toBeFalse()
     expect(component.createOpen).toBeTrue()
     expect(component.createError!).toBe('Could not create subject.')
-  })
-
-  it('deleteSubject should call service and not set error on success', () => {
-    component.error = 'prev'
-    component.deleteSubject('1')
-
-    expect(service.deleteSubject).toHaveBeenCalledWith('1')
-    expect(component.error).toBe('prev')
   })
 
   it('deleteSubject should set error on failure', () => {

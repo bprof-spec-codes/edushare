@@ -16,6 +16,7 @@ using Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Logic.Helper;
 
 namespace EdushareBackend.Controllers
 {
@@ -26,17 +27,19 @@ namespace EdushareBackend.Controllers
         UserManager<AppUser> userManager;
         RoleManager<IdentityRole> roleManager;
         Repository<AppUser> appuserRepo;
+        ImageCompressor imageCompressor;
         private readonly IWebHostEnvironment env;
         private readonly JwtSettings jwtSettings;
 
 
-        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, IOptions<JwtSettings> jwtSettings, Repository<AppUser> appuserRepo)
+        public UserController(UserManager<AppUser> userManager, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, IOptions<JwtSettings> jwtSettings, Repository<AppUser> appuserRepo, ImageCompressor imageCompressor)
         {
             this.userManager = userManager;
             this.env = env;
             this.roleManager = roleManager;
             this.jwtSettings = jwtSettings.Value;
             this.appuserRepo = appuserRepo;
+            this.imageCompressor = imageCompressor;
         }
 
         [HttpGet]
@@ -45,20 +48,30 @@ namespace EdushareBackend.Controllers
             var users = await userManager.Users //összes user listázása
                 .Include(u => u.Image)  //include a navigation property miatt kell hogy az is benne legyen
                 .ToListAsync();
+            
+            var result = new List<AppUserShortViewDto>();
 
-            return users.Select(u => new AppUserShortViewDto //átalakítás DTO-vá
+            foreach (var user in users)
             {
-                Id = u.Id,
-                Email = u.Email,
-                FullName = u.FirstName + " " + u.LastName,
-                IsWarned = u.IsWarned,
-                IsBanned = u.IsBanned,
-                Image = new ContentViewDto(
-                    u.Image.Id,
-                    u.Image.FileName,
-                    Convert.ToBase64String(u.Image.File)
-                )
-            });
+                var roles = await userManager.GetRolesAsync(user);
+                
+                result.Add(new AppUserShortViewDto
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    FullName = user.FirstName + " " + user.LastName,
+                    IsWarned = user.IsWarned,
+                    IsBanned = user.IsBanned,
+                    Role = roles.FirstOrDefault(),
+                    Image = new ContentViewDto(
+                        user.Image.Id,
+                        user.Image.FileName,
+                        Convert.ToBase64String(user.Image.File)
+                    )
+                });
+            }
+            
+            return result;
         }
 
         [HttpGet("{id}")]
@@ -118,11 +131,11 @@ namespace EdushareBackend.Controllers
         [HttpPost("Register")]
         public async Task RegisterUser(AppUserRegisterDto dto)
         {
-            if (dto.Password.Length < 8) throw new ArgumentException("A jelszónak legalább 8 karakter hosszúnak kell lennie");
+            if (dto.Password.Length < 8) throw new ArgumentException("The password must be at least 8 characters long");
 
-            if (await userManager.FindByEmailAsync(dto.Email) != null) throw new ArgumentException("Az emalcím már létezik");
+            if (await userManager.FindByEmailAsync(dto.Email) != null) throw new ArgumentException("Profile with this email already exists");
 
-            if (!(IsValidEmail(dto.Email))) throw new ArgumentException("Az email cím formátuma nem megfelelő");
+            if (!(IsValidEmail(dto.Email))) throw new ArgumentException("The email address format is invalid");
 
             var user = new AppUser();
             user.FirstName = dto.FirstName;
@@ -200,6 +213,11 @@ namespace EdushareBackend.Controllers
                 .Include(u => u.Image)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
+            if(dto.Image != null)
+            {
+                dto.Image.File = await imageCompressor.CompressToTargetSyieAsync(dto.Image.File);
+            }
+            
             currentUser.Email = dto.Email;
             currentUser.FirstName = dto.FirstName;
             currentUser.LastName = dto.LastName;
@@ -238,6 +256,15 @@ namespace EdushareBackend.Controllers
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
                 throw new ArgumentException("User not found");
+            
+            var roles =  await userManager.GetRolesAsync(user);
+
+            if (roles.FirstOrDefault() == "Admin")
+            {
+                throw new ArgumentException("User already has admin role");
+            }
+            
+            await userManager.RemoveFromRolesAsync(user, roles);
             await userManager.AddToRoleAsync(user, "Admin");
         }
 
@@ -255,7 +282,15 @@ namespace EdushareBackend.Controllers
             {
                 await roleManager.CreateAsync(new IdentityRole("Teacher"));
             }
+            
+            var roles = await userManager.GetRolesAsync(user);
 
+            if (roles.FirstOrDefault() == "Teacher")
+            {
+                throw new ArgumentException("User already has teacher role");
+            }
+
+            await userManager.RemoveFromRolesAsync(user, roles);
             await userManager.AddToRoleAsync(user, "Teacher");
         }
 

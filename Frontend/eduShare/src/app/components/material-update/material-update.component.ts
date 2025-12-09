@@ -4,6 +4,7 @@ import { Material } from '../../models/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialService } from '../../services/material.service';
 import { MaterialFormValue } from '../material-form/material-form.component';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-material-update',
@@ -15,7 +16,7 @@ export class MaterialUpdateComponent implements OnInit{
   material?: MaterialViewDto
   id!: string
 
-  constructor(private route: ActivatedRoute, private materialService: MaterialService, private router: Router) {}
+  constructor(private route: ActivatedRoute, private materialService: MaterialService, private router: Router, private toast: ToastService) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')!
@@ -24,7 +25,7 @@ export class MaterialUpdateComponent implements OnInit{
         this.material=data
       },
       error: (err) => {
-        console.error("Nem sikerült betölteni az anyagot", err)
+        console.error("The materials could not be loaded.", err)
         this.router.navigate(['/materials'])
       }
     })
@@ -42,12 +43,12 @@ export class MaterialUpdateComponent implements OnInit{
     
     this.materialService.update(this.id, dto).subscribe({
       next: () => {
-        console.log("Sikeres módosítás!")
+        //console.log("Modification successful!")
         this.router.navigate(['/materials', this.id, 'view'])
       },
       error: (err) => {
-        console.error("Nem sikerült módosítani az anyagot", err)
-        alert("Sikertelen módosítás!")
+        console.error("Unable to modify the material", err)
+        this.toast.show("Modification unsuccessful!")
         this.router.navigate(['/materials'])
       }
     })

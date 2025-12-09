@@ -4,6 +4,8 @@ import { ProfileService } from '../../services/profile.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialShortViewDto } from '../../dtos/material-short-view-dto';
 import { AuthService } from '../../services/authentication.service';
+import { ToastService } from '../../services/toast.service';
+import { ConfirmService } from '../../services/confirm.service';
 
 @Component({
   selector: 'app-profile-view',
@@ -18,39 +20,54 @@ export class ProfileViewComponent {
   ownProfile = false
   isAdmin = false
 
-  constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router, private authService: AuthService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private profileService: ProfileService,
+    private router: Router,
+    private authService: AuthService,
+    private toast: ToastService,
+    private confirmService: ConfirmService
+  ) { }
   
   ngOnInit() {
     // Check if current user is admin
     const roles = this.authService.getRoles()
     this.isAdmin = roles.includes('Admin')
 
-    const id = this.route.snapshot.paramMap.get('id')
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id')
 
-    if (!id) {
-      alert('Invalid id.')
-      return
-    }
-
-    if (id) {
-      this.loadProfile(id)
-      if (id === this.authService.getUserId()) {
-        this.ownProfile = true
+      if (!id) {
+        this.toast.show('Invalid id.');
+        return
       }
-    }
+
+      this.loadProfile(id)
+      this.ownProfile = id === this.authService.getUserId()
+    })
   }
 
   loadProfile(id: string) {
+    this.profile = null
+    this.error = undefined
     this.loading = true
     this.profileService.getById(id).subscribe({
       next: (data) => {
         this.profile = data
-        console.log(this.profile)
+
+        if (this.profile.warnedAt) {
+          this.profile.warnedAt = this.profile.warnedAt + 'Z'
+        }
+        if (this.profile.bannedAt) {
+          this.profile.bannedAt = this.profile.bannedAt + 'Z'
+        }
+        
+        //console.log(this.profile)
         this.loading = false
       },
       error: (err) => {
         console.error(err)
-        alert('Cannot load the profile.')
+        this.toast.show('Cannot load the profile.');
         this.loading = false
       }
     })
@@ -72,69 +89,73 @@ export class ProfileViewComponent {
     return file.startsWith('http') ? file : `data:image/*;base64,${file}`;
   }
 
-  warnUser(): void {
+  async warnUser(): Promise<void> {
     if (!this.profile) return
 
-    if (confirm(`Are you sure you want to warn ${this.profile.fullName}?`)) {
+    const confirmed = await this.confirmService.confirm(`Are you sure you want to warn ${this.profile.fullName}?`)
+    if (confirmed) {
       this.profileService.warnUser(this.profile.id).subscribe({
         next: () => {
-          alert('User warned successfully!')
+          this.toast.show('User warned successfully!');
           this.loadProfile(this.profile!.id)
         },
         error: (err) => {
           console.error(err)
-          alert('Failed to warn user: ' + (err.error?.message || 'Unknown error'))
+          this.toast.show('Failed to warn user: ' + (err.error?.message || 'Unknown error'));
         }
       })
     }
   }
 
-  removeWarning(): void {
+  async removeWarning(): Promise<void> {
     if (!this.profile) return
 
-    if (confirm(`Are you sure you want to remove the warning from ${this.profile.fullName}?`)) {
+    const confirmed = await this.confirmService.confirm(`Are you sure you want to remove the warning from ${this.profile.fullName}?`)
+    if (confirmed) {
       this.profileService.removeWarning(this.profile.id).subscribe({
         next: () => {
-          alert('Warning removed successfully!')
+          this.toast.show('Warning removed successfully!');
           this.loadProfile(this.profile!.id)
         },
         error: (err) => {
           console.error(err)
-          alert('Failed to remove warning: ' + (err.error?.message || 'Unknown error'))
+          this.toast.show('Failed to remove warning: ' + (err.error?.message || 'Unknown error'));
         }
       })
     }
   }
 
-  banUser(): void {
+  async banUser(): Promise<void> {
     if (!this.profile) return
 
-    if (confirm(`Are you sure you want to BAN ${this.profile.fullName}? This will prevent them from logging in.`)) {
+    const confirmed = await this.confirmService.confirm(`Are you sure you want to BAN ${this.profile.fullName}? This will prevent them from logging in.`)
+    if (confirmed) {
       this.profileService.banUser(this.profile.id).subscribe({
         next: () => {
-          alert('User banned successfully!')
+          this.toast.show('User banned successfully!');
           this.loadProfile(this.profile!.id)
         },
         error: (err) => {
           console.error(err)
-          alert('Failed to ban user: ' + (err.error?.message || 'Unknown error'))
+          this.toast.show('Failed to ban user: ' + (err.error?.message || 'Unknown error'));
         }
       })
     }
   }
 
-  unbanUser(): void {
+  async unbanUser(): Promise<void> {
     if (!this.profile) return
 
-    if (confirm(`Are you sure you want to unban ${this.profile.fullName}?`)) {
+    const confirmed = await this.confirmService.confirm(`Are you sure you want to unban ${this.profile.fullName}?`)
+    if (confirmed) {
       this.profileService.unbanUser(this.profile.id).subscribe({
         next: () => {
-          alert('User unbanned successfully!')
+          this.toast.show('User unbanned successfully!');
           this.loadProfile(this.profile!.id)
         },
         error: (err) => {
           console.error(err)
-          alert('Failed to unban user: ' + (err.error?.message || 'Unknown error'))
+          this.toast.show('Failed to unban user: ' + (err.error?.message || 'Unknown error'));
         }
       })
     }

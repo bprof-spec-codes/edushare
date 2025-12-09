@@ -8,6 +8,8 @@ import { RatingService } from '../../services/rating.service';
 import { RatingCreateDto } from '../../dtos/rating-create-dto';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RatingViewDto } from '../../dtos/rating-view-dto';
+import { ToastService } from '../../services/toast.service';
+import { ConfirmService } from '../../services/confirm.service';
 
 @Component({
   selector: 'app-material-view',
@@ -21,6 +23,8 @@ export class MaterialViewComponent implements OnInit {
   error?: string
   showFullDescription = false
   currentUserId = ''
+  recommendedMaterials: any[] = [];
+
 
   ratingDeleteId: string | null = null
   ratingCreateModalOpen = false
@@ -39,48 +43,64 @@ export class MaterialViewComponent implements OnInit {
     private router: Router,
     public auth: AuthService,
     private ratingService: RatingService,
+    private toast: ToastService,
+    private confirmService: ConfirmService
   ) { }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id')
-    if (!id) {
-      alert('Érvénytelen azonosító.')
-      return
-    }
-    this.currentUserId = this.auth.getUserId() || ''
-    this.loading = true
-    if (id) {
-      this.materialService.getById(id).subscribe({
-        next: (data) => {
-          this.material = data
-          console.log(this.material)
-        },
-        error: (err) => {
-          console.error(err)
-          alert('Nem sikerült betölteni az anyagot.')
-        }
-      })
-    }
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
 
-    this.ratingsLoad(id)
+      if (!id) {
+        this.toast.show('Invalid ID.');
+        return;
+      }
 
+      this.loadMaterial(id);
+    });
+  }
+
+
+
+  loadMaterial(id: string) {
+    this.currentUserId = this.auth.getUserId() || '';
+    this.loading = true;
+
+    this.materialService.getById(id).subscribe({
+      next: (data) => {
+        this.material = data;
+        this.recommendedMaterials = data.recommendedMaterials || [];
+
+        //console.log('Loaded material:', data);
+
+        this.ratingsLoad(id);
+      },
+      error: (err) => {
+        console.error('Error loading course material:', err);
+        this.toast.show('The data could not be loaded.');
+      }
+    });
   }
 
   recommendedMaterial(id: string) {
     this.material!.isRecommended = !this.material?.isRecommended;
     this.materialService.updateRecommended(id, this.material!.isRecommended).subscribe({
-      next: () => console.log('Sikeres mentés!'),
-      error: (err) => console.error('Hiba történt:', err)
+      next: () => {
+        //console.log('Save successfull!')
+      },
+      error: (err) => console.error('An error has occurred:', err)
     });
-    console.log(this.material!.isRecommended);
+    //console.log(this.material!.isRecommended);
   }
-  examMaterial(id: string){
-  this.material!.isExam=!this.material?.isExam;
-  this.materialService.updateExam(id, this.material!.isExam).subscribe({
-    next: () => console.log('Sikeres mentés!'),
-    error: (err) => console.error('Hiba történt:', err)
-  });
-    console.log(this.material!.isExam);
+  examMaterial(id: string) {
+    this.material!.isExam = !this.material?.isExam;
+    this.materialService.updateExam(id, this.material!.isExam).subscribe({
+      next: () => {
+        //console.log('Save successfull!')
+      },
+      error: (err) => console.error('An error has occurred:', err)
+    });
+    //console.log(this.material!.isExam);
   }
 
   downloadFile(base64: string | undefined, fileName: string | undefined): void {
@@ -108,7 +128,7 @@ export class MaterialViewComponent implements OnInit {
       const url = URL.createObjectURL(blob);
       window.open(url, '_blank');
     } else {
-      alert('Preview is only available for PDF files.');
+      this.toast.show('Preview is only available for PDF files.');
     }
   }
 
@@ -125,17 +145,18 @@ export class MaterialViewComponent implements OnInit {
     this.router.navigate(['/profile-view', id])
   }
 
-  deleteMaterial(): void {
+  async deleteMaterial(): Promise<void> {
     if (!this.material) return
-    if (!confirm('Biztosan törölni szeretnéd az anyagot?')) return
+    const confirmed = await this.confirmService.confirm('Are you sure you want to delete the material?')
+    if (!confirmed) return
     this.materialService.delete(this.material.id).subscribe({
       next: () => {
-        console.log('A tananyag sikeresen törölve lett.')
+        //console.log('The course material has been successfully deleted.')
         this.router.navigate(['/materials'])
       },
       error: (err) => {
         console.error(err)
-        alert('Nem sikerült törölni az tananyagot.')
+        this.toast.show('The course material could not be deleted.')
       }
     })
   }
@@ -150,7 +171,7 @@ export class MaterialViewComponent implements OnInit {
       error: (err) => {
         this.loading = false
         console.error(err)
-        alert('Could not load ratings.')
+        this.toast.show('Could not load ratings.')
       }
     })
   }
@@ -196,12 +217,11 @@ export class MaterialViewComponent implements OnInit {
   }
 
   onHorizontalScroll(event: WheelEvent) {
-    const target = event.currentTarget as HTMLElement | null;
-    if (!target) return
+    const container = event.currentTarget as HTMLElement;
 
-    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
-      event.preventDefault()
-      target.scrollLeft += event.deltaY
+    if (event.deltaY !== 0) {
+      event.preventDefault();
+      container.scrollLeft += event.deltaY;
     }
   }
 
@@ -215,4 +235,7 @@ export class MaterialViewComponent implements OnInit {
     this.commentModalOpen = false
   }
 
+  openSubjectMaterials(subjectId: string) {
+    this.router.navigate(['/materials'], { queryParams: { subject: subjectId } });
+  }
 }

@@ -33,7 +33,7 @@ export class AdminStatisticsComponent implements OnInit {
       next: (data: AdminStatisticsDto) => {
         this.statistics = data;
         this.loading = false;
-        console.log('Statistics loaded:', data);
+        //console.log('Statistics loaded:', data);
       },
       error: (err: any) => {
         console.error('Error loading statistics:', err);

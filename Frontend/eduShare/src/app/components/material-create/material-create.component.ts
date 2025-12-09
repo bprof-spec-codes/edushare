@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MaterialService } from '../../services/material.service';
 import { MaterialFormValue } from '../material-form/material-form.component';
 import { Router } from '@angular/router';
+import { ToastService } from '../../services/toast.service';
 
 
 @Component({
@@ -11,11 +12,11 @@ import { Router } from '@angular/router';
   styleUrl: './material-create.component.sass'
 })
 export class MaterialCreateComponent {
-constructor(private materialService: MaterialService, private router: Router) {}
+constructor(private materialService: MaterialService, private router: Router, private toast: ToastService) {}
 
   onCreate(value: MaterialFormValue) {
     if (!value.content) {
-      alert('Kérlek, válassz egy fájlt!')
+      this.toast.show('Please choose file!')
       return
     }
 
@@ -28,11 +29,11 @@ constructor(private materialService: MaterialService, private router: Router) {}
 
     this.materialService.create(dto).subscribe({
       next: () => {
-        console.log('A tananyag sikeresen létre lett hozva.')
+        //console.log('The material has been successfully created.')
         this.router.navigate(['/materials'])
       },
       error: (err) => {
-        console.error('Nem sikerült létrehozni a tananyagot', err)
+        console.error('The material could not be created.', err)
         this.router.navigate(['/materials'])
       }
     })

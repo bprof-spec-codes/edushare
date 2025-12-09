@@ -7,6 +7,7 @@ import { FileContent } from '../../models/file-content';
 import { ImageDto } from '../../dtos/image-dto';
 import { FileService } from '../../services/file.service';
 import { UpdateProfileDto } from '../../dtos/update-profile-dto';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-profile-update',
@@ -26,7 +27,7 @@ export class ProfileUpdateComponent {
   selectedFile: File | null = null;
   selectedFileDataUrl: string | null = null;
 
-  constructor(private route:ActivatedRoute, private profileService: ProfileService,private fb: FormBuilder , private router: Router, private fileService:FileService) { 
+  constructor(private route:ActivatedRoute, private profileService: ProfileService,private fb: FormBuilder , private router: Router, private fileService:FileService, private toast: ToastService) { 
     
   }
   ngOnInit(){
@@ -41,7 +42,7 @@ export class ProfileUpdateComponent {
 
     const id = this.route.snapshot.paramMap.get('id')
       if(!id) {
-        alert('Érvénytelen azonosító.')
+        this.toast.show('Invalid ID.');
         return
       }
       this.id = id;
@@ -66,7 +67,7 @@ export class ProfileUpdateComponent {
   
         error: (err) => {
           console.error(err)
-          alert('Nem sikerült betölteni a profilt.')
+          this.toast.show('The profile could not be loaded.');
         }
       })
     }
@@ -102,12 +103,12 @@ onUpdate() {
 
   this.profileService.update(this.id, dto).subscribe({
     next: () => {
-      alert('Profil sikeresen módosítva!');
+      this.toast.show('Profile successfully modified!');
       this.router.navigate(['/profile-view', this.id]);
     },
     error: (err) => {
-      console.error('Hiba történt a módosítás során', err);
-      alert('Nem sikerült módosítani a profilt.');
+      console.error('An error occurred during the modification', err);
+      this.toast.show('The profile could not be modified.');
     }
   });
 }
@@ -119,10 +120,15 @@ async onFileSelected(event: Event) {
   const file = input.files[0];
   const ext = file.name.split('.').pop()?.toLowerCase();
 
-
-
   if (!ext || !this.allowed.includes(ext)) {
-    alert('Csak PNG és JPEG formátum engedélyezett!');
+    this.toast.show('Only PNG and JPEG formats are allowed!');
+    input.value = '';
+    this.selectedFileDataUrl = null;
+    this.content = undefined;
+    return;
+  }
+   if (file.name.length > 50) {
+    this.toast.show('A fájlnév túl hosszú! Maximum 50 karakter engedélyezett.');
     input.value = '';
     this.selectedFileDataUrl = null;
     this.content = undefined;
