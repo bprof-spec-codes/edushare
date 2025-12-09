@@ -1,41 +1,138 @@
-<div class="container-fluid py-5 mt-2">
-  <div class="row w-100 justify-content-center align-items-start">
-    <div class="col-md-7 d-flex justify-content-center">
-      <div class="container mt-4" *ngIf="material">
+<div class="container-fluid py-5 mt-2 material-page">
+  <div class="row justify-content-center align-items-start gy-4">
+    <div class="col-12 col-xl-7 d-flex justify-content-center">
+      <div class="container mt-4 p-0 p-sm-2" *ngIf="material">
 
-        <div class="d-flex justify-content-between align-items-center mb-3 row">
-          <div class="col-6">
-            <div *ngIf="material.isRecommended">
-              <i class="bi bi-pin-angle-fill me-1"></i>
-              <span>Recommended</span>
-            </div>
-            <div>
-              <div class="d-inline-flex align-items-left gap-1 ps-0 rating">
+        <div class="mb-3 d-md-none">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="d-flex flex-column align-items-start">
+              <div *ngIf="material.isRecommended" class="mb-1">
+                <i class="bi bi-pin-angle-fill me-1"></i>
+                <span>Recommended</span>
+              </div>
+
+              <div class="d-inline-flex align-items-center gap-1 ps-0 rating flex-wrap mb-1">
                 <span>{{ ratingAverage$ | async | number:'1.1-1' }}</span>
-                <app-rating-stars [rating]="ratingAverage$ | async"></app-rating-stars>
-                <span class="text-muted" style="font-size: 0.9rem" count>({{(ratings$ | async)?.length}})</span>
+                <span class="d-none d-sm-inline">
+                  <app-rating-stars [rating]="ratingAverage$ | async"></app-rating-stars>
+                </span>
+                <span class="text-muted" style="font-size: 0.9rem" count>
+                  ({{(ratings$ | async)?.length}})
+                </span>
                 <i class="bi bi-plus-circle add-rating" (click)="openRatingCreateModal()"></i>
-                <i class="bi bi-download ms-4"></i> 
-                <span>{{ material.downloadCount || 0 }} downloads</span>  
+              </div>
+
+              <div class="small text-muted d-flex align-items-center">
+                <i class="bi bi-download me-1"></i>
+                <span>{{ material.downloadCount || 0 }} downloads</span>
               </div>
             </div>
 
-            <h3 class="mb-0">{{ material.title }}</h3>
-            <div class="text-muted fw-semibold">
-              <i class="bi bi-book me-1"></i>
-              <button class="subject" (click)="openSubjectMaterials(material.subject.id)"> {{ material.subject.name || 'Placeholder' }} </button> 
+            <div class="d-flex align-items-center justify-content-end">
+              <div class="text-end me-2">
+                <div class="small fw-semibold">
+                  <a class="btn btn-link p-0 text-dark" (click)="openProfile(material.uploader.id)">
+                    {{material.uploader.fullName || 'Ismeretlen'}}
+                  </a>
+                </div>
+                <div class="small text-muted">
+                  {{ material.uploadDate | date:'yyyy.MM.dd. HH:mm' }}
+                </div>
+              </div>
+
+              <img *ngIf="material.uploader.image.file" [src]="material.uploader.image.file.startsWith('http')
+                 ? material.uploader.image.file
+                 : 'data:image/*;base64,' + material.uploader.image.file"
+                alt="{{ material.uploader.fullName || 'Feltöltő' }}" class="rounded-circle flex-shrink-0" width="42"
+                height="42" />
+
+              <div class="dropdown ms-2" *ngIf="currentUserId === material.uploader.id || auth.isAdmin()">
+                <button class="btn btn-link text-dark p-0" type="button" id="optionsMenuMobile"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-three-dots-vertical fs-5"></i>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="optionsMenuMobile">
+                  <li>
+                    <button class="dropdown-item" *ngIf="currentUserId === material.uploader.id"
+                      (click)="updateMaterial()">
+                      <i class="bi bi-pencil-square me-2"></i> Modify
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item text-danger" (click)="deleteMaterial()">
+                      <i class="bi bi-trash me-2"></i> Delete
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div class="text-muted fw-semibold" *ngIf="material.isExam">
+          </div>
+
+          <h3 class="mb-0">{{ material.title }}</h3>
+
+          <div class="text-muted fw-semibold mt-1 d-flex align-items-center gap-1 flex-wrap">
+            <i class="bi bi-book me-1"></i>
+            <button class="subject" (click)="openSubjectMaterials(material.subject.id)">
+              {{ material.subject.name || 'Placeholder' }}
+            </button>
+          </div>
+
+          <div class="text-muted fw-semibold mt-1" *ngIf="material.isExam">
+            <i class="bi bi-exclamation-diamond-fill me-2"></i>
+            <span>Exam</span>
+          </div>
+        </div>
+
+
+        <div class="d-none d-md-flex justify-content-between align-items-start mb-3 row g-3">
+          <div class="col-12 col-md-7">
+            <div *ngIf="material.isRecommended" class="mb-1">
+              <i class="bi bi-pin-angle-fill me-1"></i>
+              <span>Recommended</span>
+            </div>
+
+            <div class="mb-1">
+              <div class="d-inline-flex align-items-center gap-1 ps-0 rating">
+                <span>{{ ratingAverage$ | async | number:'1.1-1' }}</span>
+                <app-rating-stars [rating]="ratingAverage$ | async"></app-rating-stars>
+                <span class="text-muted" style="font-size: 0.9rem" count>
+                  ({{(ratings$ | async)?.length}})
+                </span>
+                <i class="bi bi-plus-circle add-rating" (click)="openRatingCreateModal()"></i>
+                <i class="bi bi-download ms-3 d-none d-sm-inline"></i>
+                <span class="d-none d-sm-inline">
+                  {{ material.downloadCount || 0 }} downloads
+                </span>
+              </div>
+            </div>
+
+            <div class="small text-muted d-sm-none mb-2">
+              <i class="bi bi-download me-1"></i>
+              {{ material.downloadCount || 0 }} downloads
+            </div>
+
+            <h3 class="mb-0">{{ material.title }}</h3>
+
+            <div class="text-muted fw-semibold mt-1 d-flex align-items-center gap-1 flex-wrap">
+              <i class="bi bi-book me-1"></i>
+              <button class="subject" (click)="openSubjectMaterials(material.subject.id)">
+                {{ material.subject.name || 'Placeholder' }}
+              </button>
+            </div>
+
+            <div class="text-muted fw-semibold mt-1" *ngIf="material.isExam">
               <i class="bi bi-exclamation-diamond-fill me-2"></i>
               <span>Exam</span>
             </div>
           </div>
 
-          <div class="d-flex align-items-center col-6 justify-content-end ">
+          <div class="d-flex align-items-center justify-content-end col-12 col-md-5">
             <div class="text-end me-3">
               <div class="small fw-semibold">
-                <a class="btn btn-link p-0 text-dark"
-                  (click)="openProfile(material.uploader.id)">{{material.uploader.fullName || 'Ismeretlen'}}</a>
+                <a class="btn btn-link p-0 text-dark" (click)="openProfile(material.uploader.id)">
+                  {{material.uploader.fullName || 'Ismeretlen'}}
+                </a>
               </div>
               <div class="small text-muted">
                 {{ material.uploadDate | date:'yyyy.MM.dd. HH:mm' }}
@@ -43,10 +140,12 @@
             </div>
 
             <img *ngIf="material.uploader.image.file" [src]="material.uploader.image.file.startsWith('http')
-                       ? material.uploader.image.file
-                       : 'data:image/*;base64,' + material.uploader.image.file"
-              alt="{{ material.uploader.fullName || 'Feltöltő' }}" class="rounded-circle" width="42" height="42" />
-            <div class="dropdown ms-3" *ngIf="currentUserId === material.uploader.id || auth.isAdmin()">
+               ? material.uploader.image.file
+               : 'data:image/*;base64,' + material.uploader.image.file"
+              alt="{{ material.uploader.fullName || 'Feltöltő' }}" class="rounded-circle flex-shrink-0" width="42"
+              height="42" />
+
+            <div class="dropdown ms-2 ms-sm-3" *ngIf="currentUserId === material.uploader.id || auth.isAdmin()">
               <button class="btn btn-link text-dark p-0" type="button" id="optionsMenu" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <i class="bi bi-three-dots-vertical fs-5"></i>
@@ -54,7 +153,8 @@
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="optionsMenu">
                 <li>
-                  <button class="dropdown-item" *ngIf="currentUserId === material.uploader.id" (click)="updateMaterial()">
+                  <button class="dropdown-item" *ngIf="currentUserId === material.uploader.id"
+                    (click)="updateMaterial()">
                     <i class="bi bi-pencil-square me-2"></i> Modify
                   </button>
                 </li>
@@ -68,16 +168,16 @@
           </div>
         </div>
 
+
         <div class="row g-3">
           <div class="col-12">
             <p class="mb-0 text-body-secondary text-body">
-              <i class="bi bi-file-earmark-text"></i>
-
+              <i class="bi bi-file-earmark-text me-1"></i>
               {{ showFullDescription ? material.description : (material.description | slice:0:700) }}
               <span *ngIf="!showFullDescription && material.description.length > 700">...</span>
             </p>
 
-            <button *ngIf="material.description.length > 700" class="btn btn-link p-0 mt-0 d-flex"
+            <button *ngIf="material.description.length > 700" class="btn btn-link p-0 mt-1 d-flex"
               (click)="toggleDescription()">
               {{ showFullDescription ? 'show less' : 'show more' }}
             </button>
@@ -85,49 +185,53 @@
         </div>
 
         <div class="row my-4">
-          <div class="col-12 d-flex justify-content-center gap-4">
-            <button class="btn w-25 d-flex align-items-center justify-content-center file-button"
-              (click)="downloadFile(material.content.file, material.content.fileName)">
-              Download
-            </button>
-            <button class="btn w-25 d-flex align-items-center justify-content-center file-button"
-              (click)="previewFile()">
-              Preview
-            </button>
-            <button class="btn w-25 d-flex align-items-center justify-content-center file-button"
-              *ngIf="auth.isAdmin() || auth.isTeacher()" (click)="recommendedMaterial(material.id)">
-              <i class="bi bi-pin-angle-fill me-2"></i>
-              <span>Recommend</span>
-            </button>
-            <button class="btn w-25 d-flex align-items-center justify-content-center file-button" *ngIf="auth.isAdmin() || auth.isTeacher()" (click)="examMaterial(material.id)">
-              <i class="bi bi-exclamation-diamond-fill me-2"></i>
-              <span>Exam</span>
-            </button>
+          <div class="col-12">
+            <div class="d-flex flex-column flex-md-row justify-content-center align-items-stretch gap-3">
+              <button class="btn flex-fill file-button"
+                (click)="downloadFile(material.content.file, material.content.fileName)">
+                Download
+              </button>
+
+              <button class="btn flex-fill file-button" (click)="previewFile()">
+                Preview
+              </button>
+
+              <button class="btn flex-fill file-button" *ngIf="auth.isAdmin() || auth.isTeacher()"
+                (click)="recommendedMaterial(material.id)">
+                <i class="bi bi-pin-angle-fill me-2"></i>
+                <span>Recommend</span>
+              </button>
+
+              <button class="btn flex-fill file-button" *ngIf="auth.isAdmin() || auth.isTeacher()"
+                (click)="examMaterial(material.id)">
+                <i class="bi bi-exclamation-diamond-fill me-2"></i>
+                <span>Exam</span>
+              </button>
+            </div>
           </div>
         </div>
-
 
         <div class="row">
           <div class="col-12">
             <div class="rating-scroll-container comments-wrapper" [class.open]="((ratings$ | async)?.length ?? 0)>0"
               #ratingScroll (wheel)="onHorizontalScroll($event)">
-              <app-rating-card *ngFor="let rating of ratings$ | async" [rating]="rating" [currentUserId]="currentUserId" (deleteRating)="handleRatingDelete($event)"
+              <app-rating-card *ngFor="let rating of ratings$ | async" [rating]="rating" [currentUserId]="currentUserId"
+                (deleteRating)="handleRatingDelete($event)"
                 (showFullComment)="openCommentModal(rating.userName,rating.comment)">
               </app-rating-card>
             </div>
           </div>
         </div>
 
-        <div class="mt-2" *ngIf="recommendedMaterials.length > 0" #ratingScroll (wheel)="onHorizontalScroll($event)">
-          <app-recommended-materials 
-            [materials]="recommendedMaterials">
+        <div class="mt-3" *ngIf="recommendedMaterials.length > 0" #ratingScroll (wheel)="onHorizontalScroll($event)">
+          <app-recommended-materials [materials]="recommendedMaterials">
           </app-recommended-materials>
         </div>
 
       </div>
     </div>
 
-    <div class="col-md-5 d-flex align-items-center justify-content-center">
+    <div class="col-12 col-xl-5 d-none d-xl-flex align-items-center justify-content-center">
       <img src="/images/vecteezy_men-set-an-alarm-to-remember-to-always-study_4474412-1.jpg" alt="tanulj öcsi"
         class="img-fluid rounded w-100" />
     </div>
