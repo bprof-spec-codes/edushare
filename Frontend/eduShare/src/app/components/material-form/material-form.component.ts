@@ -97,7 +97,7 @@ export class MaterialFormComponent implements OnInit {
       ...(this.materialForm.value.file ? { content: this.content } : {})
     }
 
-    console.log(dto)
+    //console.log(dto)
 
     this.submitted.emit(dto)
   }

@@ -29,7 +29,7 @@ constructor(private materialService: MaterialService, private router: Router, pr
 
     this.materialService.create(dto).subscribe({
       next: () => {
-        console.log('The material has been successfully created.')
+        //console.log('The material has been successfully created.')
         this.router.navigate(['/materials'])
       },
       error: (err) => {
