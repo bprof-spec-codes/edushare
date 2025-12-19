@@ -13,8 +13,15 @@
 | Nagy Zsombor                 | Architect | [nzsombor04](http://github.com/nzsombor04) |
 | Bátori András                | Frontend developer | [batoriandras](http://github.com/batoriandras) |
 | Hanusz Bettina Alexandra     | Frontend developer | [hanuszbettina](http://github.com/hanuszbettina) |
+| Tolnai Levente               | Frontend developer | [levitolnai](https://github.com/levitolnai) |
 | Zádori Áron                  | Backend developer | [zadoriaron](http://github.com/zadoriaron) |
 | Keserű Gergely Márton        | Backend developer | [kesamarci](http://github.com/kesamarci) |
+
+---
+
+## <img width="25" alt="eduhog" src="https://github.com/user-attachments/assets/67e81705-b99a-495f-91a4-97c4b1a90c1d" /> Availability
+
+The site is available for everyone at [EDUSHARE](https://edushareoe.hu)
 
 ---
 
@@ -36,22 +43,26 @@ ng serve
 Runs at: `http://localhost:4200/`
 
 ### Backend (ASP.NET Core)
-1. Open the solution in Visual Studio  
-2. Update database:
-```powershell
-update-database
-```
-3. Run the Web API (IIS Express or Kestrel)  
-4. Swagger UI is available while the backend is running
+1. Open the solution in Visual Studio
+2. Add Migration (if needed)
+   ```powershell
+   Add-Migration
+   ```
+3. Update database:
+   ```powershell
+   Update-Database
+   ```
+4. Run the Web API (IIS Express or Kestrel)  
+5. Swagger UI is available while the backend is running
 
 ---
 
-## 🔐 Default Accounts
+## 🔐 Develop Default Accounts after loaded Seed API (Test Page)
 
 | Role | Email | Password |
 |---|---|---|
 | Admin | molnar.tamas@example.com | 123123123 |
-| Teacher | testteacher@gmail.com | test |
+| Teacher | kiss.evelin@example.com | 123123123 |
 | Student | toth.milan@example.com | 123123123 |
 
 > Seeded users, subjects and materials are included.
@@ -61,18 +72,17 @@ update-database
 ## 🧭 Use-cases
 
 ### Users
-- Register / log in
+- Upload materials
 - Browse and filter materials
 - PDF preview
-- Rate and comment
-- Save to favourites
+- Download material
+- Rate and comment a material
+- Save material to favourites
 - See recommended materials
-- View download / open statistics
 
 ### Teachers
-- Upload materials
-- Set subject and semester
-- Mark as **Recommended** or **Exam**
+- Set subjects and semesters
+- Mark materials as **Recommended** or **Exam**
 - Manage subjects
 
 ### Admins
@@ -113,13 +123,17 @@ update-database
 | Screen | Purpose |
 |---|---|
 | Login / Register | User authentication |
-| Home / Materials | Browse, search and filter materials |
-| Material page | PDF preview, comments, ratings, statistics |
-| Favourites | Saved materials |
+| Home | navigation, important informations |
+| Material upload | upload material |
+| Materials list | browse, search and filter materials |
+| Material | PDF preview, download, comments, ratings, statistics |
+| Favourites | saved materials |
+| Profile | update profile, uploaded materials |
+| Profiles list | all users |
 | Subject Management (Teacher) | Manage subjects |
-| Admin Dashboard | Moderation & statistics |
+| Admin Dashboard (Admin) | Moderation & statistics |
 
-> Screenshots will be added later.
+> Screenshots and guideline available in docs.
 
 ---
 
@@ -129,23 +143,16 @@ update-database
 |---|---|---|
 | CORS error | FE/BE | Configure allowed origins and headers in the API |
 | PDF preview restrictions | FE | Embedded PDF viewer with proper CSP settings |
-| EF migration conflict | BE | Resolved via `update-database` and schema reset |
-| JWT token handling | FE | Implemented HTTP interceptor and secure storage |
+| SCRUM poker scoring | Team | team-based task estimation |
+| JWT token handling | FE | Payload decryption |
 | File upload size limit | BE | Increased request size and client-side validation |
 
 ---
 
 ## 📂 Documentation
 
-The repository must include a `docs/` directory containing:
-- `usermanual.pdf` — step-by-step end-user manual
-- any additional documentation
-
-Structure:
-```
-/docs
-   └── usermanual.pdf
-```
+The repository include a `docs/` directory:
+- `usermanual.pdf` — step-by-step end-user manual.
 
 ---
 
