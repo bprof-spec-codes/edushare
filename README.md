@@ -152,7 +152,7 @@ Runs at: `http://localhost:4200/`
 ## 📂 Documentation
 
 The repository include a `docs/` directory:
-- `usermanual.pdf` — step-by-step end-user manual
+- `usermanual.pdf` — step-by-step end-user manual.
 
 ---
 
