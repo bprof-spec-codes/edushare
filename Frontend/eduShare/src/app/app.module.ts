@@ -43,6 +43,7 @@ import { ToastComponent } from './components/toast/toast.component';
 import { ConfirmComponent } from './components/confirm/confirm.component';
 import { NgxTypedJsModule } from 'ngx-typed-js';
 import { CountUpModule } from 'ngx-countup';
+import { SnowComponent } from './components/snow/snow.component';
 
 
 @NgModule({
@@ -77,7 +78,8 @@ import { CountUpModule } from 'ngx-countup';
     RecommendedMaterialsComponent,
     MiniMaterialCardComponent,
     ToastComponent,
-    ConfirmComponent
+    ConfirmComponent,
+    SnowComponent
   ],
   imports: [
     BrowserModule,
